@@ -22,7 +22,7 @@ You love to ski and you have your heart set on winning the upcoming winter olymp
 
 You know it won't be easy, with at least 3 trials of increasing difficulty you have to pass to take home the goal. But you're brave, and are going to give it your best shot.
 
-**Come back on 5/15/2024 to play and compete for the #1 gold medal!**
+**Come back on 5/2/2024 to play and compete for the #1 gold medal!**
 <figure>
     <img src="gold_medal.jpg" height="100px">
     <!-- source: https://www.freepik.com/premium-vector/snowy-mountains-fir-trees-starry-sky-pixel-art-game-location-8-bit-retro-backdrop-seamless_36462427.htm7 -->
