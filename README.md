@@ -1,14 +1,18 @@
 # Everest the Olympicat by "The Himalayans"
 Welcome to the Himalayans group (CMSC447-04 Spring 2024) github project repository!
 
+# Sprint 2 - Implementation
+## Build Instructions
+See the instructions in `./Frontend/README.md` for instructions on how to start the app.
 
+# Sprint 1 - Design
 <figure>
     <img src="./about_images/himalayan_cat.jpg" height="300px">
     <!-- source: https://www.dreamstime.com/hand-drawn-himalayan-cat-vector-illustration-hand-drawn-himalayan-cat-image131123437 -->
     <figcaption>Current concept of the sprite for the game character!</figcaption>
 </figure>
 
-# Game concept
+## Game concept
 Picture this. 
 
 You're the cute himalayan cat shown above born and raised in the himalayan mountains.
@@ -21,6 +25,8 @@ You love to ski and you have your heart set on winning the upcoming winter olymp
 </figure>
 
 You know it won't be easy, with at least 3 trials of increasing difficulty you have to pass to take home the goal. But you're brave, and are going to give it your best shot.
+
+# Full Product
 
 **Come back on 5/2/2024 to play and compete for the #1 gold medal!**
 <figure>
