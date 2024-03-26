@@ -1,4 +1,9 @@
-# Getting Started with Create React App
+# Frontend for "Everest the Olympicat"
+
+If this is the first time you are getting ready to run this application,
+make sure to run `npm install`.
+After that you can run `npm start`
+
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
