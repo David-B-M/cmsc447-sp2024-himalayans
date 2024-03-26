@@ -42,7 +42,7 @@ You're the cute himalayan cat shown above born and raised in the himalayan mount
 
 You love to ski and you have your heart set on winning the upcoming winter olympics which are in your very own backyard.
 <figure>
-    <img src="Frontend/interface/snowy_mountains.jpg" height="300px">
+    <img src="./about_images/snowy_mountains.jpg" height="300px">
     <!-- source: https://www.freepik.com/premium-vector/snowy-mountains-fir-trees-starry-sky-pixel-art-game-location-8-bit-retro-backdrop-seamless_36462427.htm7 -->
     <figcaption>Current concept of background landscape!</figcaption>
 </figure>
@@ -53,7 +53,7 @@ You know it won't be easy, with at least 3 trials of increasing difficulty you h
 
 **Come back on 5/2/2024 to play and compete for the #1 gold medal!**
 <figure>
-    <img src="Frontend/interface/gold_medal.jpg" height="100px">
+    <img src="./about_images/gold_medal.jpg" height="100px">
     <!-- source: https://www.freepik.com/premium-vector/snowy-mountains-fir-trees-starry-sky-pixel-art-game-location-8-bit-retro-backdrop-seamless_36462427.htm7 -->
     <figcaption>The gold medal you want to win!</figcaption>
 </figure>
