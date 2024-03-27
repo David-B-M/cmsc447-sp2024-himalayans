@@ -21,20 +21,40 @@ import './App.css';
 
 import React, {Component} from 'react'
 
+/* --------------------- Custom constants --------------------- */
+// This is how I (@LT69018) decided to maneuver switching pages/components
+// conditions in the App render function just compare and reassign to values from these pageNumbers.
+import pageNumbers from './Constants/pageNumbers.js'
+/* --------------------- IMPORTING CUSTOM PAGES --------------------- */
+// Note to other frontend folk: 
+// import your page (component) here!
+import MainMenu from './Pages/MainMenu.js'
+import ChooseLevel from './Pages/ChooseLevel.js'
+/* ------------------------------------------------------------------ */
+
 class App extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      // start with the main menu when the app boots.
+      pageNumber: pageNumbers.MainMenu 
+    };
   }
 
+
   render() {
-    return (
-      <div>
-        Welcome to the Home Page!
-      </div>
-    );
+    const currentPageNum = this.state.pageNumber;
+    if (currentPageNum === pageNumbers.MainMenu) {
+      console.log("In App.js - Switching to Main Menu page.");
+      return (<div><MainMenu/></div>);
+    } else if (currentPageNum === pageNumbers.ChooseLevel) {
+      console.log("In App.js - Switching to ChooseLevel page.");
+      return (<div><ChooseLevel/></div>);
+    } 
+    console.log("WHOOPS. Haven't imported/checked/rendered that page num yet:", currentPageNum);
   }
 
 }
+
 
 export default App;
