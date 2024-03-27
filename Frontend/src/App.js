@@ -19,26 +19,22 @@
 
 import './App.css';
 
-import React, {useState, useEffect} from 'react'
-function App() {
-  const [data, setData] = useState([{}])
-  useEffect(() => {
-    fetch("/test").then(res => res.json()).then(
-        data => {
-          setData(data)
-          console.log(data.sample)
-        }
-    )
-  }, []);
+import React, {Component} from 'react'
 
-  return (
-    <div className="App">
-        <h1>Sample Data</h1>
-        {data.sample.map((sample_data, key) => {
-            return <p>{sample_data}</p>
-        })}
-    </div>
-  );
+class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {};
+  }
+
+  render() {
+    return (
+      <div>
+        Welcome to the Home Page!
+      </div>
+    );
+  }
+
 }
 
 export default App;
