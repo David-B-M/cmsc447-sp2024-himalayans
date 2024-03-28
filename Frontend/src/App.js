@@ -46,10 +46,10 @@ class App extends Component {
     const currentPageNum = this.state.pageNumber;
     if (currentPageNum === pageNumbers.MainMenu) {
       console.log("In App.js - Switching to Main Menu page.");
-      return (<div><MainMenu/></div>);
+      return <MainMenu/>;
     } else if (currentPageNum === pageNumbers.ChooseLevel) {
       console.log("In App.js - Switching to ChooseLevel page.");
-      return (<div><ChooseLevel/></div>);
+      return <ChooseLevel/>;
     } 
     console.log("WHOOPS. Haven't imported/checked/rendered that page num yet:", currentPageNum);
   }
