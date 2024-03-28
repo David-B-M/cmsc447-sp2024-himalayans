@@ -5,6 +5,7 @@ import Test from "./Test/page"
 import {BrowserRouter as Router, Routes, Route, Link} from "react-router-dom";
 import React, {useState, useEffect} from 'react'
 function App() {
+    {/* This is an example of getting the api from the backend. */}
   const [data, setData] = useState([{}])
   useEffect(() => {
     fetch("/test").then(res => res.json()).then(
@@ -17,14 +18,14 @@ function App() {
 
   return (
     <div className="App">
-        <Router>
+        <Router> {/* Navbar goes here */}
             <div>
                 NAVBAR
                 <Link to={"/"}> Home</Link>
                 <Link to={"/Pause"}> Pause Menu</Link>
                 <Link to={"/LevelComplete"}> Level Complete</Link>
             </div>
-            <Routes>
+            <Routes> {/* Routes navbar connects to goes here */}
                 <Route path={"/"} element={<Test testData={data} />}></Route>
                 <Route path={"/Pause"} element={<PauseMenu/>}></Route>
                 <Route path={"/LevelComplete"} element={<LevelComplete/>}></Route>
