@@ -74,6 +74,8 @@ Connor Gilger
 - Github: https://github.com/cmgilger
 - Email: cgilger1@umbc.edu
 
+
+Anna's Branch: Currently working on background animation using Phaser
 David Middour
 - Github: https://github.com/David-B-M
 - Email: dmiddou1@umbc.edu
