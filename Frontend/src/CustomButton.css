@@ -1,0 +1,13 @@
+.custom-button {
+    background-image: url('icetexture.png'); /* Specify the path to your image */
+    background-size: cover;
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-family: 'SuperCool', sans-serif; /* Use the SuperCool font */
+    font-size: 16px;
+    cursor: pointer;
+  }

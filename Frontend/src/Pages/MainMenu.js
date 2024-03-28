@@ -5,7 +5,15 @@ import {Typography, Box} from '@mui/material/';
 
 import { useTheme } from '@mui/material/styles';
 
+import 'Frontend\src\CustomButton.css'; // Import CSS file for styling
+
 // @cmgilger
+const CustomButton = () => {
+  return (
+    <button className="custom-button">Click Me</button>
+  );
+}
+
 function MainMenu() {
   const theme = useTheme();
   return (
@@ -18,6 +26,9 @@ function MainMenu() {
         <Typography variant="h1"
                     color="primary" backgroundColor="secondary">
           Main Menu
+          <CustomButton>Start Game</CustomButton>
+          <CustomButton>Choose Level</CustomButton>
+          <CustomButton>View Leaderboard</CustomButton>
         </Typography>
       </Box>
     </Container>
