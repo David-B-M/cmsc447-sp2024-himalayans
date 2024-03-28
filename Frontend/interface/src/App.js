@@ -1,5 +1,8 @@
 import './App.css';
-
+import PauseMenu from "./PauseMenu/page"
+import LevelComplete from "./Level Completion/page"
+import Test from "./Test/page"
+import {BrowserRouter as Router, Routes, Route, Link} from "react-router-dom";
 import React, {useState, useEffect} from 'react'
 function App() {
   const [data, setData] = useState([{}])
@@ -13,11 +16,21 @@ function App() {
   }, []);
 
   return (
+
     <div className="App">
-        <h1>Sample Data</h1>
-        {data.sample.map((sample_data, key) => {
-            return <p>{sample_data}</p>
-        })}
+        <Router>
+            <div>
+                NAVBAR
+                <Link to={"/"}> Home</Link>
+                <Link to={"/Pause"}> Pause Menu</Link>
+                <Link to={"/LevelComplete"}> Level Complete</Link>
+            </div>
+            <Routes>
+                <Route path={"/"} element={<Test testData={data} />}></Route>
+                <Route path={"/Pause"} element={<PauseMenu/>}></Route>
+                <Route path={"/LevelComplete"} element={<LevelComplete/>}></Route>
+            </Routes>
+        </Router>
     </div>
   );
 }
