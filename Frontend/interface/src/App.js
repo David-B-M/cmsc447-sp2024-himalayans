@@ -1,6 +1,6 @@
 import './App.css';
 import PauseMenu from "./PauseMenu/page"
-import LevelComplete from "./Level Completion/page"
+import LevelComplete from "./LevelCompletion/page"
 import Test from "./Test/page"
 import {BrowserRouter as Router, Routes, Route, Link} from "react-router-dom";
 import React, {useState, useEffect} from 'react'
@@ -16,7 +16,6 @@ function App() {
   }, []);
 
   return (
-
     <div className="App">
         <Router>
             <div>

@@ -1,11 +1,11 @@
-
-.PauseMenu .control-flow {
+.level {
     display: flex;
     flex-direction: column;
-    height:500px;
+    height:600px;
+    color:red;
 }
 
-.PauseMenu .title {
+.LevelComplete .title {
     border: solid 1px black;
     width: fit-content;
     margin: 30px auto;
@@ -15,23 +15,11 @@
     opacity:.6;
 }
 
-.PauseMenu button {
+button {
     width: 300px;
     height: 40px;
     margin: 15px auto;
     color: white;
     background-color: #3f49c0;
     border: 1px solid black;
-}
-
-.PauseMenu .return {
-    border: solid 1px black;
-    background-color: white;
-    color: black;
-    font-size: 24px;
-    padding: 22px 0px;
-    display: flex;
-    border-radius: 10px;
-    justify-content: center;
-    align-items: center;
 }
