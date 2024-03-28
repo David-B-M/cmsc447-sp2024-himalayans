@@ -1,17 +1,27 @@
 import React, {Component} from 'react';
 
-// @cmgilger
-class MainMenu extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {}
-  }
+import {Container} from 'react-bootstrap';
+import {Typography, Box} from '@mui/material/';
 
-  render() {
-    return (
-      <h1 style={{ textAlign: 'center' }}>Main menu code will go here</h1>
-    );
-  }
+import { useTheme } from '@mui/material/styles';
+
+// @cmgilger
+function MainMenu() {
+  const theme = useTheme();
+  return (
+    <Container style={{ backgroundImage: `url('main_menu_background.jpg')`,  
+                        backgroundSize: 'cover',
+                        backgroundPosition: 'left', 
+                        display: 'flex',
+                        height: '100vh'}}>
+      <Box bgcolor={theme.palette.background} justifyContent="center">
+        <Typography variant="h1"
+                    color="primary" backgroundColor="secondary">
+          Main Menu
+        </Typography>
+      </Box>
+    </Container>
+  );
 }
 
 export default MainMenu;
