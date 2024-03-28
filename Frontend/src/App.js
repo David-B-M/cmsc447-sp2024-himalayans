@@ -31,6 +31,7 @@ import pageNumbers from './Constants/pageNumbers.js'
 import MainMenu from './Pages/MainMenu.js'
 import StartGame from './Pages/StartGame.js'
 import ChooseLevel from './Pages/ChooseLevel.js'
+import ViewLeaderboard from './Pages/ViewLeaderboard.js'
 /* ------------------------------------------------------------------ */
 
 class App extends Component {
@@ -55,6 +56,9 @@ class App extends Component {
     } else if (currentPageNum === pageNumbers.ChooseLevel) {
       console.log("In App.js - Switching to ChooseLevel page.");
       return <ChooseLevel/>;
+    } else if (currentPageNum === pageNumbers.ViewLeaderboard) {
+      console.log("In App.js - Switching to ViewLeaderboard page.");
+      return <ViewLeaderboard/>;
     } 
     console.log("WHOOPS. Haven't imported/checked/rendered that page num yet:", currentPageNum);
   }
