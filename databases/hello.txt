@@ -1,1 +1,0 @@
-This is the databases folder. The leaderboard and level progress will be saved per player.
