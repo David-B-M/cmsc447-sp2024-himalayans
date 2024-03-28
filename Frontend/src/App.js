@@ -20,6 +20,10 @@ function App() {
     <div className="App">
         <Router> {/* Navbar goes here */}
             <div>
+                {/* The navbar below is an example of how to use Navbar until main menu is complete. But for testing purposes,
+                When doing something that's going to require a new page like say main menu, add a new link and new route to the page.
+                Link to={} connects the navbar to the path. path={} will contain
+                 url that represents the page element={} will have the React component that represents the page. */}
                 NAVBAR
                 <Link to={"/"}> Home</Link>
                 <Link to={"/Pause"}> Pause Menu</Link>
