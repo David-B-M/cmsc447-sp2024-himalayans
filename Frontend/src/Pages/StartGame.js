@@ -6,7 +6,7 @@ import {Typography, Box} from '@mui/material/';
 import { useTheme } from '@mui/material/styles';
 
 // @cmgilger
-function ChooseLevel() {
+function StartGame() {
   const theme = useTheme();
   return (
     <Container style={{ backgroundImage: `url('main_menu_background.jpg')`,  
@@ -17,11 +17,13 @@ function ChooseLevel() {
       <Box bgcolor={theme.palette.background} justifyContent="center">
         <Typography variant="h1"
                     color="primary" backgroundColor="secondary">
-          Choose Level
+          Start Game
         </Typography>
+
+        <label for="username"><input type="text" id="username"/>Enter a username:</label>
       </Box>
     </Container>
   );
 }
 
-export default ChooseLevel;
+export default StartGame;

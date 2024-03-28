@@ -29,6 +29,7 @@ import pageNumbers from './Constants/pageNumbers.js'
 // Note to other frontend folk: 
 // import your page (component) here!
 import MainMenu from './Pages/MainMenu.js'
+import StartGame from './Pages/StartGame.js'
 import ChooseLevel from './Pages/ChooseLevel.js'
 /* ------------------------------------------------------------------ */
 
@@ -37,7 +38,8 @@ class App extends Component {
     super(props);
     this.state = {
       // start with the main menu when the app boots.
-      pageNumber: pageNumbers.MainMenu 
+      pageNumber: pageNumbers.MainMenu  
+      // ^ change this to debug or try to see your page without actually implementing page switching :p
     };
   }
 
@@ -47,6 +49,9 @@ class App extends Component {
     if (currentPageNum === pageNumbers.MainMenu) {
       console.log("In App.js - Switching to Main Menu page.");
       return <MainMenu/>;
+    } else if (currentPageNum === pageNumbers.StartGame) {
+      console.log("In App.js - Switching to StartGame page.");
+      return <StartGame/>;
     } else if (currentPageNum === pageNumbers.ChooseLevel) {
       console.log("In App.js - Switching to ChooseLevel page.");
       return <ChooseLevel/>;
