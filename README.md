@@ -3,13 +3,16 @@ Welcome to the Himalayans group (CMSC447-04 Spring 2024) github project reposito
 
 # Sprint 2 - Implementation
 ## Build Instructions
-See the instructions in `./Frontend/README.md` for instructions on how to start the app.
+See the instructions in `./Frontend/README.md` for how to start the app.
 
+## Current Progress!
 Here is how our application is currently lookin!
 You can load the app up and see the the following pages.
+
+
 Shoutout our awesome team of developers for each of those pages.
 - MainMenu: @cmgilger, @LT69018, @David-B-M
-- StartGame: @LT69018 (<- Todo: add image.)
+- StartGame: @LT69018 
 - PauseMenu/LevelFail: @samdev193 
 <figure>
     <img src="current_appearance/MainMenu_3-29.png" height="300px">
