@@ -30,7 +30,7 @@ https://miro.com/app/board/uXjVNh35L8s=/?moveToWidget=3458764583679328038&cot=14
 
 # Sprint 1 - Design
 <figure>
-    <img src="Frontend/interface/himalayan_cat.jpg" height="300px">
+    <img src="./about_images/himalayan_cat.jpg" height="300px">
     <!-- source: https://www.dreamstime.com/hand-drawn-himalayan-cat-vector-illustration-hand-drawn-himalayan-cat-image131123437 -->
     <figcaption>Current concept of the sprite for the game character!</figcaption>
 </figure>
