@@ -13,14 +13,20 @@ const CustomButton = ({ children }) => {
 
 function MainMenu() {
   return (
-    <div style={{ backgroundImage: `url('main_menu_background.jpg')`,  
-                        backgroundSize: 'cover',
-                        backgroundPosition: 'left', 
-                        display: 'flex',
-                        height: '100vh'}}>
-      <div bgcolor={theme.palette.background} justifyContent="center">
-        <h1 style={{color:'white', fontSize:'100px', textAlign:"center"}}>
-          Main Menu
+    <div style={{ 
+      backgroundImage: `url('main_menu_background.jpg')`,  
+      backgroundSize: 'cover',
+      backgroundPosition: 'left', 
+      display: 'flex',
+      height: '100vh',
+      alignItems: 'center'}}>
+      <div justifyContent="center">
+        <h1 style={{
+          color:'white', 
+          fontSize:'100px', 
+          textAlign:"center",
+          margin:"1vw"}}>
+            Main Menu
         </h1>
         <div>
           <CustomButton>Start Game</CustomButton>
