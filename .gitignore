@@ -1,3 +1,4 @@
 .vscode/*
 /Backend/venv
-/Frontend/node_modulesnpm
+/Frontend/node_modules
+.DS_Store
