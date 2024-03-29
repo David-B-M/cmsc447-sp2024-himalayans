@@ -1,0 +1,25 @@
+.level {
+    display: flex;
+    flex-direction: column;
+    height:600px;
+    color:red;
+}
+
+.LevelComplete .title {
+    border: solid 1px black;
+    width: fit-content;
+    margin: 30px auto;
+    padding: 10px 30px;
+    border-radius: 10px;
+    background-color: darkgray;
+    opacity:.6;
+}
+
+button {
+    width: 300px;
+    height: 40px;
+    margin: 15px auto;
+    color: white;
+    background-color: #3f49c0;
+    border: 1px solid black;
+}
