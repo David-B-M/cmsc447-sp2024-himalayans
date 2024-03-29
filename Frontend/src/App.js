@@ -12,14 +12,14 @@ import React, {useState, useEffect} from 'react'
 function App() {
     {/* This is an example of getting the api from the backend. */}
   const [data, setData] = useState([{}])
-  useEffect(() => {
-    fetch("/test").then(res => res.json()).then(
-        data => {
-          setData(data)
-          console.log(data.sample)
-        }
-    )
-  }, []);
+  // useEffect(() => {
+  //   fetch("/test").then(res => res.json()).then(
+  //       data => {
+  //         setData(data)
+  //         console.log(data.sample)
+  //       }
+  //   )
+  // }, []);
 
   return (
     <div className="App">
