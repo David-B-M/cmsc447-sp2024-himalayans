@@ -17,7 +17,7 @@ Shoutout our awesome team of developers for each of those pages.
 </figure>
 
 <figure>
-    <img src="current_appearance/StartGame-29.png" height="300px">
+    <img src="current_appearance/StartGame_3-29.png" height="300px">
     <figcaption>Start Game Screen as of 3-29. User input doesn't go anywhere currently. The goal is for them to search through saved games (referenced by their username), delete and load saves, as well as initialize a new save file (with their new username). Credits - Jess</figcaption>
 </figure>
 For more on @LT69018 intentions with this page, see our whiteboard (which I believe is only accessible for team internal members):
