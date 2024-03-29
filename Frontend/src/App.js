@@ -5,7 +5,6 @@ import MainMenu from "./MainMenu/page"
 import PauseMenu from "./PauseMenu/page"
 import LevelComplete from "./LevelCompletion/page"
 import ChooseLevel from './ChooseLevel/page'
-import Test from "./Test/page"
 
 
 
@@ -14,14 +13,6 @@ import React, {useState, useEffect} from 'react'
 function App() {
     {/* This is an example of getting the api from the backend. */}
   const [data, setData] = useState([{}])
-  // useEffect(() => {
-  //   fetch("/test").then(res => res.json()).then(
-  //       data => {
-  //         setData(data)
-  //         console.log(data.sample)
-  //       }
-  //   )
-  // }, []);
 
   return (
     <div className="App">
