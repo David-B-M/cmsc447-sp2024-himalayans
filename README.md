@@ -69,3 +69,20 @@ David Middour
 Samuel Oyeneyin
 - Github: https://github.com/samdev193
 - Email: soyeneyin@umbc.edu
+
+
+# Notes about our Branches
+## Anna's Branch: 
+Currently working on background animation using Phaser
+## Jess' Branch: 
+Will be where I implement the StartGame and ChooseLevel Page.
+- I originally implemented them using classes and custom page switching,
+but I was overcomplicating it :p 
+- Stashed that code in `backup-frontend-class-components`
+- I will pull sam's updated main so that we are both the same page.
+
+Connors Branch:
+@LT69018 Todo: add a skeleton HTML page for him to add buttons to.
+
+Main Branch: (what have we all agreed on)
+- App that switches between different pages 
