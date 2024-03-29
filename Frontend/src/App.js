@@ -1,10 +1,12 @@
 import './App.css';
 
 /* IMPORT YOUR PAGE HERE! */
+import MainMenu from "./MainMenu/page"
 import PauseMenu from "./PauseMenu/page"
 import LevelComplete from "./LevelCompletion/page"
 import ChooseLevel from './ChooseLevel/page'
 import Test from "./Test/page"
+
 
 
 import {BrowserRouter as Router, Routes, Route, Link} from "react-router-dom";
@@ -36,7 +38,7 @@ function App() {
                 <Link to={"/LevelComplete"}> Level Complete</Link>
             </div>
             <Routes> {/* Routes navbar connects to goes here */}
-                <Route path={"/"} element={<Test testData={data} />}></Route>
+                <Route path={"/"} element={<MainMenu/>}></Route>
                 <Route path={"/ChooseLevel"} element={<ChooseLevel/>}></Route>
                 <Route path={"/Pause"} element={<PauseMenu/>}></Route>
                 <Route path={"/LevelComplete"} element={<LevelComplete/>}></Route>
