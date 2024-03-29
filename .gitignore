@@ -1,1 +1,3 @@
 .vscode/*
+/Backend/venv
+/Frontend/node_modulesnpm
