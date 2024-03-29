@@ -13,6 +13,10 @@ Or if you don't feel like running that over and over... Use
 bash run_frontend.sh
 ```
 
+If that still doesn't work, try to delete node_modules and rerun that command.
+```
+rm -rf node_modules && rm package-lock.json
+```
 - [ ] (wishlist) Todo: @LT69018 docker to give everyone the same packages (legacy openssl) 
 
 # Getting Started with Create React App
