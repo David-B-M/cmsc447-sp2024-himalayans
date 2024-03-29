@@ -1,18 +1,22 @@
+.LevelComplete {
+    height: 800px;
+    display: flex;
+}
 .level {
     display: flex;
     flex-direction: column;
-    height:600px;
-    color:red;
-}
-
-.LevelComplete .title {
+    height: 400px;
     border: solid 1px black;
-    width: fit-content;
-    margin: 30px auto;
-    padding: 10px 30px;
-    border-radius: 10px;
+    width: 400px;
+    margin: auto;
+    padding: 40px 50px;
+    border-radius: 80px;
     background-color: darkgray;
     opacity:.6;
+}
+
+.level .title {
+    margin-bottom: 70px;
 }
 
 button {
