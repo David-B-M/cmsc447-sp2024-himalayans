@@ -1,3 +1,20 @@
+# Frontend for everest the Olympicat
+To run the first time you must run `npm install` .
+Subsequent times you should be able to just run `npm start`
+
+P.S. If you have errors for allowing legacy code, try running this instead of plain `npm start`.
+Here's how you do that...
+```bash
+set NODE_OPTIONS=--openssl-legacy-provider && npm run start
+```
+
+Or if you don't feel like running that over and over... Use 
+```bash
+bash run_frontend.sh
+```
+
+- [ ] (wishlist) Todo: @LT69018 docker to give everyone the same packages (legacy openssl) 
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
