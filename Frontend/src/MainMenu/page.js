@@ -13,12 +13,12 @@ const CustomButton = ({ children }) => {
 
 function MainMenu() {
   return (
-    <div style={{ backgroundImage: `url('main_menu_background.jpg')`,  
+    <div style={{ backgroundImage: `url('snowy_mountains.jpg')`,  
                         backgroundSize: 'cover',
                         backgroundPosition: 'left', 
                         display: 'flex',
                         height: '100vh'}}>
-      <div bgcolor={theme.palette.background} justifyContent="center">
+      <div justifyContent="center">
         <h1 style={{color:'white', fontSize:'100px', textAlign:"center"}}>
           Main Menu
         </h1>
