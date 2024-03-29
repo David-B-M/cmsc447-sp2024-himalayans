@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import "react-bootstrap";
 
-import {Container} from 'react-bootstrap';
+import {Container, Row} from 'react-bootstrap';
 import {Typography, Box} from '@mui/material/';
 
 import { useTheme } from '@mui/material/styles';
