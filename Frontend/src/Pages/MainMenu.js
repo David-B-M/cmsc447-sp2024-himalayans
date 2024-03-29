@@ -1,10 +1,6 @@
 import React, {Component} from 'react';
-import "react-bootstrap";
 
 import {Container} from 'react-bootstrap';
-import {Typography, Box} from '@mui/material/';
-
-import { useTheme } from '@mui/material/styles';
 
 import './CustomButton.css'; // Import CSS file for styling
 
@@ -16,25 +12,23 @@ const CustomButton = ({ children }) => {
 }
 
 function MainMenu() {
-  const theme = useTheme();
   return (
-    <Container style={{ backgroundImage: `url('main_menu_background.jpg')`,  
+    <div style={{ backgroundImage: `url('main_menu_background.jpg')`,  
                         backgroundSize: 'cover',
                         backgroundPosition: 'left', 
                         display: 'flex',
                         height: '100vh'}}>
-      <Row className="justify-content-md-center">
-        <Typography variant="h1"
-                    color="primary" backgroundColor="secondary">
+      <div bgcolor={theme.palette.background} justifyContent="center">
+        <h1 style={{color:'white', fontSize:'100px', textAlign:"center"}}>
           Main Menu
-        </Typography>
-      </Row>
-      <Row>
-        <CustomButton>Start Game</CustomButton>
-        <CustomButton>Choose Level</CustomButton>
-        <CustomButton>View Leaderboard</CustomButton>
-      </Row>
-    </Container>
+        </h1>
+        <div>
+          <CustomButton>Start Game</CustomButton>
+          <CustomButton>Choose Level</CustomButton>
+          <CustomButton>View Leaderboard</CustomButton>
+        </div>
+      </div>
+    </div>
   );
 }
 
