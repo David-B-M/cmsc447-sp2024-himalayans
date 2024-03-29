@@ -18,23 +18,22 @@ const CustomButton = ({ children }) => {
 function MainMenu() {
   const theme = useTheme();
   return (
-    <Container style={{ backgroundImage: `url('main_menu_background.jpg')`,  
+    <div style={{ backgroundImage: './main_menu_background.jpg',  
                         backgroundSize: 'cover',
                         backgroundPosition: 'left', 
                         display: 'flex',
                         height: '100vh'}}>
-      <Row className="justify-content-md-center">
-        <Typography variant="h1"
-                    color="primary" backgroundColor="secondary">
+      <div className="justify-content-md-center">
+        <h1>
           Main Menu
-        </Typography>
-      </Row>
+        </h1>
+      </div>
       <Row>
         <CustomButton>Start Game</CustomButton>
         <CustomButton>Choose Level</CustomButton>
         <CustomButton>View Leaderboard</CustomButton>
       </Row>
-    </Container>
+    </div>
   );
 }
 
