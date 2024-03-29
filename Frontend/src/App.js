@@ -1,7 +1,12 @@
 import './App.css';
+
+/* IMPORT YOUR PAGE HERE! */
 import PauseMenu from "./PauseMenu/page"
 import LevelComplete from "./LevelCompletion/page"
+import ChooseLevel from './ChooseLevel/page'
 import Test from "./Test/page"
+
+
 import {BrowserRouter as Router, Routes, Route, Link} from "react-router-dom";
 import React, {useState, useEffect} from 'react'
 function App() {
@@ -26,11 +31,13 @@ function App() {
                  url that represents the page element={} will have the React component that represents the page. */}
                 NAVBAR
                 <Link to={"/"}> Home</Link>
+                <Link to={"/ChooseLevel"}>Choose Level </Link>
                 <Link to={"/Pause"}> Pause Menu</Link>
                 <Link to={"/LevelComplete"}> Level Complete</Link>
             </div>
             <Routes> {/* Routes navbar connects to goes here */}
                 <Route path={"/"} element={<Test testData={data} />}></Route>
+                <Route path={"/ChooseLevel"} element={<ChooseLevel/>}></Route>
                 <Route path={"/Pause"} element={<PauseMenu/>}></Route>
                 <Route path={"/LevelComplete"} element={<LevelComplete/>}></Route>
             </Routes>
