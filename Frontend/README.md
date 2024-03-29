@@ -1,5 +1,8 @@
 # Frontend for everest the Olympicat
 To run the first time you must run `npm install` .
+(You will also need to run this if you ever get an error like this: 
+`sh: react-scripts: command not found`)
+
 Subsequent times you should be able to just run `npm start`
 
 P.S. If you have errors for allowing legacy code, try running this instead of plain `npm start`.
