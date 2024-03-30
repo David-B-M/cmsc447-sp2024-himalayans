@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 
 import {Container} from 'react-bootstrap';
 
-import './CustomButton.css'; // Import CSS file for styling
+import './MainMenu.css'; // Import CSS file for styling
 
 // @cmgilger
 const CustomButton = ({ children }) => {
@@ -17,9 +17,10 @@ function MainMenu() {
                         backgroundSize: 'cover',
                         backgroundPosition: 'left', 
                         display: 'flex',
-                        height: '100vh'}}>
-      <div justifyContent="center">
-        <h1 style={{color:'white', fontSize:'100px', textAlign:"center"}}>
+                        height: '100vh',
+                        flexDirection: 'column'}}>
+      <div className={"control-flow"}>
+        <h1 style={{color:'white', fontSize:'100px'}}>
           Main Menu
         </h1>
         <div>
