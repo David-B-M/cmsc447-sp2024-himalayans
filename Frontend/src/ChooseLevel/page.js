@@ -1,11 +1,12 @@
 import React, {Component} from 'react';
-
+import { Link } from 'react-router-dom';
+import {Container} from 'react-bootstrap';
 import './ChooseLevel.css'; // Import CSS file for styling
 
 //@cmgilger
-const CustomButton = ({ children }) => {
+const CustomButton = ({ children, to }) => {
   return (
-    <button className="custom-button">{children}</button>
+    <Link to={to} className="custom-button">{children}</Link>
   );
 }
 

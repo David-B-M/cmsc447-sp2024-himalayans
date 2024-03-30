@@ -1,13 +1,13 @@
 import React, {Component} from 'react';
-
+import { Link } from 'react-router-dom';
 import {Container} from 'react-bootstrap';
 
 import './MainMenu.css'; // Import CSS file for styling
 
 // @cmgilger
-const CustomButton = ({ children }) => {
+const CustomButton = ({ children, to }) => {
   return (
-    <button className="custom-button">{children}</button>
+    <Link to={to} className="custom-button">{children}</Link>
   );
 }
 
@@ -19,13 +19,13 @@ function MainMenu() {
                         display: 'flex',
                         height: '100vh',
                         flexDirection: 'column'}}>
-      <div className={"control-flow"}>
-        <h1 style={{color:'white', fontSize:'100px'}}>
+      <div justifyContent="center">
+        <h1 style={{color:'white', fontSize:'100px', textAlign:"center"}}>
           Main Menu
         </h1>
         <div>
           <CustomButton>Start Game</CustomButton>
-          <CustomButton>Choose Level</CustomButton>
+          <CustomButton to="/ChooseLevel">Choose Level</CustomButton>
           <CustomButton>View Leaderboard</CustomButton>
         </div>
       </div>
