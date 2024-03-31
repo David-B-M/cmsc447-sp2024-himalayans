@@ -1,6 +1,7 @@
-.custom-button {
+  .custom-button {
     background-image: url('ChooseLevel_normal.png');
     background-size: cover;
+    text-align: center;
     border: none;
     color: rgb(0, 86, 156);
     padding: 10px 30px;
@@ -14,11 +15,11 @@
     height: 10vh; /* Adjust height to desired size */
     outline-width: 4px;
     outline-style: solid;
-    margin: 1vw;
+    margin: 0.5vw;
   }
 
   .control-flow {
     display: flex;
     flex-direction: column;
     height: 800px;
-}
+  }

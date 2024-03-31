@@ -19,15 +19,20 @@ function MainMenu() {
                         display: 'flex',
                         height: '100vh',
                         flexDirection: 'column'}}>
-      <div justifyContent="center">
+      <div justifyContent="center" style={{fontSize:'20px'}}>
         <h1 style={{color:'white', fontSize:'100px', textAlign:"center"}}>
           Main Menu
         </h1>
-        <div>
+        <h1>
           <CustomButton>Start Game</CustomButton>
+          <CustomButton>Load Game</CustomButton>
+        </h1>
+        <h1>
           <CustomButton to="/ChooseLevel">Choose Level</CustomButton>
+        </h1>
+        <h1>
           <CustomButton>View Leaderboard</CustomButton>
-        </div>
+        </h1>
       </div>
     </div>
   );
