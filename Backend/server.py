@@ -1,11 +1,21 @@
-from flask import Flask
+from flask import Flask, g
 app = Flask(__name__)
 
-import sqlite3
+# todo: replace this.
+# source: https://flask.palletsprojects.com/en/3.0.x/patterns/sqlite3/
+DATABASE = '/path/to/database.db'
+
+FINAL_LEVEL_NUMBER = 3
 
 @app.route('/test')
 def hello_world():  # put application's code here
     return {"sample": ["hello world", "random data", "booo"]}
+
+def get_db():
+    db = getattr(g, '_database', None)
+    if db is None:
+        db = g._database = sqlite3.connect(DATABASE)
+    return db
 
 def load_users():
     # when the user is on the StartGame page and we display which games they can load from
@@ -19,13 +29,15 @@ def load_users():
 
 def create_users_table():
     """
+    Initialize users table.
     """
     columns = ["name", "levelReached", ]
     SQL_FOR_CREATE_USERS = \
-    """
+    f"""
     CREATE TABLE users (
-        PRIMARY KEY name varchar(5) NOT NULL UNIQUE,
-        levelReached integer NOT NULL,
+        id integer NOT NULL UNIQUE,
+        name varchar(5) NOT NULL UNIQUE,
+        levelReached integer NOT NULL DEFAULT 1 CHECK (levelReached >= 1 AND levelReached <= {FINAL_LEVEL_NUMBER}),
     );
     """
     # don't let them save a name if its already in the table
