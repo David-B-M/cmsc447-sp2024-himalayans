@@ -1,6 +1,6 @@
 ﻿import Phaser from 'phaser';
 
-class LevelExample extends Phaser.Scene
+class LevelExampleClass extends Phaser.Scene
 {
     constructor ()
     {
@@ -37,27 +37,51 @@ class LevelExample extends Phaser.Scene
         sprite.play('walk');
         */
 
+        this.cursors = this.input.keyboard.createCursorKeys();
+
         const catSprite = this.add.sprite(400, 484, 'cat');
         catSprite.setScale(0.1); 
+
+
+        // The player and its settings
+        //this.player = this.physics.add.sprite(100, 450, 'cat');
+        //this.player.setDepth(1);
+/*
+        //  Player physics properties. 
+        this.catSprite.setBounce(0.2);
+        this.catSprite.setCollideWorldBounds(true);
+        this.catSprite.setScale(0.1);
+        */
+    
     }
 
     update ()
     {
         this.bg.tilePositionX += 2;
+/*
+        if (this.cursors.up.isDown && this.catSprite.body.touching.down)
+        {
+            this.catSprite.setVelocityY(-330);
+        }*/
     }
 }
 
-const config = {
-    type: Phaser.AUTO,
-    parent: 'phaser-example',
-    scale: {
-        mode: Phaser.Scale.RESIZE,
-        width: '100%',
-        height: '100%'
-    },
-    scene: LevelExample
-};
 
-const game = new Phaser.Game(config);
+function LevelExample()
+{
+    const config = {
+        type: Phaser.AUTO,
+        parent: 'phaser-example',
+        scale: {
+            mode: Phaser.Scale.RESIZE,
+            width: '100%',
+            height: '100%'
+        },
+        scene: LevelExampleClass
+    };
+
+    const game = new Phaser.Game(config);
+    return game;
+}
 
 export default LevelExample;
