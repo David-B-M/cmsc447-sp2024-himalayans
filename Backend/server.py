@@ -7,6 +7,16 @@ import sqlite3
 def hello_world():  # put application's code here
     return {"sample": ["hello world", "random data", "booo"]}
 
+def load_users():
+    # when the user is on the StartGame page and we display which games they can load from
+    # we can call this function!
+    SQL_FOR_LOAD_ALL_USERS = \
+    """
+    SELECT * from users
+    """
+    # todo: add the execution for this command and return it nicely i.e. json
+    pass
+
 def create_users_table():
     """
     """
