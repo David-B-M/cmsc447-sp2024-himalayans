@@ -7,9 +7,11 @@ DATABASE = '/path/to/database.db'
 
 FINAL_LEVEL_NUMBER = 3
 
-@app.route('/test')
-def hello_world():  # put application's code here
-    return {"sample": ["hello world", "random data", "booo"]}
+@app.route('/')
+def home():  # put application's code here
+    create_users_table()
+    print("Successfully loaded `/` endpoint!")
+    return {"ok": True}
 
 def get_db():
     db = getattr(g, '_database', None)
@@ -17,6 +19,7 @@ def get_db():
         db = g._database = sqlite3.connect(DATABASE)
     return db
 
+@app.route("/loadUsers", methods=["GET"])
 def load_users():
     # when the user is on the StartGame page and we display which games they can load from
     # we can call this function!
@@ -34,7 +37,7 @@ def create_users_table():
     columns = ["name", "levelReached", ]
     SQL_FOR_CREATE_USERS = \
     f"""
-    CREATE TABLE users (
+    CREATE TABLE IF NOT EXISTS users (
         id integer NOT NULL UNIQUE,
         name varchar(5) NOT NULL UNIQUE,
         levelReached integer NOT NULL DEFAULT 1 CHECK (levelReached >= 1 AND levelReached <= {FINAL_LEVEL_NUMBER}),
