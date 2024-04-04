@@ -1,21 +1,38 @@
 ﻿import Phaser from 'phaser';
+import {useEffect} from 'react';
 
-class LevelExampleClass extends Phaser.Scene
-{
-    constructor ()
-    {
-        super();
-    }
+let game;
+const gameConfig = {
+        type: Phaser.AUTO,
+        scale: {
+            mode: Phaser.Scale.RESIZE,
+            width: '100%',
+            height: '100%'
+        },
+        physics: {
+            default: 'arcade',
+            arcade: {
+                gravity: { y: 300 },
+                debug: false
+            }
+        },
+        backgroundColor: '#304858',
+        scene: {
+            preload: preload,
+            create: create,
+            update: update
+        }
+};
 
-    preload ()
+    function preload()
     {
         this.load.image('cat', 'himalayan_cat.jpg');
         this.load.image('background', 'snowy_mountains.jpg');
         this.load.image('ground', 'platform.jpg');
     }
 
-    create ()
-    {  
+    function create()
+    {
         // create background
         const { width, height } = this.sys.game.canvas;
         this.bg = this.add.tileSprite(0, 0, width, height, 'background').setOrigin(0, 0);
@@ -31,14 +48,14 @@ class LevelExampleClass extends Phaser.Scene
 
         // create player
         this.catSprite = this.physics.add.sprite(200, 475, 'cat');
-        this.catSprite.setScale(0.05); 
+        this.catSprite.setScale(0.05);
         this.catSprite.setBounce(0.2);
         this.catSprite.setCollideWorldBounds(true);
         this.physics.add.collider(this.catSprite, this.ground);
-    
+
     }
 
-    update ()
+    function update()
     {
         // update background and ground
         this.bg.tilePositionX += 2;
@@ -50,31 +67,13 @@ class LevelExampleClass extends Phaser.Scene
             this.catSprite.setVelocityY(-330);
         }
     }
-}
+
+ function Game() {
+     useEffect(() => {
+         game = new Phaser.Game(gameConfig);
+     }, [])
+     return <div id={"level-example"}/>;
+ }
 
 
-function LevelExample()
-{
-    const config = {
-        type: Phaser.AUTO,
-        scale: {
-            mode: Phaser.Scale.RESIZE,
-            width: '100%',
-            height: '100%'
-        },
-        physics: {
-            default: 'arcade',
-            arcade: {
-                gravity: { y: 300 },
-                debug: false
-            }
-        },
-        backgroundColor: '#304858',
-        scene: LevelExampleClass
-    };
-
-    const game = new Phaser.Game(config);
-    return game;
-}
-
-export default LevelExample;
+export default Game;
