@@ -6,8 +6,8 @@ import PauseMenu from "./PauseMenu/page"
 import LevelComplete from "./LevelCompletion/page"
 import ChooseLevel from './ChooseLevel/page'
 import StartGame from './StartGame/page'
-
-
+import ViewLeaderboard from "./ViewLeaderboard/page"
+import LevelExample from "./LevelExample/page"
 import {BrowserRouter as Router, Routes, Route, Link} from "react-router-dom";
 import React, {useState, useEffect} from 'react'
 function App() {
@@ -28,6 +28,8 @@ function App() {
                 <Link to={"/ChooseLevel"}>Choose Level </Link>
                 <Link to={"/Pause"}> Pause Menu</Link>
                 <Link to={"/LevelComplete"}> Level Complete</Link>
+                <Link to={"/ViewLeaderboard"}> View Leaderboard</Link>
+                <Link to={"/LevelExample"}> Level Example</Link>
             </div>
             <Routes> {/* Routes navbar connects to goes here */}
                 <Route path={"/"} element={<MainMenu/>}></Route>
@@ -35,6 +37,8 @@ function App() {
                 <Route path={"/ChooseLevel"} element={<ChooseLevel/>}></Route>
                 <Route path={"/Pause"} element={<PauseMenu/>}></Route>
                 <Route path={"/LevelComplete"} element={<LevelComplete/>}></Route>
+                <Route path={"/ViewLeaderboard"} element={<ViewLeaderboard/>}></Route>
+                <Route path={"/LevelExample"} element={<LevelExample/>}></Route>
             </Routes>
         </Router>
     </div>
