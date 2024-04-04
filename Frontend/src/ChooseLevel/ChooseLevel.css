@@ -17,6 +17,10 @@
     margin: 1vw;
   }
 
+  .disabled {
+    opacity: 0.33;
+  }
+
   .control-flow {
     display: flex;
     flex-direction: column;

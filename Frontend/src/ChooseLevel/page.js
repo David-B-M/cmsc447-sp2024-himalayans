@@ -16,11 +16,14 @@ const ButtonSwitch = ({ currLevel }) => { // This determines how the buttons are
   let buttons;
   switch(currLevel){
     case 1: //Level 1 is currLevel
-      buttons = <div><CustomButton>Level 1</CustomButton></div>
+      buttons = <div><CustomButton>Level 1</CustomButton>
+      <CustomButton disabled className="disabled">Level 2</CustomButton>
+      <CustomButton disabled className="disabled">Level 3</CustomButton></div>
       break;
     case 2: //Level 2 is currLevel
       buttons = <div><CustomButton>Level 1</CustomButton>
-      <CustomButton>Level 2</CustomButton></div>
+      <CustomButton>Level 2</CustomButton>
+      <CustomButton disabled className="disabled">Level 3</CustomButton></div>
       break;
     case 3: //Level 3 is currLevel
       buttons = <div><CustomButton>Level 1</CustomButton>
