@@ -1,65 +1,44 @@
-// main menu
-// needs buttons for 
-/*
-1. Start/load (1 button, takes you to a terraria like load page).
-- a table of usernames they can select to get back to that id's progress.
-- two buttons on the bottom [back] [new]
--
-
-2. Choose level
--> PlayLevel or phaser stuff (tbd)
--> display the status (win/lose) => they have a button to go back to the menu
--> take them back to the main menu.
-
-3. View leaderboard
-- a table of stats for each user
-- give them a button to press to go back to the main menu.
-
-*/
-
 import './App.css';
 
-import React, {Component} from 'react'
-
-/* --------------------- Custom constants --------------------- */
-// This is how I (@LT69018) decided to maneuver switching pages/components
-// conditions in the App render function just compare and reassign to values from these pageNumbers.
-import pageNumbers from './Constants/pageNumbers.js'
-/* --------------------- IMPORTING CUSTOM PAGES --------------------- */
-// Note to other frontend folk: 
-// import your page (component) here!
-import MainMenu from './Pages/MainMenu.js'
-import StartGame from './Pages/StartGame.js'
-import ChooseLevel from './Pages/ChooseLevel.js'
-/* ------------------------------------------------------------------ */
-
-class App extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      // start with the main menu when the app boots.
-      pageNumber: pageNumbers.MainMenu  
-      // ^ change this to debug or try to see your page without actually implementing page switching :p
-    };
-  }
+/* IMPORT YOUR PAGE HERE! */
+import MainMenu from "./MainMenu/page"
+import PauseMenu from "./PauseMenu/page"
+import LevelComplete from "./LevelCompletion/page"
+import ChooseLevel from './ChooseLevel/page'
+import StartGame from './StartGame/page'
 
 
-  render() {
-    const currentPageNum = this.state.pageNumber;
-    if (currentPageNum === pageNumbers.MainMenu) {
-      console.log("In App.js - Switching to Main Menu page.");
-      return <MainMenu/>;
-    } else if (currentPageNum === pageNumbers.StartGame) {
-      console.log("In App.js - Switching to StartGame page.");
-      return <StartGame/>;
-    } else if (currentPageNum === pageNumbers.ChooseLevel) {
-      console.log("In App.js - Switching to ChooseLevel page.");
-      return <ChooseLevel/>;
-    } 
-    console.log("WHOOPS. Haven't imported/checked/rendered that page num yet:", currentPageNum);
-  }
+import {BrowserRouter as Router, Routes, Route, Link} from "react-router-dom";
+import React, {useState, useEffect} from 'react'
+function App() {
+    {/* This is an example of getting the api from the backend. */}
+  const [data, setData] = useState([{}])
 
+  return (
+    <div className="App">
+        <Router> {/* Navbar goes here */}
+            <div>
+                {/* The navbar below is an example of how to use Navbar until main menu is complete. But for testing purposes,
+                When doing something that's going to require a new page like say main menu, add a new link and new route to the page.
+                Link to={} connects the navbar to the path. path={} will contain
+                 url that represents the page element={} will have the React component that represents the page. */}
+                NAVBAR
+                <Link to={"/"}> Home</Link>
+                <Link to={"/StartGame"}> Start Game </Link>
+                <Link to={"/ChooseLevel"}>Choose Level </Link>
+                <Link to={"/Pause"}> Pause Menu</Link>
+                <Link to={"/LevelComplete"}> Level Complete</Link>
+            </div>
+            <Routes> {/* Routes navbar connects to goes here */}
+                <Route path={"/"} element={<MainMenu/>}></Route>
+                <Route path={"/StartGame"} element={<StartGame/>}></Route>
+                <Route path={"/ChooseLevel"} element={<ChooseLevel/>}></Route>
+                <Route path={"/Pause"} element={<PauseMenu/>}></Route>
+                <Route path={"/LevelComplete"} element={<LevelComplete/>}></Route>
+            </Routes>
+        </Router>
+    </div>
+  );
 }
-
 
 export default App;

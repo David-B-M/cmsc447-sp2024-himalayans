@@ -1,89 +1,29 @@
-# Frontend for "Everest the Olympicat"
+# Frontend for everest the Olympicat
+To run the first time you must run `npm install` .
+(You will also need to run this if you ever get an error like this: 
+`sh: react-scripts: command not found`)
 
-If this is the first time you are getting ready to run this application,
-make sure to run `npm install`.
-After that you can run `npm start`
+Subsequent times you should be able to just run `npm start`
 
-# Comments about Development.
-
-I, @LT69018, am creating a mechanism to switch between which page is rendered by App.js
-This is a draft and we can do it a different way if that works out better, 
-but this is how I know to implement pages, 
-so if this works for yall, 
-let's stick with it and make sure we're consistently on the same wavelength 
-(have the same idea.)
-
-## First create your page.
-See `App.js` and `Pages/MainMenu.js` for how to export your component and import it in the app.
-
-Similarly, feel free to follow these instructions for a more in depth explanation.
-
-1. To start, make a file called `NewPage.js` (preferably something more descriptive)
-```js
-import React, {Component} from 'react';
-
-class NewPage extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {}
-  }
-
-  render() {
-    return (
-      {/*This is how you comment in an HTML section of React. */}
-      <h1 style={{ textAlign: 'center' }}>Code will go here</h1>
-    );
-  }
-}
-
-export default NewPage; // <- IMPORTANT: make sure to export your page. 
-// Use a name consistent with the component name you defined above
+P.S. If you have errors for allowing legacy code, try running this instead of plain `npm start`.
+Here's how you do that...
+```bash
+set NODE_OPTIONS=--openssl-legacy-provider && npm run start
 ```
 
-2. Import that component to `App.js`
-```js
-/* --------------------- IMPORTING CUSTOM PAGES --------------------- */
-// Note to other frontend folk: 
-// import your page (component) here!
-import MainMenu from './Pages/MainMenu.js';
-// ... 
-import NewPage from './Pages/NewPage.js'; // <- YOURS GOES HERE
-/* ------------------------------------------------------------------ */
+Or if you don't feel like running that over and over... Use 
+```bash
+bash run_frontend.sh
 ```
 
-## After creating a page, make it accessible to other pages through App.js
-
-these are the steps I recommend to link it to the App. 
-1. Add a constant to this dictionary (key) to represent the page you're implementing
-`Frontend/Constants/pageNumbers.js`
-```js
-const pageNumbers = {
-  MainMenu: 1,
-  ChooseLevel: 2,
-  // your new page goes here, i.e. MyNewPage: 10
-};
+If that still doesn't work, try to delete node_modules and rerun that command.
 ```
-
-2. Go to `App.js` and add a condition that compares the current page state to pages.NewPage
-```js
-render() {
-    if (currentPageNum === pageNumbers.MainMenu) {
-      console.log("In App.js - Switching to Main Menu page.");
-      return (<div><MainMenu/></div>);
-    } else if (currentPageNum === pageNumbers.ChooseLevel) {
-      // ...
-    } else if (currentPageNum === pageNumbers.NewPage) { // <- YOU ADD THIS 
-      // ...
-      console.log("In App.js - Switching to NEW page.");
-      return (<div><NewPage/></div>);
-    } 
-}
+rm -rf node_modules && rm package-lock.json
 ```
+- [ ] (wishlist) Todo: @LT69018 docker to give everyone the same packages (legacy openssl) 
 
-3. For now, that's it! Later we'll worry about actually switching between the pages i.e. when buttons are pressed. You'll likely use some props to change the App state. Feel free to ping me with questions about this.
+# Getting Started with Create React App
 
-
-# React Reference
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts

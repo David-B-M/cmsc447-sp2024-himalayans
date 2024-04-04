@@ -3,7 +3,33 @@ Welcome to the Himalayans group (CMSC447-04 Spring 2024) github project reposito
 
 # Sprint 2 - Implementation
 ## Build Instructions
-See the instructions in `./Frontend/README.md` for instructions on how to start the app.
+See the instructions in `./Frontend/README.md` for how to start the app.
+
+## Current Progress!
+Here is how our application is currently lookin!
+You can load the app up and see the the following pages.
+
+
+Shoutout our awesome team of developers for each of those pages.
+- MainMenu: @cmgilger, @LT69018, @David-B-M
+- StartGame: @LT69018 
+- PauseMenu/LevelFail: @samdev193 
+<figure>
+    <img src="current_appearance/MainMenu_3-29.png" height="300px">
+    <figcaption>Main Menu Screen as of 3-29. Buttons do not navigate to new page., but can be pressed. Credits - Connor, Jess, David</figcaption>
+</figure>
+
+<figure>
+    <img src="current_appearance/StartGame_3-29.png" height="300px">
+    <figcaption>Start Game Screen as of 3-29. User input doesn't go anywhere currently. The goal is for them to search through saved games (referenced by their username), delete and load saves, as well as initialize a new save file (with their new username). Credits - Jess</figcaption>
+</figure>
+For more on @LT69018 intentions with this page, see our whiteboard (which I believe is only accessible for team internal members):
+https://miro.com/app/board/uXjVNh35L8s=/?moveToWidget=3458764583679328038&cot=14
+
+<figure>
+    <img src="current_appearance/ChooseLevel_3-29.png" height="300px">
+    <figcaption>ChooseLevel screen as of 3-29. (Still just template, @LT69018 needs to develop it.)</figcaption>
+</figure>
 
 # Sprint 1 - Design
 <figure>
@@ -69,3 +95,20 @@ David Middour
 Samuel Oyeneyin
 - Github: https://github.com/samdev193
 - Email: soyeneyin@umbc.edu
+
+
+# Notes about our Branches
+## Anna's Branch: 
+Currently working on background animation using Phaser
+## Jess' Branch: 
+Will be where I implement the StartGame and ChooseLevel Page.
+- I originally implemented them using classes and custom page switching,
+but I was overcomplicating it :p 
+- Stashed that code in `backup-frontend-class-components`
+- I will pull sam's updated main so that we are both the same page.
+
+Connors Branch:
+@LT69018 Todo: add a skeleton HTML page for him to add buttons to.
+
+Main Branch: (what have we all agreed on)
+- App that switches between different pages 
