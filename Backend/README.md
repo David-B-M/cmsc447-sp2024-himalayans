@@ -1,5 +1,12 @@
 # Backend for "Everest the Olympicat"
-Current progress...
+This folder contains the source code for our Flask backend!
+
+# Build Instructions
+```bash
+flask --app flaskr run --debug
+```
+
+# Current progress...
 
 ## Todo
 - [ ] call init_db() i.e. in `/` endpoint or even in `__init__.py`
