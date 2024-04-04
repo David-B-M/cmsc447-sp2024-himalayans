@@ -13,6 +13,8 @@ const CustomButton = ({ children, to }) => {
   );
 }
 
+
+
 function MainMenu() {
   return (
     <div style={{ backgroundImage: `url('snowy_mountains.jpg')`,  
@@ -34,9 +36,6 @@ function MainMenu() {
         </h1>
         <h1>
           <CustomButton>View Leaderboard</CustomButton>
-        </h1>
-        <h1>
-          <button onClick={Navigate("/ChooseLevel")}>Test Button</button>
         </h1>
       </div>
     </div>
