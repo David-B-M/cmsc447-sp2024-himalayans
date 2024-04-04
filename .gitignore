@@ -1,3 +1,9 @@
 .vscode/*
 /Backend/venv
-/Frontend/node_modulesnpm
+/Frontend/node_modules
+/Frontend/.DS_Store
+/current_appearance/.DS_Store
+.DS_Store
+.idea/modules.xml
+.idea/misc.xml
+.idea/cs447-himalayans-repo.iml
