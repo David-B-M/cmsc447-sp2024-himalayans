@@ -1,13 +1,12 @@
 .custom-button {
-    background-image: url('./ChooseLevel_normal.png'); /* Specify the path to your image */
+    background-image: url('ChooseLevel_normal.png');
     background-size: cover;
     border: none;
     color: rgb(0, 86, 156);
     padding: 10px 30px;
     text-align: center;
     text-decoration: none;
-    display: block;
-    font-family: 'Montserrat', sans-serif; /* Use the SuperCool font */
+    font-family: 'Verdana', sans-serif;
     font-size: 35px;
     cursor: pointer;
     border-radius: 15px;
@@ -17,3 +16,13 @@
     outline-style: solid;
     margin: 1vw;
   }
+
+  .disabled {
+    opacity: 0.33;
+  }
+
+  .control-flow {
+    display: flex;
+    flex-direction: column;
+    height: 800px;
+}
