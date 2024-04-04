@@ -11,34 +11,40 @@ class LevelExampleClass extends Phaser.Scene
     {
         this.load.image('cat', 'himalayan_cat.jpg');
         this.load.image('background', 'snowy_mountains.jpg');
-        this.load.image('platform', 'platform.jpg');
+        this.load.image('ground', 'platform.jpg');
     }
 
     create ()
     {  
-        // Create background
+        // create background
         const { width, height } = this.sys.game.canvas;
-        //this.bg = this.add.tileSprite(0, 0, width, height, 'background').setOrigin(0, 0);
-        //this.bg.setTileScale(2);
+        this.bg = this.add.tileSprite(0, 0, width, height, 'background').setOrigin(0, 0);
+        this.bg.setTileScale(2);
 
-        this.platform = this.add.tileSprite(0, 0, width, height/3, 'platform').setOrigin(0, .5);
-        
-        //this.platform.create(400, 568, 'ground').setScale(2).refreshBody();
+        // create ground
+        this.ground = this.add.tileSprite(0, 525, width, height, 'ground').setOrigin(0, 0);
+        this.ground.setTileScale(3);
+        this.physics.add.existing(this.ground, true);
 
+        // user input
         this.cursors = this.input.keyboard.createCursorKeys();
 
-        this.catSprite = this.physics.add.sprite(200, 484, 'cat');
+        // create player
+        this.catSprite = this.physics.add.sprite(200, 475, 'cat');
         this.catSprite.setScale(0.05); 
         this.catSprite.setBounce(0.2);
         this.catSprite.setCollideWorldBounds(true);
+        this.physics.add.collider(this.catSprite, this.ground);
     
     }
 
     update ()
     {
-       //this.bg.tilePositionX += 2;
-       this.platform.tilePositionX += 2;
+        // update background and ground
+        this.bg.tilePositionX += 2;
+        this.platform.tilePositionX += 2;
 
+       // player jumping
         if (this.cursors.up.isDown && this.catSprite.body.onFloor())
         {
             this.catSprite.setVelocityY(-330);
