@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import { Link } from 'react-router-dom';
 import {Container} from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
 
 import './MainMenu.css'; // Import CSS file for styling
 
@@ -33,6 +34,9 @@ function MainMenu() {
         </h1>
         <h1>
           <CustomButton>View Leaderboard</CustomButton>
+        </h1>
+        <h1>
+          <button onClick={Navigate("/ChooseLevel")}>Test Button</button>
         </h1>
       </div>
     </div>
