@@ -42,7 +42,7 @@ class LevelExampleClass extends Phaser.Scene
     {
         // update background and ground
         this.bg.tilePositionX += 2;
-        this.platform.tilePositionX += 2;
+        this.ground.tilePositionX += 2;
 
        // player jumping
         if (this.cursors.up.isDown && this.catSprite.body.onFloor())
