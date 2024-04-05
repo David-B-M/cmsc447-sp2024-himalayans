@@ -6,6 +6,8 @@ This folder contains the source code for our Flask backend!
 ```bash
 flask --app flaskr run --debug
 ```
+You may also just execute `run_backend.sh`
+
 Make sure you have flask installed!
 
 
