@@ -11,7 +11,7 @@
     width: fit-content;
     margin-left: auto;
     margin-right: auto;
-    margin-top: 10vw;
+    margin-top: 10vh;
     padding: 10px 30px;
     border-radius: 10px;
     background-color: darkgray;
@@ -22,13 +22,14 @@
     background-image: url('ChooseLevel_normal.png');
     background-size: cover;
     text-align: center;
-    width: 300px;
-    height: 40px;
+    font-size: 20px;
+    width: 15vw; /* Adjust width to desired size */
+    height: 5vh; /* Adjust height to desired size */
     margin: 15px auto;
     color: rgb(0, 0, 0);
     background-color: #3f49c0;
     border: 1px solid black;
-    opacity: .6;
+    opacity: 1;
 }
 
 .PauseMenu .return {
