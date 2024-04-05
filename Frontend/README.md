@@ -20,6 +20,25 @@ If that still doesn't work, try to delete node_modules and rerun that command.
 ```
 rm -rf node_modules && rm package-lock.json
 ```
+
+Note 4/5 - (new potential error found from package.json)
+If you get this error
+```
+ERROR in [eslint] package.json » eslint-config-react-app/jest#overrides[0]:
+        Environment key "jest/globals" is unknown
+```
+, try to delete this line `react-app/jest` from `package.json`
+```json
+"eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest [<- DELETE THAT]"
+    ]
+  },
+```
+Source: https://stackoverflow.com/questions/67343817/how-to-solve-this-error-package-json-eslint-config-react-app-jestoverrides0
+
+
 - [ ] (wishlist) Todo: @LT69018 docker to give everyone the same packages (legacy openssl) 
 
 # Getting Started with Create React App
