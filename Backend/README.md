@@ -2,9 +2,12 @@
 This folder contains the source code for our Flask backend!
 
 # Build Instructions
+1. Initialize the virtual environment
 ```bash
 flask --app flaskr run --debug
 ```
+Make sure you have flask installed!
+
 
 # Current progress...
 
