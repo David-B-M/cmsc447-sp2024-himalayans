@@ -7,3 +7,10 @@
 .idea/modules.xml
 .idea/misc.xml
 .idea/cs447-himalayans-repo.iml
+
+# from repl.it
+.replit
+node_modules/
+package-lock.json
+package.json
+replit.nix

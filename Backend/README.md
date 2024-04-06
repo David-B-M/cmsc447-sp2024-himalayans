@@ -2,14 +2,42 @@
 This folder contains the source code for our Flask backend!
 
 # Build Instructions
+Before you begin, make sure to install `pip` and `virtualenv`.
+Follow the instructions here to do so:
+- https://packaging.python.org/en/latest/guides/installing-using-pip-and-virtual-environments/#prepare-pip
+
 1. Initialize the virtual environment
+
+You can also find these instructions below on https://packaging.python.org/en/latest/guides/installing-using-pip-and-virtual-environments/
+
+Start from scratch creating your virtual environment by following the python documentation instructions.
+
+Create `.venv` folder by running the following command.
+- (Linux) `python3 -m venv .venv`
+- (Windows) `py -m venv .venv`
+
+2. Load the `.venv` (+ install dependencies for the first time)!
+- (Linux) `source .venv/bin/activate`
+- (Windows) `.venv\Scripts\activate`
+
+Install dependencies by running `pip install -r requirements.txt`
+This is how it looks on the linux terminal.
+```bash
+~/cmsc447-sp2024-himalayans/Backend$ source .venv/bin/activate
+(venv) ~/cmsc447-sp2024-himalayans/Backend$ pip install -r requirements.txt
+```
+Once you have installed the requirements in your virtual environment, you won't have to do this again unless you delete your virtual environment again.
+
+3. Run the app!
 ```bash
 flask --app flaskr run --debug
 ```
 You may also just execute `run_backend.sh`
 
-Make sure you have flask installed!
+4. Quit the app
+You can do Cntrl-C usually to exit (break out of `flask run`).
 
+Deactivate the `.venv` by running the `deactivate` command.
 
 # Current progress...
 
