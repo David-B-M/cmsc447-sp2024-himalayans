@@ -9,9 +9,13 @@ class LevelExampleClass extends Phaser.Scene
 
     preload ()
     {
-        this.load.image('cat', 'himalayan_cat.jpg');
+        //this.load.image('cat', 'himalayan_cat.jpg');
+        this.load.atlas('player', 'cat_sprite.png', 'cat_sprite.json');
         this.load.image('background', 'snowy_mountains.jpg');
         this.load.image('ground', 'platform.jpg');
+        this.load.image('rock', 'snowy_rock.png')
+        this.load.image('tree', 'snowy_tree.png')
+        this.load.image('fish', 'fish.png')
     }
 
     create ()
@@ -29,29 +33,68 @@ class LevelExampleClass extends Phaser.Scene
         // user input
         this.cursors = this.input.keyboard.createCursorKeys();
 
+        // player animation
+        this.anims.create({ 
+            key:'walk', 
+            frames: this.anims.generateFrameNames('player', {
+                prefix:'cat_sprite', 
+                end: 2, 
+                zeroPad: 1
+            }),
+            repeat: -1
+        });
+
         // create player
-        this.catSprite = this.physics.add.sprite(200, 475, 'cat');
-        this.catSprite.setScale(0.05); 
-        this.catSprite.setBounce(0.2);
-        this.catSprite.setCollideWorldBounds(true);
-        this.physics.add.collider(this.catSprite, this.ground);
-    
+        this.player = this.physics.add.sprite(200, 465, 'player');
+        this.player.setBounce(0.2);
+        this.player.setCollideWorldBounds(true);
+        this.physics.add.collider(this.player, this.ground)
+        this.player.play('walk');
+
+        //  the score
+        this.scoreText = this.add.text(16, 16, 'score: 0', { fontSize: '32px', fill: '#000' });
+
+        // the time
+        this.timerValue = 15;
+        this.timerText = this.add.text(16, 48, 'time: ' + this.timerValue, { fontSize: '32px', fill: '#000' });
+       
+        // game end flag
+        this.gameOver = false;
     }
 
     update ()
     {
+        if (outOfTime(this.timerValue))
+        {
+        return;
+        }
+
         // update background and ground
         this.bg.tilePositionX += 2;
         this.ground.tilePositionX += 2;
 
+        // update timer
+        this.timerText.setText('time: ' + this.timerValue.toFixed(0));
+        this.timerValue -= 0.025;
+
+        
        // player jumping
-        if (this.cursors.up.isDown && this.catSprite.body.onFloor())
+        if (this.cursors.up.isDown && this.player.body.onFloor())
         {
-            this.catSprite.setVelocityY(-330);
+            this.player.setVelocityY(-330);
         }
+        
     }
 }
 
+function outOfTime (timerValue)
+{
+    if (timerValue <= 0)
+    {
+    this.physics.pause();
+    this.gameOver = true;
+    }
+}
 
 function LevelExample()
 {
