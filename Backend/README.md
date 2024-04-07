@@ -43,7 +43,7 @@ Deactivate the `.venv` by running the `deactivate` command.
 # Current progress...
 
 ## Todo
-- [ ] call init_db() i.e. in `/` endpoint or even in `__init__.py`
+- [X] call init_db() i.e. in `/` endpoint or even in `__init__.py`
 - [ ] Fully Document the expected parameters and returns for the HTTP requests below.
 
 ### __HTTP Requests__
