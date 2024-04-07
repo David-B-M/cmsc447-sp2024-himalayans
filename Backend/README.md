@@ -86,3 +86,45 @@ GET load_leaderboard
 
 ## Complete
 - schema.sql (Define tables `users` and `leaderboard`)
+
+# Miscellaneous Notes
+
+## Running on repl.it
+You may have noticed some silly files in the `~/.gitignore`, the reason is because I (@LT69018) did some development on there while my computer has been in the shop.
+
+In the slim chance you are running this app on replit.com
+To add the `flask` package in order to run commands like `flask run`, you need to go through the `Packages` and try to install flask through that. Similarly, **Repeat** whichever procedure works for you for each of the remaining packages in `requirements.txt`, if there are any.
+
+That would run a command like this in the Console
+```bash
+poetry add 'flask ==0.2.10'
+```
+If it fails i.e. `Could not find a matching version of package flask`, executing that command manually in the Shell without the version worked for me.
+
+```bash
+~/cmsc447-sp2024-himalayans$ poetry add 'flask'
+Using version ^3.0.2 for flask
+
+Updating dependencies
+Resolving dependencies... (4.9s)
+
+Package operations: 7 installs, 0 updates, 0 removals
+
+  • Installing markupsafe (2.1.5)
+  • Installing blinker (1.7.0)
+  • Installing click (8.1.7)
+  • Installing itsdangerous (2.1.2)
+  • Installing jinja2 (3.1.3)
+  • Installing werkzeug (3.0.2)
+  • Installing flask (3.0.2)
+
+Writing lock file
+```
+
+Verify you were successfully able to get the requirements by running `pip install -r requirements` in your activated venv.
+
+```bash
+(venv) ~/cmsc447-sp2024-himalayans/Backend$ pip install -r requirements.txt 
+Requirement already satisfied: ...
+...
+```
