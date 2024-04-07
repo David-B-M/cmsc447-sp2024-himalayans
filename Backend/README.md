@@ -88,6 +88,11 @@ GET load_leaderboard
 - schema.sql (Define tables `users` and `leaderboard`)
 
 # Miscellaneous Notes
+## Our Tests (Using Pytest library)
+Inside the virtual environment `(venv)` you can run this command to execute our tests!
+```
+python -m pytest
+```
 
 ## Running on repl.it
 You may have noticed some silly files in the `~/.gitignore`, the reason is because I (@LT69018) did some development on there while my computer has been in the shop.

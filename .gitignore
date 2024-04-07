@@ -19,3 +19,5 @@ replit.nix
 # backend packages (flask)
 poetry.lock
 pyproject.toml
+.breakpoints
+Backend/tests/__pycache__/
