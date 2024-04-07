@@ -1,5 +1,6 @@
 .vscode/*
 /Backend/venv
+/Backend/flaskr/__pycache__
 /Frontend/node_modules
 /Frontend/.DS_Store
 /current_appearance/.DS_Store
@@ -10,7 +11,11 @@
 
 # from repl.it
 .replit
+# frontend packages
 node_modules/
 package-lock.json
 package.json
 replit.nix
+# backend packages (flask)
+poetry.lock
+pyproject.toml
