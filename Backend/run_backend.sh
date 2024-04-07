@@ -1,1 +1,1 @@
-flask --app flaskr run --debug
+source .venv/bin/activate && flask --app flaskr run --debug
