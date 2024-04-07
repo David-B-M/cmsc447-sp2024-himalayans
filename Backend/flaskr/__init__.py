@@ -24,6 +24,11 @@ def create_app(test_config=None):
     except OSError:
         pass
 
+    # source:
+    # https://flask.palletsprojects.com/en/3.0.x/tutorial/database/ 
+    from . import db
+    db.init_app(app)
+    
     @app.route('/')
     def home():  # put application's code here
         print("Successfully loaded `/` endpoint!")

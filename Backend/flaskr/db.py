@@ -45,9 +45,15 @@ Using @app.cli.command makes it so we can run it from the commmand "flask"
 """
 
 
-# source: https://sun.iwu.edu/~mliffito/flask_tutorial/dbinit.html
-@app.cli.command('initdb')
-def initdb_command():
-    """Initializes the database."""
+# source: https://flask.palletsprojects.com/en/3.0.x/tutorial/database/
+@click.command('init-db')
+def init_db_command():
+    """Clear the existing data and create new tables."""
     init_db()
-    print('Initialized the database.')
+    click.echo('Initialized the database.')
+
+
+# source: https://flask.palletsprojects.com/en/3.0.x/tutorial/database/
+def init_app(app):
+    app.teardown_appcontext(close_db)
+    app.cli.add_command(init_db_command)
