@@ -1,1 +1,2 @@
+- [ ] Verify database is created when app starts up.
 - [ ] Add windows instructions for installing dependencies via requirements.txt

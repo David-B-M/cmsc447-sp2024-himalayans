@@ -5,6 +5,8 @@ Author: Flask Documentation + Jess
 Description:
 This code should allow me to test our endpoints using the pytest app client!
 
+Particularly, I can use any "fixtures" here as variables in any of the tests in this directory. i.e. `app` (all without having to import them!)
+
 Skeleton code gathered from this source:
 https://flask.palletsprojects.com/en/3.0.x/testing/
 """

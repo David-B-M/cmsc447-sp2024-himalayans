@@ -35,3 +35,19 @@ def init_db():
         db.executescript(f.read().decode('utf8'))
 
     print("Initialized database!")
+
+
+#
+"""
+Hppefully, this will initialize the database when the app starts up
+Using @app.cli.command makes it so we can run it from the commmand "flask"
+- `flask initdb`
+"""
+
+
+# source: https://sun.iwu.edu/~mliffito/flask_tutorial/dbinit.html
+@app.cli.command('initdb')
+def initdb_command():
+    """Initializes the database."""
+    init_db()
+    print('Initialized the database.')

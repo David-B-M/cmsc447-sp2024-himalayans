@@ -32,9 +32,10 @@ Once you have installed the requirements in your virtual environment, you won't 
 ```bash
 flask --app flaskr run --debug
 ```
-You may also just execute `run_backend.sh`
+(If you're running bash) You may also just execute `run_backend.sh`
 
 4. Quit the app
+   
 You can do Cntrl-C usually to exit (break out of `flask run`).
 
 Deactivate the `.venv` by running the `deactivate` command.
@@ -88,11 +89,52 @@ GET load_leaderboard
 - schema.sql (Define tables `users` and `leaderboard`)
 
 # Miscellaneous Notes
+General References
+- Project Layout modeled after <a href="https://flask.palletsprojects.com/en/2.3.x/tutorial/layout/">Flask Documentation - Project Layout</a>
+```
+├── flaskr/
+│   ├── __init__.py
+│   │       Each endpoint is a sub-function in "create_app(...)"
+│   │       Todo: GET /create_user, etc. + document
+│   │       
+│   ├── db.py
+│   │       Where I attempt to create functions to access the database! 
+│   │       Todo: test is the database actually created when the app is run.
+│   │       
+│   ├── schema.sql
+│   │       Defines the tables for the "users" and "leaderboard".
+│   │       
+├── tests/
+│   ├── conftest.py
+│   │      Just a configuration file for pytest. 
+│   │      Allows me to access the flask app from each test_*.py 
+│   │      
+│   ├── test_[endpoint].py
+│   │      Usually just one function that tries to assert an endpoint is behaving.
+│   │      
+└── .venv/
+            This only appears after you initialize your virtual environment.
+            It holds our python interpreter and packages! i.e. "flask", etc.
+```
+  - 
+
 ## Our Tests (Using Pytest library)
 Inside the virtual environment `(venv)` you can run this command to execute our tests!
+Reference: https://flask.palletsprojects.com/en/3.0.x/testing/
+
+(run pytest without viewing stdout during successful tests)
 ```
 python -m pytest
 ```
+Apparently, by default, `pytest` doesn't display any output it gets when a test was successful (however it will always show during failed tests). 
+
+To see your output, i.e. my "Successfully pinged [endpoint name] " messages from `flaskr/__init__.py`, run it with the `-s` option after pytest.
+
+(run pytest **WITH** viewing stdout during successful tests)
+```
+python -m pytest -s
+```
+Reference: https://stackoverflow.com/a/24617813
 
 ## Running on repl.it
 You may have noticed some silly files in the `~/.gitignore`, the reason is because I (@LT69018) did some development on there while my computer has been in the shop.
