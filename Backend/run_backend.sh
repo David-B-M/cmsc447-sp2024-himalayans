@@ -1,1 +1,4 @@
-source .venv/bin/activate && flask --app flaskr run --debug
+source .venv/bin/activate && \
+    export FLASK_APP=flaskr && \
+    flask init-db && \
+    flask run --debug

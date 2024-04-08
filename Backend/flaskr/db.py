@@ -34,8 +34,6 @@ def init_db():
     with current_app.open_resource(SCHEMA_SQL_FILE_PATH) as f:
         db.executescript(f.read().decode('utf8'))
 
-    print("Initialized database!")
-
 
 #
 """

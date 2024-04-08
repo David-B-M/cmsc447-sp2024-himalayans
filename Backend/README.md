@@ -29,6 +29,31 @@ This is how it looks on the linux terminal.
 Once you have installed the requirements in your virtual environment, you won't have to do this again unless you delete your virtual environment again.
 
 3. Run the app!
+The instructions to do this all manually are below.
+If you are running linux, you can skip these and just run
+```
+bash run_backend.sh
+```
+
+Manually run:
+
+The first time you do this, you must initialize a few things.
+- set the flask app name (reference: https://flask.palletsprojects.com/en/1.1.x/cli/ )
+```bash
+$ export FLASK_APP=flaskr
+```
+Windows CMD:
+```cmd
+> set FLASK_APP=flaskr
+```
+Windows PowerShell:
+```powershell
+> $env:FLASK_APP = "flaskr"
+```
+- initialize the database by running this command: `flask init-db`
+- 
+
+After you've run that, you can just run and re-run the app without re-initializing the datbase.
 ```bash
 flask --app flaskr run --debug
 ```
