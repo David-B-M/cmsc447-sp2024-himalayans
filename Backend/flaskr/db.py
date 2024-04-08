@@ -6,6 +6,9 @@ import click
 from flask import current_app, g
 
 SCHEMA_SQL_FILE_PATH = 'schema.sql'
+DEBUG_DB = True
+
+USERNAME_LEN = 5  # <- for easy display on frontend. Also this is how we define it in the database schema.
 
 
 def get_db():
@@ -29,26 +32,17 @@ def close_db(e=None):
 
 
 def init_db():
+    """Creates the tables if they don't already exist"""
     db = get_db()
 
     with current_app.open_resource(SCHEMA_SQL_FILE_PATH) as f:
         db.executescript(f.read().decode('utf8'))
 
-    print("Initialized database!")
 
-
-#
-"""
-Hppefully, this will initialize the database when the app starts up
-Using @app.cli.command makes it so we can run it from the commmand "flask"
-- `flask initdb`
-"""
-
-
-# source: https://flask.palletsprojects.com/en/3.0.x/tutorial/database/
+# Reference: https://flask.palletsprojects.com/en/3.0.x/tutorial/database/
 @click.command('init-db')
 def init_db_command():
-    """Clear the existing data and create new tables."""
+    """Allows you to initialize the database from the command line `flask init-db`"""
     init_db()
     click.echo('Initialized the database.')
 
@@ -57,3 +51,113 @@ def init_db_command():
 def init_app(app):
     app.teardown_appcontext(close_db)
     app.cli.add_command(init_db_command)
+    if DEBUG_DB:
+        app.cli.add_command(load_users_command)
+        app.cli.add_command(drop_db_command)
+
+
+# ----------------------------
+# MY CUSTOM FUNCTIONS BEGIN HERE
+# ----------------------------
+def drop_db():
+    # usage: during development, I may edit the schema and want to re-initialize the tables.
+    # run the drop_db_command via the command line to do so.
+    db = get_db()
+    assert db is not None, "[DB: drop_db] Failed to connect to database."
+
+    DROP_USERS_TABLE_SQL = """
+        DROP TABLE IF EXISTS users;
+        """
+    DROP_LEADERBOARD_TABLE_SQL = """
+        DROP TABLE IF EXISTS leaderboard;
+        """
+    db_cursor = db.cursor()
+    try:
+        db_cursor.execute(DROP_USERS_TABLE_SQL)
+        db_cursor.execute(DROP_LEADERBOARD_TABLE_SQL)
+    except Exception as e:
+        print("Failed to drop_db :(")
+        if DEBUG_DB:
+            print("[DB: drop_db] Error: ", e)
+        return False
+    print("Dropped tables.")
+    return True
+
+
+@click.command('drop-db')
+def drop_db_command():
+    result = drop_db()
+    click.echo(f'Successfully dropped tables? {result}')
+
+
+@click.command('load-users')
+def load_users_command():
+    result = load_users_from_db()
+    click.echo(f'Loaded users from db: {result}')
+
+
+def load_users_from_db():
+    db = get_db()
+    assert db is not None, "[DB: load_users_from_db] Failed to connect to database."
+
+    LOAD_USERS_SQL = """
+    SELECT * from users;
+    """
+    db_cursor = db.cursor()
+    load_result = db_cursor.execute(LOAD_USERS_SQL)
+
+    if load_result is None:
+        print("Failed to load_users_from_db :(")
+        close_db()
+        return None
+
+    fetched_result = load_result.fetchall()
+    close_db()
+    jsonified_result = []
+    for user_row in fetched_result:
+        jsonified_result.append({
+            "user_id": user_row["user_id"],
+            "username": user_row["username"],
+            "levelReached": user_row["levelReached"]
+        })
+    return jsonified_result
+
+
+def get_usernames_only(load_result):
+    # considering making a function to get the usernames from the load_result
+    # this way I can check if a username is already in the table.
+    # I do have a UNIQUE constraint on the username column, so this may or may not be necessary.
+    # it just may be more user friendly if the warning comes from our server.
+    pass
+
+
+def add_user(username):
+    """
+    Create a row in the `users` table with the given username.
+    :param: the username we want to store. 
+    :return: 
+        (on success) the ID of the new user
+        (on failure) None
+    """
+    assert len(username) == USERNAME_LEN, \
+        f"Username should be 5 characters long, but is {len(username)} characters long."
+    # todo: maybe validate the username isn't in the database already? i.e. look through the result from load.
+    db = get_db()
+    assert db is not None, "[DB: add_user] Failed to connect to database."
+
+    ADD_USER_SQL = """
+    INSERT INTO users(username) 
+    VALUES (?);
+    """
+
+    db_cursor = db.cursor()
+    load_result = db_cursor.execute(ADD_USER_SQL, username)
+
+    if load_result is None:
+        print(f"Failed to add_user(username={username}) :(")
+        close_db()
+        return None
+
+    close_db()
+    # Reference: https://www.sqlitetutorial.net/sqlite-python/insert/
+    return db_cursor.lastrowid

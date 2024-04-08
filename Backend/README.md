@@ -29,6 +29,31 @@ This is how it looks on the linux terminal.
 Once you have installed the requirements in your virtual environment, you won't have to do this again unless you delete your virtual environment again.
 
 3. Run the app!
+The instructions to do this all manually are below.
+If you are running linux, you can skip these and just run
+```
+bash run_backend.sh
+```
+
+Manually run:
+
+The first time you do this, you must initialize a few things.
+- set the flask app name (reference: https://flask.palletsprojects.com/en/1.1.x/cli/ )
+```bash
+$ export FLASK_APP=flaskr
+```
+Windows CMD:
+```cmd
+> set FLASK_APP=flaskr
+```
+Windows PowerShell:
+```powershell
+> $env:FLASK_APP = "flaskr"
+```
+- initialize the database by running this command: `flask init-db`
+- 
+
+After you've run that, you can just run and re-run the app without re-initializing the datbase.
 ```bash
 flask --app flaskr run --debug
 ```
@@ -98,12 +123,15 @@ General References
 │   │       Todo: GET /create_user, etc. + document
 │   │       
 │   ├── db.py
-│   │       Where I attempt to create functions to access the database! 
-│   │       Todo: test is the database actually created when the app is run.
+│   │       Functions to access the database! 
 │   │       
 │   ├── schema.sql
 │   │       Defines the tables for the "users" and "leaderboard".
 │   │       
+├── instance/
+│   ├── flaskr.sqlite
+│   │      This is where all db tables reside after you run `flask init-db`
+│   │      
 ├── tests/
 │   ├── conftest.py
 │   │      Just a configuration file for pytest. 
@@ -116,10 +144,51 @@ General References
             This only appears after you initialize your virtual environment.
             It holds our python interpreter and packages! i.e. "flask", etc.
 ```
-  - 
 
+## How to contribute:
+### Make a new endpoint
+### Make a new database function `db.py`
+
+- If you're adding to `db.py` your code will probably look something like this.
+    ```python
+    def new_func_for_db(parameter):
+      """
+      Description
+      :param parameter: 
+          Expected format "xyz"
+      :return:
+          (on success) _____
+          (on fail) None
+      """
+      db = get_db()
+      assert db is not None, "Failed to connect to database."
+      NEW_FUNC_SQL = """
+          SELECT * from users; -- you replace this with what you actually wanna do
+          """
+      db_cursor = db.cursor()
+      execution_result = db_cursor.execute(NEW_FUNC_SQL)  
+      # ^ you might want to fetch data from this.
+      return SUCCESS_RETURN_VALUE
+    ```
+  - (this is mostly a note for myself) Remember, you can only execute 1 sql command at a time using `cur.execute(query)`
+  - Additionally, you may want to make an `@click` function so that you can test it without running the app.
+  - For example, currently I have this command (`flask drop-db`)so that I can re-initialize the tables after deleting them (i.e. if I change `schema.sql`)
+    ```python
+    @click.command('drop-db')
+    def drop_db_command():
+        result = drop_db()
+        click.echo(f'Successfully dropped tables? {result}')
+    ```
+    ```bash
+    (Backend) ~/cmsc447-sp2024-himalayans/Backend$ flask drop-db
+    Getting database connection
+    Dropped tables.
+    Successfully dropped tables? True
+    Closed database connection.
+    ```
 ## Our Tests (Using Pytest library)
-Inside the virtual environment `(venv)` you can run this command to execute our tests!
+Inside the virtual environment `(venv)` you can run this command to execute our tests! (Currently there is one for the "/" endpoint and thats it.)
+
 Reference: https://flask.palletsprojects.com/en/3.0.x/testing/
 
 (run pytest without viewing stdout during successful tests)
@@ -135,6 +204,18 @@ To see your output, i.e. my "Successfully pinged [endpoint name] " messages from
 python -m pytest -s
 ```
 Reference: https://stackoverflow.com/a/24617813
+
+### Command line tests (for DEBUGGING)
+Additionally, I have the `flask load-db` command to display all the users from the command line.
+```bash
+(Backend) ~/cmsc447-sp2024-himalayans/Backend$ flask load-users
+Getting database connection
+Closed database connection.
+Loaded users from db:[]
+Closed database connection.
+```
+
+This way once I implement functionality to add users it'll be easy to display them if I can't get the endpoint to work.
 
 ## Running on repl.it
 You may have noticed some silly files in the `~/.gitignore`, the reason is because I (@LT69018) did some development on there while my computer has been in the shop.

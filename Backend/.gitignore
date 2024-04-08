@@ -1,3 +1,4 @@
 # don't commit any virtual environments to the repo!
 .venv/
 venv/
+instance/
