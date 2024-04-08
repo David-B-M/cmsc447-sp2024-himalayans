@@ -144,8 +144,48 @@ General References
             This only appears after you initialize your virtual environment.
             It holds our python interpreter and packages! i.e. "flask", etc.
 ```
-  - 
 
+## How to contribute:
+### Make a new endpoint
+### Make a new database function `db.py`
+
+- If you're adding to `db.py` your code will probably look something like this.
+    ```python
+    def new_func_for_db(parameter):
+      """
+      Description
+      :param parameter: 
+          Expected format "xyz"
+      :return:
+          (on success) _____
+          (on fail) None
+      """
+      db = get_db()
+      assert db is not None, "Failed to connect to database."
+      NEW_FUNC_SQL = """
+          SELECT * from users; -- you replace this with what you actually wanna do
+          """
+      db_cursor = db.cursor()
+      execution_result = db_cursor.execute(NEW_FUNC_SQL)  
+      # ^ you might want to fetch data from this.
+      return SUCCESS_RETURN_VALUE
+    ```
+  - (this is mostly a note for myself) Remember, you can only execute 1 sql command at a time using `cur.execute(query)`
+  - Additionally, you may want to make an `@click` function so that you can test it without running the app.
+  - For example, currently I have this command (`flask drop-db`)so that I can re-initialize the tables after deleting them (i.e. if I change `schema.sql`)
+    ```python
+    @click.command('drop-db')
+    def drop_db_command():
+        result = drop_db()
+        click.echo(f'Successfully dropped tables? {result}')
+    ```
+    ```bash
+    (Backend) ~/cmsc447-sp2024-himalayans/Backend$ flask drop-db
+    Getting database connection
+    Dropped tables.
+    Successfully dropped tables? True
+    Closed database connection.
+    ```
 ## Our Tests (Using Pytest library)
 Inside the virtual environment `(venv)` you can run this command to execute our tests! (Currently there is one for the "/" endpoint and thats it.)
 
