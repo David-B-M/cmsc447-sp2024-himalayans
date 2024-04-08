@@ -123,12 +123,15 @@ General References
 │   │       Todo: GET /create_user, etc. + document
 │   │       
 │   ├── db.py
-│   │       Where I attempt to create functions to access the database! 
-│   │       Todo: test is the database actually created when the app is run.
+│   │       Functions to access the database! 
 │   │       
 │   ├── schema.sql
 │   │       Defines the tables for the "users" and "leaderboard".
 │   │       
+├── instance/
+│   ├── flaskr.sqlite
+│   │      This is where all db tables reside after you run `flask init-db`
+│   │      
 ├── tests/
 │   ├── conftest.py
 │   │      Just a configuration file for pytest. 
@@ -144,7 +147,8 @@ General References
   - 
 
 ## Our Tests (Using Pytest library)
-Inside the virtual environment `(venv)` you can run this command to execute our tests!
+Inside the virtual environment `(venv)` you can run this command to execute our tests! (Currently there is one for the "/" endpoint and thats it.)
+
 Reference: https://flask.palletsprojects.com/en/3.0.x/testing/
 
 (run pytest without viewing stdout during successful tests)
@@ -160,6 +164,18 @@ To see your output, i.e. my "Successfully pinged [endpoint name] " messages from
 python -m pytest -s
 ```
 Reference: https://stackoverflow.com/a/24617813
+
+### Command line tests (for DEBUGGING)
+Additionally, I have the `flask load-db` command to display all the users from the command line.
+```bash
+(Backend) ~/cmsc447-sp2024-himalayans/Backend$ flask load-users
+Getting database connection
+Closed database connection.
+Loaded users from db:[]
+Closed database connection.
+```
+
+This way once I implement functionality to add users it'll be easy to display them if I can't get the endpoint to work.
 
 ## Running on repl.it
 You may have noticed some silly files in the `~/.gitignore`, the reason is because I (@LT69018) did some development on there while my computer has been in the shop.
