@@ -6,7 +6,16 @@ Before you begin, make sure to install `pip` and `virtualenv`.
 Follow the instructions here to do so:
 - https://packaging.python.org/en/latest/guides/installing-using-pip-and-virtual-environments/#prepare-pip
 
-1. Initialize the virtual environment
+You'll only have to run step 1 once, but will repeat steps 2-4 every time you want to run the app.
+
+If you're on linux/bash, you can just run this shell script instead which runs those steps (2-4) for you. 
+```
+bash run_backend.sh
+```
+
+**Note for Mac Users**: If an instruction says Linux or bash, you should be fine to run those on Mac since that terminal uses bash.
+
+## 1. Initialize the virtual environment
 
 You can also find these instructions below on https://packaging.python.org/en/latest/guides/installing-using-pip-and-virtual-environments/
 
@@ -16,7 +25,8 @@ Create `.venv` folder by running the following command.
 - (Linux) `python3 -m venv .venv`
 - (Windows) `py -m venv .venv`
 
-2. Load the `.venv` (+ install dependencies for the first time)!
+## 2. Load the `.venv` (+ install dependencies for the first time)!
+Load the virtual envronment:
 - (Linux) `source .venv/bin/activate`
 - (Windows) `.venv\Scripts\activate`
 
@@ -28,17 +38,11 @@ This is how it looks on the linux terminal.
 ```
 Once you have installed the requirements in your virtual environment, you won't have to do this again unless you delete your virtual environment again.
 
-3. Run the app!
-The instructions to do this all manually are below.
-If you are running linux, you can skip these and just run
-```
-bash run_backend.sh
-```
+## 3. Run the app!
 
-Manually run:
-
-The first time you do this, you must initialize a few things.
+Every terminal session you do this in, you must initialize the name of the app.
 - set the flask app name (reference: https://flask.palletsprojects.com/en/1.1.x/cli/ )
+- Note: If you are unable to set this environment variable, later instead of doing `flask [COMMAND]` you'll have to do `flask --app flaskr [COMMAND]`. I suggest trying to get this environment variable so you have less to type, especially if you run any of our custom click commands for testing.
 ```bash
 $ export FLASK_APP=flaskr
 ```
@@ -50,16 +54,15 @@ Windows PowerShell:
 ```powershell
 > $env:FLASK_APP = "flaskr"
 ```
+
 - initialize the database by running this command: `flask init-db`
-- 
 
 After you've run that, you can just run and re-run the app without re-initializing the datbase.
 ```bash
-flask --app flaskr run --debug
+flask run 
 ```
-(If you're running bash) You may also just execute `run_backend.sh`
 
-4. Quit the app
+## 4. Quit the app
    
 You can do Cntrl-C usually to exit (break out of `flask run`).
 
@@ -74,7 +77,7 @@ Deactivate the `.venv` by running the `deactivate` command.
 ### __HTTP Requests__
 
 ```
-POST add_user?name
+POST add_user?username
 ```
 - Usage: Frontend StartGame page.
 - when user presses `[New Game]` and enters their name, send it to the backend to validate and save!
@@ -205,7 +208,17 @@ python -m pytest -s
 ```
 Reference: https://stackoverflow.com/a/24617813
 
-### Command line tests (for DEBUGGING)
+### My Custom Tests
+Run a specific test by typing the test file path after `pytest`. 
+For example:
+```bash
+python -m pytest tests/test_load.py
+```
+
+For my reference, when I test an endpoint, I get a `TestResponse` as the result. See this reference link for information about the attributes that can be accessed from those objects.
+https://docs.pylonsproject.org/projects/webtest/en/latest/testresponse.html
+
+#### Command line tests (for DEBUGGING)
 Additionally, I have the `flask load-db` command to display all the users from the command line.
 ```bash
 (Backend) ~/cmsc447-sp2024-himalayans/Backend$ flask load-users
