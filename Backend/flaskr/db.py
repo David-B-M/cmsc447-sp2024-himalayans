@@ -113,7 +113,14 @@ def load_users_from_db():
 
     fetched_result = load_result.fetchall()
     close_db()
-    return fetched_result
+    jsonified_result = []
+    for user_row in fetched_result:
+        jsonified_result.append({
+            "user_id": user_row["user_id"],
+            "username": user_row["username"],
+            "levelReached": user_row["levelReached"]
+        })
+    return jsonified_result
 
 
 def get_usernames_only(load_result):
