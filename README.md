@@ -129,7 +129,7 @@ Main Branch: (what have we all agreed on)
 <figure>
     <img src="current_appearance/StartGame_4-9.jpg" height="300px">
 </figure>
-Worked on the StartGame page GUI
+Worked on the StartGame page GUI.
 - button functionality to traverse between pages
 - displays current example saved games
 - added css file and image for StartGame styling
