@@ -39,6 +39,8 @@ def init_db():
     with current_app.open_resource(SCHEMA_SQL_FILE_PATH) as f:
         db.executescript(f.read().decode('utf8'))
 
+    print("Created the tables if they don't already exist.")
+
 
 # Reference: https://flask.palletsprojects.com/en/3.0.x/tutorial/database/
 @click.command('init-db')
@@ -93,11 +95,11 @@ def drop_db_command():
 
 @click.command('load-users')
 def load_users_command():
-    result = load_users_from_db()
+    result = load_users()
     click.echo(f'Done running load_users via click command.')
 
 
-def load_users_from_db():
+def load_users():
     """
     Get all the rows from the `users` table.
     - No parameters since there is no condition or input.
@@ -135,8 +137,10 @@ def load_users_from_db():
             "username": user_row["username"],
             "levelReached": user_row["levelReached"]
         })
-    if (DEBUG_DB):
-        print(f"[DB: load_users_from_db] Loaded users: {jsonified_result}")
+
+    print(f"[DB: load_users_from_db] Successfully loaded users from database!")
+    if DEBUG_DB:
+        print(f"\tResult: {jsonified_result}")
     return (True, jsonified_result)
 
 
@@ -156,6 +160,9 @@ def add_user(username):
         (on success) the ID of the new user
         (on failure) None
     """
+    if DEBUG_DB:
+        print(f"[DB: add_user] Top of Function.\n\tUsername = {username}")
+
     assert len(username) == USERNAME_LEN, \
         f"Username should be 5 characters long, " + \
         f"but is {len(username)} characters long."
@@ -169,13 +176,25 @@ def add_user(username):
     """
 
     db_cursor = db.cursor()
-    load_result = db_cursor.execute(ADD_USER_SQL, username)
+    try:
+        load_result = db_cursor.execute(ADD_USER_SQL, (username, ))
 
-    if load_result is None:
-        print(f"Failed to add_user(username={username}) :(")
-        close_db()
+        if load_result is None:
+            print(f"Failed to add_user(username={username}) :(")
+            close_db()
+            return None
+    except sqlite3.IntegrityError as e:
+        # If it reaches here,
+        # the only integrity constraint it should've been able
+        # to violate is the UNIQUE constraint on the username column.
+        print(f"[DB: add_user] Unable to add user '{username}.'" +
+              "\n\tUsername already exists in database.")
+        if DEBUG_DB:
+            print("Got this exact integrity error: ", e)
         return None
 
+    db.commit()
+    print(f"Successfully saved username={username} to database.")
     close_db()
     # Reference: https://www.sqlitetutorial.net/sqlite-python/insert/
     return db_cursor.lastrowid
