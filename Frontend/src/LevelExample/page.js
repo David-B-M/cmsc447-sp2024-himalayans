@@ -95,7 +95,7 @@ class LevelExampleClass extends Phaser.Scene
     update()
     {
         // check if time is left
-        outOfTime(this.timerValue);
+        outOfTime(this.timerValue, this);
 
         if (this.gameOver)
         {
@@ -133,6 +133,7 @@ class LevelExampleClass extends Phaser.Scene
             child.x -= 3;
         });
 
+        // reset rock position when it goes off screen
         this.rocks.children.iterate(function (child) {
             if (child.x < -60) {
                 child.x = 1400;
@@ -143,6 +144,7 @@ class LevelExampleClass extends Phaser.Scene
     }
 }
 
+// gets a y position ranging from 350-510 to spawn fish
 function getRandomY()
 {
     return Math.random() * (510 - 350) + 350;
@@ -170,12 +172,12 @@ function collectFish (player, fish)
     this.scoreText.setText('Score: ' + this.scoreValue);
 }
 
-function outOfTime (timerValue)
+function outOfTime (timerValue, scene)
 {
     if (timerValue <= 0)
     {
-    this.physics.pause();
-    this.gameOver = true;
+        scene.physics.pause();
+        scene.gameOver = true;
     }
 }
 
