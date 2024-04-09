@@ -16,6 +16,28 @@ const CustomGameSave = ({children}) => {
   );
 }
 
+var add = 0;
+const NewGame = ({children, to}) => {
+  if (add === 1) {
+    return(
+      <div style={{zIndex: '9', position: 'fixed'}}>
+        <form>
+          <label htmlFor='name'>Name</label>
+          <input type='text' name='name2' id='name' autoComplete='off'></input>
+        </form>
+      </div>
+    );
+  } else {
+    return(
+      //<button className="new-game" onClick={popup}>{children}</button>
+      <Link to={to} className="new-game">{children}</Link>
+    );
+  }
+}
+function popup() {
+  add = 1;
+}
+
 // @dmiddour
 function StartGame() {
   return (
@@ -57,7 +79,7 @@ function StartGame() {
 
         <div style={{display: '', marginTop: '20px'}}>
           <CustomButton to={"/"}>Back</CustomButton>
-          <CustomButton to={"/"}>New Game</CustomButton>
+          <NewGame to={"/Popup2"}>New Game</NewGame>
         </div>
       </div>
     </div>

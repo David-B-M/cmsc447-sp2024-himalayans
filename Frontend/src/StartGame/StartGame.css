@@ -41,3 +41,22 @@
   overflow-y: scroll;
   scrollbar-width: none;
 }
+
+.new-game {
+  background-image: url('ChooseLevel_normal.png');
+    background-size: cover;
+    text-align: center;
+    border: none;
+    color: rgb(0, 86, 156);
+    padding: 10px 30px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 35px;
+    cursor: pointer;
+    border-radius: 15px;
+    width: 20vw; /* Adjust width to desired size */
+    height: 10vh; /* Adjust height to desired size */
+    outline-width: 4px;
+    outline-style: solid;
+    margin: 0.5vw;
+}
