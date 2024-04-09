@@ -18,7 +18,7 @@ Shoutout our awesome team of developers for each of those pages.
 - ViewLeaderboard: @ampham03
 - LevelExample: @ampham03 
 <figure>
-    <img src="current_appearance/MainMenu_4_4.png" height="300px">
+    <img src="current_appearance/MainMenu_4_4.jpg" height="300px">
     <figcaption>Main Menu Screen as of 4-4. ChooseLevel navigates to ChooseLevel page, rest are not functional. Credits - Connor, Jess, David. Moving background as of 4-9 (Credits - Anna).</figcaption>
 </figure>
 
