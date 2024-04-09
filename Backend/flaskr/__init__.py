@@ -61,7 +61,7 @@ def create_app(test_config=None):
         RESULT_BOOL_INDEX = 0
         RESULT_USERS_JSON_INDEX = 1
         
-        loaded_users = db.load_users_from_db()
+        loaded_users = db.load_users()
         if not loaded_users[RESULT_BOOL_INDEX]:
             load_response["users"] = []
             add_response_failure_options(load_response, "Failed to load users.")

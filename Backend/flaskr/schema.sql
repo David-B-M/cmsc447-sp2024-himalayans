@@ -1,9 +1,8 @@
 CREATE TABLE IF NOT EXISTS users (
-  user_id integer NOT NULL UNIQUE DEFAULT 1, 
+  user_id integer PRIMARY KEY NOT NULL UNIQUE DEFAULT 1, 
   -- note to self auto_increment isn't a sqlite thing :0
   username varchar(5) NOT NULL UNIQUE,
-  levelReached integer NOT NULL DEFAULT 1 CHECK (levelReached >= 1 AND levelReached <= 3), -- attempt at keeping it within 1 our number of levels
-  PRIMARY KEY (user_id, username)
+  levelReached integer NOT NULL DEFAULT 1 CHECK (levelReached >= 1 AND levelReached <= 3) -- attempt at keeping it within 1 our number of levels
 );
 
 CREATE TABLE IF NOT EXISTS leaderboard (
