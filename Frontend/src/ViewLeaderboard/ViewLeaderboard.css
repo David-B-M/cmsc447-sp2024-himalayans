@@ -22,8 +22,12 @@
     color: white;
     background-color: #3f49c0;
     border: 1px solid black;
+    text-decoration: none;
 }
 
+.ViewLeaderboard a {
+    text-decoration: none;
+}
 .ViewLeaderboard .return {
     border: solid 1px black;
     background-color: white;

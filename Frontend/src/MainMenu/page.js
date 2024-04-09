@@ -9,7 +9,7 @@ import './MainMenu.css'; // Import CSS file for styling
 // @cmgilger
 const CustomButton = ({ children, to }) => {
   return (
-    <Link to={to} className="custom-button">{children}</Link>
+        <Link to={to} className="custom-button">{children}</Link>
   );
 }
 
@@ -74,14 +74,14 @@ function MainMenu() {
           Main Menu
         </h1>
         <h1>
-          <CustomButton>Start Game</CustomButton>
+          <CustomButton to={"/StartGame"}>Start Game</CustomButton>
           <CustomButton>Load Game</CustomButton>
         </h1>
         <h1>
           <CustomButton to="/ChooseLevel">Choose Level</CustomButton>
         </h1>
         <h1>
-          <CustomButton>View Leaderboard</CustomButton>
+          <CustomButton to={"/ViewLeaderboard"}>View Leaderboard</CustomButton>
         </h1>
       </div>
     </div>

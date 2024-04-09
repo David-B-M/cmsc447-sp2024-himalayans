@@ -1,4 +1,5 @@
 ﻿import Phaser from 'phaser';
+import {useEffect} from 'react';
 
 class LevelExampleClass extends Phaser.Scene
 {
@@ -7,7 +8,7 @@ class LevelExampleClass extends Phaser.Scene
         super();
     }
 
-    preload ()
+    preload()
     {
         this.load.atlas('player', 'cat_sprite.png', 'cat_sprite.json');
         this.load.image('background', 'snowy_mountains.jpg');
@@ -17,8 +18,8 @@ class LevelExampleClass extends Phaser.Scene
         this.load.image('fish', 'fish.png')
     }
 
-    create ()
-    {  
+    create()
+    {
         // create background
         const { width, height } = this.sys.game.canvas;
         this.bg = this.add.tileSprite(0, 0, width, height, 'background').setOrigin(0, 0);
@@ -91,7 +92,7 @@ class LevelExampleClass extends Phaser.Scene
 
     }
 
-    update ()
+    update()
     {
         // check if time is left
         outOfTime(this.timerValue);
@@ -202,4 +203,15 @@ function LevelExample()
     return game;
 }
 
-export default LevelExample;
+function Game() {
+    useEffect(() => {
+        const game = LevelExample();
+        return () => {
+            game.destroy(true); 
+        };
+    }, []);
+    return <div id={"level-example"}/>;
+}
+
+
+export default Game;

@@ -15,7 +15,7 @@ Shoutout our awesome team of developers for each of those pages.
 - StartGame: @LT69018 
 - PauseMenu/LevelFail: @samdev193 
 <figure>
-    <img src="current_appearance/MainMenu_3-29.png" height="300px">
+    <img src="current_appearance/MainMenu_4_4.png" height="300px">
     <figcaption>Main Menu Screen as of 3-29. Buttons do not navigate to new page., but can be pressed. Credits - Connor, Jess, David</figcaption>
 </figure>
 
