@@ -3,6 +3,8 @@ To run the first time you must run `npm install` .
 (You will also need to run this if you ever get an error like this: 
 `sh: react-scripts: command not found`)
 
+You also need to download Phaser. You can download it by running `npm install phaser@v3.80.1` or download Phaser from this link https://phaser.io/download/stable
+
 Subsequent times you should be able to just run `npm start`
 
 P.S. If you have errors for allowing legacy code, try running this instead of plain `npm start`.
@@ -20,6 +22,25 @@ If that still doesn't work, try to delete node_modules and rerun that command.
 ```
 rm -rf node_modules && rm package-lock.json
 ```
+
+Note 4/5 - (new potential error found from package.json)
+If you get this error
+```
+ERROR in [eslint] package.json » eslint-config-react-app/jest#overrides[0]:
+        Environment key "jest/globals" is unknown
+```
+, try to delete this line `react-app/jest` from `package.json`
+```json
+"eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest [<- DELETE THAT]"
+    ]
+  },
+```
+Source: https://stackoverflow.com/questions/67343817/how-to-solve-this-error-package-json-eslint-config-react-app-jestoverrides0
+
+
 - [ ] (wishlist) Todo: @LT69018 docker to give everyone the same packages (legacy openssl) 
 
 # Getting Started with Create React App

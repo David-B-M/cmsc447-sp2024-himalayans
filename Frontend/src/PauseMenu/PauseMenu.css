@@ -1,8 +1,8 @@
-.PauseMenu {
-}
+
 .PauseMenu .control-flow {
     display: flex;
     flex-direction: column;
+    justify-content: center;
     height: 800px;
 }
 
@@ -12,19 +12,24 @@
     margin-left: auto;
     margin-right: auto;
     margin-top: auto;
-    padding: 10px 30px;
+    padding: 10px 10px;
     border-radius: 10px;
     background-color: darkgray;
     opacity:.6;
 }
 
-.PauseMenu button {
-    width: 300px;
-    height: 40px;
+.PauseMenu .button {
+    background-image: url('ChooseLevel_normal.png');
+    background-size: cover;
+    text-align: center;
+    width: 20vw; /* Adjust width to desired size */
+    height: 7vh; /* Adjust height to desired size */
     margin: 15px auto;
-    color: white;
+    font-size: 25px;
+    color: rgb(0, 86, 156);
     background-color: #3f49c0;
     border: 1px solid black;
+    border-radius: 15px;
 }
 
 .PauseMenu .return {
@@ -39,3 +44,22 @@
     align-items: center;
     margin-bottom: auto;
 }
+
+.custom-button-2 {
+    background-image: url('ChooseLevel_normal.png');
+    background-size: cover;
+    text-align: center;
+    border: none;
+    color: rgb(0, 86, 156);
+    padding: 10px 30px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 35px;
+    cursor: pointer;
+    border-radius: 15px;
+    width: 20vw; /* Adjust width to desired size */
+    height: 10vh; /* Adjust height to desired size */
+    outline-width: 4px;
+    outline-style: solid;
+    margin: 0.5vw;
+  }

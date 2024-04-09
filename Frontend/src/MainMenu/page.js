@@ -1,5 +1,7 @@
 import React, {Component} from 'react';
 import { Link } from 'react-router-dom';
+import {Container} from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
 
 import './MainMenu.css'; // Import CSS file for styling
 
@@ -10,6 +12,8 @@ const CustomButton = ({ children, to }) => {
     <Link to={to} className="custom-button">{children}</Link>
   );
 }
+
+
 
 function MainMenu() {
   return (
@@ -24,14 +28,13 @@ function MainMenu() {
           Main Menu
         </h1>
         <h1>
-          <CustomButton>Start Game</CustomButton>
-          <CustomButton>Load Game</CustomButton>
+          <CustomButton to="/StartGame">Start or Load Game</CustomButton>
         </h1>
         <h1>
           <CustomButton to="/ChooseLevel">Choose Level</CustomButton>
         </h1>
         <h1>
-          <CustomButton>View Leaderboard</CustomButton>
+          <CustomButton to="/ViewLeaderboard">View Leaderboard</CustomButton>
         </h1>
       </div>
     </div>
