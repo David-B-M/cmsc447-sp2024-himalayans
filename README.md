@@ -124,3 +124,12 @@ Connors Branch:
 
 Main Branch: (what have we all agreed on)
 - App that switches between different pages 
+
+##David's Branch
+<figure>
+    <img src="current_appearance/StartGame_4-9.jpg" height="300px">
+</figure>
+Worked on the StartGame page GUI
+- button functionality to traverse between pages
+- displays current example saved games
+- added css file and image for StartGame styling
