@@ -1,5 +1,5 @@
-
-  .custom-button {
+/*
+.custom-button {
     background-image: url('ChooseLevel_normal.png');
     background-size: cover;
     text-align: center;
@@ -11,15 +11,33 @@
     font-size: 35px;
     cursor: pointer;
     border-radius: 15px;
-    width: 20vw; /* Adjust width to desired size */
-    height: 10vh; /* Adjust height to desired size */
+    width: 20vw; /* Adjust width to desired size 
+    height: 10vh; /* Adjust height to desired size 
     outline-width: 4px;
     outline-style: solid;
     margin: 0.5vw;
   }
+  */
 
-  .control-flow {
-    display: flex;
-    flex-direction: column;
-    height: 800px;
+.gamesave {
+    background-image: url('Game-Select-Background.jpg');
+    background-size: cover;
+    cursor: pointer;
+    color: black;
+    font-size: 30px;
+    height: 15vh;
+    width: 45vw;
+    border-radius: 15px;
   }
+
+.saved-game-box {
+  background-image: url('');
+  height: 50vh;
+  width: 50vw;
+  border: solid;
+  border-radius: 15px;
+  background-color: white;
+  display: inline-block;
+  overflow-y: scroll;
+  scrollbar-width: none;
+}
