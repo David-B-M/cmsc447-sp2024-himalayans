@@ -1,6 +1,68 @@
 # Backend for "Everest the Olympicat"
 This folder contains the source code for our Flask backend!
 
+Scroll down to "Build Instructions" for how to run the app.
+
+# __HTTP Requests__  
+The status of each of these implementations is shown by the emojis:
+- ✅ = done
+- 🟡 = in progress
+- ❌ = not started
+
+## 🟡 Add/Create user
+(in progress)
+```
+POST add_user?username
+```
+- Usage: Frontend StartGame page.
+- when user presses `[New Game]` and enters their name, send it to the backend to validate and save!
+
+## ✅ Load (read all) users 
+(done with first attempt and test, ready to be called!)
+```
+GET /load_users
+```
+- Usage: Frontend StartGame page.
+    - return the information from the users table so that the frontend can display "save files" (usernames and the levels they reached + maybe their highscore). 
+- Response Elements:
+    - ok:     boolean
+    - users:  list of dicts (rows) each corresponding to a user. Attributes:
+        - user_id
+        - username
+        - levelReached
+<figure>
+    <img src="./example_requests/GET-load_users-success.png" 
+         style="height:200px">
+    <figcaption>
+        Example of a successful GET /load_users request.
+    </figcaption>
+</figure>
+
+
+## ❌ Check user level
+(not implemented, however you can parse the data from load_users for now)
+```
+GET user_level?username="[username]"
+```
+- Usage: Frontend ChooseLevel page.
+- Will be used in Connor's switch statement to determine which levels are disabled
+- (i.e. can't chose from 2 if they only haven't level 1)
+
+## ❌ Update user score
+```
+POST save_score
+Expects {body:{username: "...", score: ..N..}}
+```
+- Usage: Frontend LevelComplete page (which gets this information from PlayLevel)
+
+## ❌ Load leaderboard table
+```
+GET load_leaderboard
+```
+- Usage: Frontend ViewLeaderboard page.
+- [ ] todo: figure out format we want to return the data for displaying.
+
+
 # Build Instructions
 Before you begin, make sure to install `pip` and `virtualenv`.
 Follow the instructions here to do so:
@@ -68,54 +130,6 @@ You can do Cntrl-C usually to exit (break out of `flask run`).
 
 Deactivate the `.venv` by running the `deactivate` command.
 
-# Current progress...
-
-## Todo
-- [X] call init_db() i.e. in `/` endpoint or even in `__init__.py`
-- [ ] Fully Document the expected parameters and returns for the HTTP requests below.
-
-### __HTTP Requests__
-
-```
-POST add_user?username
-```
-- Usage: Frontend StartGame page.
-- when user presses `[New Game]` and enters their name, send it to the backend to validate and save!
-
-```
-GET load_users
-```
-- Usage: Frontend StartGame page.
-- return the information from the users table so that the frontend can display "save files" (usernames and the levels they reached + maybe their highscore). 
-
-```
-GET user_level?username="[username]"
-```
-- Usage: Frontend ChooseLevel page.
-- Will be used in Connor's switch statement to determine which levels are disabled
-- (i.e. can't chose from 2 if they only haven't level 1)
-
-```
-POST save_score
-Expects {body:{username: "...", score: ..N..}}
-```
-- Usage: Frontend LevelComplete page (which gets this information from PlayLevel)
-
-```
-GET load_leaderboard
-```
-- Usage: Frontend ViewLeaderboard page.
-- [ ] todo: figure out format we want to return the data for displaying.
-
-
-## In Progress
-- load_users() method. will allow HTTP GET request.
-  - Usage: displaying saves to load from on frontend. (StartGame)
- 
-
-## Complete
-- schema.sql (Define tables `users` and `leaderboard`)
-
 # Miscellaneous Notes
 General References
 - Project Layout modeled after <a href="https://flask.palletsprojects.com/en/2.3.x/tutorial/layout/">Flask Documentation - Project Layout</a>
@@ -141,7 +155,7 @@ General References
 │   │      Allows me to access the flask app from each test_*.py 
 │   │      
 │   ├── test_[endpoint].py
-│   │      Usually just one function that tries to assert an endpoint is behaving.
+│   │      Contains functions that assert an endpoint is behaving.
 │   │      
 └── .venv/
             This only appears after you initialize your virtual environment.
@@ -149,8 +163,27 @@ General References
 ```
 
 ## How to contribute:
-### Make a new endpoint
-### Make a new database function `db.py`
+### Make a new endpoint `flaskr/__init__.py`
+Add a subfunction to `create_app`. I recommend using a similar format to the home() function. 
+
+For ease of interpreting the response later on, I have created functions `add_response_success_options(response)` and `add_response_fail_options(response, msg="[default fail msg]")` so that we can consistently interpret the results.
+```python
+def create_app(test_config=None):
+    # ... configuration
+    
+    @app.route('/')
+    def home():
+        print("Successfully loaded `/` endpoint!")
+        home_response = {"msg": "Welcome to Everest the Olympicat Backend!"}
+        add_response_success_options(home_response)
+        return home_response
+
+    # ... other endpoints
+
+    # insert your endpoint here!
+```
+
+### Make a new database function `flaskr/db.py`
 
 - If you're adding to `db.py` your code will probably look something like this.
     ```python
