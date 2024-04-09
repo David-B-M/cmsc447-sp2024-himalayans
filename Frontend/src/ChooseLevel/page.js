@@ -4,6 +4,16 @@ import {Container} from 'react-bootstrap';
 import './ChooseLevel.css'; // Import CSS file for styling
 import { useNavigate } from 'react-router-dom';
 
+const LevelValue = ({}) =>{
+  axios.get('localhost:5000/load_users')
+  .then(function (response) {
+    console.log(response);
+  })
+  .catch(function (error) {
+    console.log(error);
+  });
+}
+
 const BackButton = ({ children }) => {
   const navigate = useNavigate();
 
