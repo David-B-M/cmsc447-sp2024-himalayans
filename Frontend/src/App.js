@@ -6,6 +6,7 @@ import PauseMenu from "./PauseMenu/page"
 import LevelComplete from "./LevelCompletion/page"
 import ChooseLevel from './ChooseLevel/page'
 import StartGame from './StartGame/page'
+import Popup2 from './StartGame/popup'
 import ViewLeaderboard from "./ViewLeaderboard/page"
 import LevelExample from "./LevelExample/page"
 import {BrowserRouter as Router, Routes, Route, Link} from "react-router-dom";
@@ -34,6 +35,7 @@ function App() {
             <Routes> {/* Routes navbar connects to goes here */}
                 <Route path={"/"} element={<MainMenu/>}></Route>
                 <Route path={"/StartGame"} element={<StartGame/>}></Route>
+                <Route path={"/Popup2"} element={<Popup2/>}></Route>
                 <Route path={"/ChooseLevel"} element={<ChooseLevel/>}></Route>
                 <Route path={"/Pause"} element={<PauseMenu/>}></Route>
                 <Route path={"/LevelComplete"} element={<LevelComplete/>}></Route>
