@@ -3,6 +3,8 @@ To run the first time you must run `npm install` .
 (You will also need to run this if you ever get an error like this: 
 `sh: react-scripts: command not found`)
 
+You also need to download Phaser. You can download it by running `npm install phaser@v3.80.1` or download Phaser from this link https://phaser.io/download/stable
+
 Subsequent times you should be able to just run `npm start`
 
 P.S. If you have errors for allowing legacy code, try running this instead of plain `npm start`.
