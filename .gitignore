@@ -1,5 +1,6 @@
 .vscode/*
 /Backend/venv
+/Backend/flaskr/__pycache__
 /Frontend/node_modules
 /Frontend/.DS_Store
 /current_appearance/.DS_Store
@@ -7,3 +8,16 @@
 .idea/modules.xml
 .idea/misc.xml
 .idea/cs447-himalayans-repo.iml
+
+# from repl.it
+.replit
+# frontend packages
+node_modules/
+package-lock.json
+package.json
+replit.nix
+# backend packages (flask)
+poetry.lock
+pyproject.toml
+.breakpoints
+Backend/tests/__pycache__/
