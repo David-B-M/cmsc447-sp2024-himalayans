@@ -5,6 +5,7 @@ from flask import Flask, request
 
 RESPONSE_MESSAGE_KEY = "msg"
 
+
 def create_app(test_config=None):
     # create and configure the app
     app = Flask(__name__, instance_relative_config=True)
@@ -31,11 +32,15 @@ def create_app(test_config=None):
     from . import db
     db.init_app(app)
 
+    # ---------------------------
+    # put application's code here
+    # ---------------------------
     @app.route('/')
-    def home():  # put application's code here
+    def home():
         print("Successfully loaded `/` endpoint!")
-        home_response = {RESPONSE_MESSAGE_KEY: 
-                         "Welcome to Everest the Olympicat Backend!"}
+        home_response = {
+            RESPONSE_MESSAGE_KEY: "Welcome to Everest the Olympicat Backend!"
+        }
         add_response_success_options(home_response)
         return home_response
 
@@ -60,11 +65,12 @@ def create_app(test_config=None):
         load_response = {}
         RESULT_BOOL_INDEX = 0
         RESULT_USERS_JSON_INDEX = 1
-        
-        loaded_users = db.load_users_from_db()
+
+        loaded_users = db.load_users()
         if not loaded_users[RESULT_BOOL_INDEX]:
             load_response["users"] = []
-            add_response_failure_options(load_response, "Failed to load users.")
+            add_response_failure_options(load_response,
+                                         "Failed to load users.")
             return load_response
 
         # =========
@@ -78,19 +84,48 @@ def create_app(test_config=None):
 
     @app.route("/add_user", methods=["POST"])
     def add_user():
-        username = None
-        if request.headers["Content-Type"] == "application/json":
-            username = request.get_json()["username"]
-        else:
-            username = request.params.require('username')
-        successfully_added = db.add_user(username)
-        # do something
-        if not successfully_added:
-            return {
-                "ok": False,
-                "msg": f"Unable to add user {username} to database. :("
-            }
+        """
+        Create a row in our `users` table for the given username.
+        :param: the username we want to store.
+        :return: 
+            (on success)  ex. {... , user_id: 123, ...}
+                Notably - the user_id for that user. 
+                Save it so you can look them up fast later.
+            (on fail)     ex. {..., user_id: None, ...}
 
+            Todo: maybe just return the entire row? 
+                So we don't have to look it up later.
+        """
+        # constants
+        DB_UNABLE_ADD_USER = None
+
+        # handling the request
+        response = {
+            "user_id": DB_UNABLE_ADD_USER
+        }  # <- None by default (db fails to add).
+        print(f"!!DEBUGGING /add_user!! Request=\n\t{request.get_data()}")
+        # get the username they passed to the request.
+        username = None
+        if request.headers[
+                "Content-Type"] == "application/x-www-form-urlencoded":
+            # form data is a multi-dict
+            # reference: https://flask-api.github.io/flask-api/api-guide/parsers/
+            # https://tedboy.github.io/flask/generated/generated/werkzeug.MultiDict.html
+            username = request.form.get("username")
+        else:
+            username = request.args.get('username')
+
+        # use the database method to try to add the user (validates as well)
+        db_add_user_result = db.add_user(username)
+
+        if db_add_user_result == DB_UNABLE_ADD_USER:
+            add_response_failure_options(response)
+            response[RESPONSE_MESSAGE_KEY] = \
+                f"Failed to add user {username} to database. :("
+            return response
+
+        response["user_id"] = db_add_user_result
+        add_response_success_options(response)
         return {
             "ok": True,
             "msg": f"Successfully added user {username} to database! :D"
@@ -106,7 +141,8 @@ def create_app(test_config=None):
         response["headers"] = {"content-type": "application/json"}
         response["ok"] = True
 
-    def add_response_failure_options(response, msg="Content-Type not supported!"):
+    def add_response_failure_options(response,
+                                     msg="Content-Type not supported!"):
         response['msg'] = msg
         response['ok'] = False
 
