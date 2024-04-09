@@ -3,7 +3,8 @@ Welcome to the Himalayans group (CMSC447-04 Spring 2024) github project reposito
 
 # Sprint 2 - Implementation
 ## Build Instructions
-See the instructions in `./Frontend/README.md` for how to start the app.
+1. Load the backend by following the instructions in `./Backend/README.md`
+2. Render the app by following the instructions in `./Frontend/README.md`.
 
 ## Current Progress!
 Here is how our application is currently lookin!
