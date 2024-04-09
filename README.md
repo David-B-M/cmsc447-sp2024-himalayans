@@ -3,7 +3,8 @@ Welcome to the Himalayans group (CMSC447-04 Spring 2024) github project reposito
 
 # Sprint 2 - Implementation
 ## Build Instructions
-See the instructions in `./Frontend/README.md` for how to start the app.
+1. Load the backend by following the instructions in `./Backend/README.md`
+2. Render the app by following the instructions in `./Frontend/README.md`.
 
 ## Current Progress!
 Here is how our application is currently lookin!
@@ -11,12 +12,14 @@ You can load the app up and see the the following pages.
 
 
 Shoutout our awesome team of developers for each of those pages.
-- MainMenu: @cmgilger, @LT69018, @David-B-M
+- MainMenu: @cmgilger, @LT69018, @David-B-M, @ampham03
 - StartGame: @LT69018 
-- PauseMenu/LevelFail: @samdev193 
+- PauseMenu/LevelFail: @samdev193
+- ViewLeaderboard: @ampham03
+- LevelExample: @ampham03 
 <figure>
     <img src="current_appearance/MainMenu_4_4.png" height="300px">
-    <figcaption>Main Menu Screen as of 4-4. ChooseLevel navigates to ChooseLevel page, rest are not functional. Credits - Connor, Jess, David</figcaption>
+    <figcaption>Main Menu Screen as of 4-4. ChooseLevel navigates to ChooseLevel page, rest are not functional. Credits - Connor, Jess, David. Moving background as of 4-9 (Credits - Anna).</figcaption>
 </figure>
 
 <figure>
@@ -29,6 +32,11 @@ https://miro.com/app/board/uXjVNh35L8s=/?moveToWidget=3458764583679328038&cot=14
 <figure>
     <img src="current_appearance/ChooseLevel4-9.png" height="300px">
     <figcaption>ChooseLevel screen as of 3-29. (Still just template, @LT69018 needs to develop it.)</figcaption>
+</figure>
+
+<figure>
+    <img src="current_appearance/LevelExample 4-9.png" height="300px">
+    <figcaption>LevelExample as of 4-9. Level is playable</figcaption>
 </figure>
 
 # Sprint 1 - Design
@@ -99,7 +107,11 @@ Samuel Oyeneyin
 
 # Notes about our Branches
 ## Anna's Branch: 
-Currently working on background animation using Phaser
+Currently working on an example level using Phaser
+    -implemented an endless runner concept
+    -created a moving background with a static player
+    -created obstacles to avoid and items to collect for points
+    -level ends when player hits an obstacle or time runs out
 ## Jess' Branch: 
 Will be where I implement the StartGame and ChooseLevel Page.
 - I originally implemented them using classes and custom page switching,
