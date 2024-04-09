@@ -46,7 +46,6 @@ class LevelExampleClass extends Phaser.Scene
 
         // create player
         this.player = this.physics.add.sprite(200, 475, 'player');
-        this.player.setBounce(0.2);
         this.player.setCollideWorldBounds(true);
         this.physics.add.collider(this.player, this.ground)
         this.player.play('walk');
@@ -56,7 +55,7 @@ class LevelExampleClass extends Phaser.Scene
         this.scoreText = this.add.text(16, 16, 'score: ' + this.scoreValue, { fontSize: '32px', fill: '#000' });
 
         // the time
-        this.timerValue = 15;
+        this.timerValue = 30;
         this.timerText = this.add.text(16, 48, 'time: ' + this.timerValue, { fontSize: '32px', fill: '#000' });
        
         // game end flag
