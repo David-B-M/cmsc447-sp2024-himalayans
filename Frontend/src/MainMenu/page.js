@@ -28,7 +28,7 @@ function MainMenu() {
           Main Menu
         </h1>
         <h1>
-          <CustomButton>Start Game</CustomButton>
+          <CustomButton to="/StartGame">Start Game</CustomButton>
           <CustomButton>Load Game</CustomButton>
         </h1>
         <h1>

@@ -2,6 +2,17 @@ import React, {Component} from 'react';
 import { Link } from 'react-router-dom';
 import {Container} from 'react-bootstrap';
 import './ChooseLevel.css'; // Import CSS file for styling
+import { useNavigate } from 'react-router-dom';
+
+const BackButton = ({ children }) => {
+  const navigate = useNavigate();
+
+  return (
+    <>
+      <button onClick={() => navigate(-1)} className='custom-button'>{children}</button>
+    </>
+  );
+}
 
 let level = 1; // PLACEHOLDER: this should be picked out from the currLevel column of the database
 
@@ -47,6 +58,9 @@ function ChooseLevel() {
           Choose a Level
         </h1>
         <ButtonSwitch currLevel={level} /> 
+        <div>
+          <BackButton>Go Back</BackButton>
+        </div>
       </div>
     </div>
   );
