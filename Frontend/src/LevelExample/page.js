@@ -1,37 +1,21 @@
 ﻿import Phaser from 'phaser';
 import {useEffect} from 'react';
 
-let game;
-const gameConfig = {
-        type: Phaser.AUTO,
-        scale: {
-            mode: Phaser.Scale.RESIZE,
-            width: '100%',
-            height: '100%'
-        },
-        physics: {
-            default: 'arcade',
-            arcade: {
-                gravity: { y: 300 },
-                debug: false
-            }
-        },
-        backgroundColor: '#304858',
-        scene: {
-            preload: preload,
-            create: create,
-            update: update
-        }
-};
+class LevelExampleClass extends Phaser.Scene
+{
+    constructor ()
+    {
+        super();
+    }
 
-    function preload()
+    preload()
     {
         this.load.image('cat', 'himalayan_cat.jpg');
         this.load.image('background', 'snowy_mountains.jpg');
         this.load.image('ground', 'platform.jpg');
     }
 
-    function create()
+    create()
     {
         // create background
         const { width, height } = this.sys.game.canvas;
@@ -55,25 +39,53 @@ const gameConfig = {
 
     }
 
-    function update()
+    update()
     {
         // update background and ground
         this.bg.tilePositionX += 2;
         this.ground.tilePositionX += 2;
 
-       // player jumping
+    // player jumping
         if (this.cursors.up.isDown && this.catSprite.body.onFloor())
         {
             this.catSprite.setVelocityY(-330);
         }
     }
+}
 
- function Game() {
-     useEffect(() => {
-         game = new Phaser.Game(gameConfig);
-     }, [])
-     return <div id={"level-example"}/>;
- }
+function LevelExample()
+{
+    const config = {
+        type: Phaser.AUTO,
+        scale: {
+            mode: Phaser.Scale.RESIZE,
+            width: '100%',
+            height: '100%'
+        },
+        physics: {
+            default: 'arcade',
+            arcade: {
+                gravity: { y: 300 },
+                debug: false
+            }
+        },
+        backgroundColor: '#304858',
+        scene: LevelExampleClass
+    };
+
+    const game = new Phaser.Game(config);
+    return game;
+}
+
+function Game() {
+    useEffect(() => {
+        const game = LevelExample();
+        return () => {
+            game.destroy(true); 
+        };
+    }, []);
+    return <div id={"level-example"}/>;
+}
 
 
 export default Game;
