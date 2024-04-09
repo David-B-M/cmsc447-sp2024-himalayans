@@ -1,0 +1,41 @@
+
+.ViewLeaderboard .control-flow {
+    display: flex;
+    flex-direction: column;
+    height:500px;
+}
+
+.ViewLeaderboard .title {
+    border: solid 1px black;
+    width: fit-content;
+    margin: 30px auto;
+    padding: 10px 30px;
+    border-radius: 10px;
+    background-color: darkgray;
+    opacity:.6;
+}
+
+.ViewLeaderboard button {
+    width: 300px;
+    height: 40px;
+    margin: 15px auto;
+    color: white;
+    background-color: #3f49c0;
+    border: 1px solid black;
+    text-decoration: none;
+}
+
+.ViewLeaderboard a {
+    text-decoration: none;
+}
+.ViewLeaderboard .return {
+    border: solid 1px black;
+    background-color: white;
+    color: black;
+    font-size: 24px;
+    padding: 22px 0px;
+    display: flex;
+    border-radius: 10px;
+    justify-content: center;
+    align-items: center;
+}
