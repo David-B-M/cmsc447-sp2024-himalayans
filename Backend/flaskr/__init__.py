@@ -3,6 +3,7 @@ import os
 from flask import Flask, request
 # hopefully Flask will automatically know to find get_db in db.py considering the Flask documentation recommendaed that structure.
 
+RESPONSE_MESSAGE_KEY = "msg"
 
 def create_app(test_config=None):
     # create and configure the app
@@ -33,19 +34,37 @@ def create_app(test_config=None):
     @app.route('/')
     def home():  # put application's code here
         print("Successfully loaded `/` endpoint!")
-        return {"ok": True}
+        home_response = {RESPONSE_MESSAGE_KEY: 
+                         "Welcome to Everest the Olympicat Backend!"}
+        add_response_success_options(home_response)
+        return home_response
 
     @app.route("/load_users", methods=["GET"])
     def load_users():
+        """
+        Example usage: Frontend StartGame page 
+            we display which games they can load from the data here.
+
+        :return:
+            (on success) JSON response with user rows. 
+                {"ok": True,
+                "users": 
+                    [{..., "username": "ab123", ...}, {...}]
+                }
+            (on failure) msg - "Failed to load users"
+                - Idea: not setting type to JSON 
+                so that the frontend 
+                recognizes its an error when trying to interpret the empty list.
+            
+        """
         load_response = {}
         RESULT_BOOL_INDEX = 0
         RESULT_USERS_JSON_INDEX = 1
-        # when the user is on the StartGame page and we display which games they can load from
-        # we can call this function!
+        
         loaded_users = db.load_users_from_db()
         if not loaded_users[RESULT_BOOL_INDEX]:
             load_response["users"] = []
-            add_response_failure_options(load_response)
+            add_response_failure_options(load_response, "Failed to load users.")
             return load_response
 
         # =========
@@ -87,8 +106,8 @@ def create_app(test_config=None):
         response["headers"] = {"content-type": "application/json"}
         response["ok"] = True
 
-    def add_response_failure_options(response):
-        response['msg'] = 'Content-Type not supported!'
+    def add_response_failure_options(response, msg="Content-Type not supported!"):
+        response['msg'] = msg
         response['ok'] = False
 
     return app
