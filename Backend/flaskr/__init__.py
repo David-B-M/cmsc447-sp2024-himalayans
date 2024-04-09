@@ -32,8 +32,11 @@ def create_app(test_config=None):
     from . import db
     db.init_app(app)
 
+    # ---------------------------
+    # put application's code here
+    # ---------------------------
     @app.route('/')
-    def home():  # put application's code here
+    def home():
         print("Successfully loaded `/` endpoint!")
         home_response = {
             RESPONSE_MESSAGE_KEY: "Welcome to Everest the Olympicat Backend!"
@@ -97,12 +100,18 @@ def create_app(test_config=None):
         DB_UNABLE_ADD_USER = None
 
         # handling the request
-        response = {"user_id": None}  # <- None by default (db fails to add).
+        response = {
+            "user_id": DB_UNABLE_ADD_USER
+        }  # <- None by default (db fails to add).
         print(f"!!DEBUGGING /add_user!! Request=\n\t{request.get_data()}")
         # get the username they passed to the request.
         username = None
-        if request.headers["Content-Type"] == "application/json":
-            username = request.get_json()["username"]
+        if request.headers[
+                "Content-Type"] == "application/x-www-form-urlencoded":
+            # form data is a multi-dict
+            # reference: https://flask-api.github.io/flask-api/api-guide/parsers/
+            # https://tedboy.github.io/flask/generated/generated/werkzeug.MultiDict.html
+            username = request.form.get("username")
         else:
             username = request.args.get('username')
 

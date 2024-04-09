@@ -208,7 +208,7 @@ def create_app(test_config=None):
     ```
   - (this is mostly a note for myself) Remember, you can only execute 1 sql command at a time using `cur.execute(query)`
   - Additionally, you may want to make an `@click` function so that you can test it without running the app.
-  - For example, currently I have this command (`flask drop-db`)so that I can re-initialize the tables after deleting them (i.e. if I change `schema.sql`)
+  - For example, currently I have this command (`flask drop-db`) so that I can re-initialize (Rerun `flask init-db`)the tables after deleting them (i.e. if I change `schema.sql`)
     ```python
     @click.command('drop-db')
     def drop_db_command():
