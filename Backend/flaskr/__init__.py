@@ -103,11 +103,12 @@ def create_app(test_config=None):
         response = {
             "user_id": DB_UNABLE_ADD_USER
         }  # <- None by default (db fails to add).
-        print(f"!!DEBUGGING /add_user!! Request=\n\t{request.get_data()}")
+        print("%" * 50)
+        print(f"DEBUGGING /add_user\n\tRequest=\n\t{request.get_data()}")
+        print("%" * 50)
         # get the username they passed to the request.
         username = None
-        if request.headers[
-                "Content-Type"] == "application/x-www-form-urlencoded":
+        if request.headers["Content-Type"] == "application/x-www-form-urlencoded":
             # form data is a multi-dict
             # reference: https://flask-api.github.io/flask-api/api-guide/parsers/
             # https://tedboy.github.io/flask/generated/generated/werkzeug.MultiDict.html
@@ -115,13 +116,17 @@ def create_app(test_config=None):
         else:
             username = request.args.get('username')
 
+        if username == None:
+            add_response_failure_options(response, 
+            "[Endpoint: add_user] Unable to parse username from request. (Got null)")
+            return response
         # use the database method to try to add the user (validates as well)
         db_add_user_result = db.add_user(username)
 
         if db_add_user_result == DB_UNABLE_ADD_USER:
             add_response_failure_options(response)
             response[RESPONSE_MESSAGE_KEY] = \
-                f"Failed to add user {username} to database. :("
+                f"[Endpoint: add_user] Failed to add user {username} to database. :("
             return response
 
         response["user_id"] = db_add_user_result
@@ -142,8 +147,8 @@ def create_app(test_config=None):
         response["ok"] = True
 
     def add_response_failure_options(response,
-                                     msg="Content-Type not supported!"):
-        response['msg'] = msg
+                                     message="Content-Type not supported!"):
+        response[RESPONSE_MESSAGE_KEY] = message
         response['ok'] = False
 
     return app

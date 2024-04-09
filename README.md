@@ -18,7 +18,7 @@ Shoutout our awesome team of developers for each of those pages.
 - ViewLeaderboard: @ampham03
 - LevelExample: @ampham03 
 <figure>
-    <img src="current_appearance/MainMenu_4_4.png" height="300px">
+    <img src="current_appearance/MainMenu_4_4.jpg" height="300px">
     <figcaption>Main Menu Screen as of 4-4. ChooseLevel navigates to ChooseLevel page, rest are not functional. Credits - Connor, Jess, David. Moving background as of 4-9 (Credits - Anna).</figcaption>
 </figure>
 
@@ -31,12 +31,17 @@ https://miro.com/app/board/uXjVNh35L8s=/?moveToWidget=3458764583679328038&cot=14
 
 <figure>
     <img src="current_appearance/ChooseLevel4-9.png" height="300px">
-    <figcaption>ChooseLevel screen as of 3-29. (Still just template, @LT69018 needs to develop it.)</figcaption>
+    <figcaption>ChooseLevel screen as of 4-9. Credits: @cmgilger </figcaption>
+</figure>
+
+<figure>
+    <img src="current_appearance/ViewLeaderboard 4-9.png" height="300px">
+    <figcaption>ViewLeaderboard as of 4-9.</figcaption>
 </figure>
 
 <figure>
     <img src="current_appearance/LevelExample 4-9.png" height="300px">
-    <figcaption>LevelExample as of 4-9. Level is playable</figcaption>
+    <figcaption>LevelExample as of 4-9. Level is playable Credits: Anna</figcaption>
 </figure>
 
 # Sprint 1 - Design
@@ -124,3 +129,12 @@ Connors Branch:
 
 Main Branch: (what have we all agreed on)
 - App that switches between different pages 
+
+## David's Branch:
+<figure>
+    <img src="current_appearance/StartGame_4-9.jpg" height="300px">
+</figure>
+Worked on the StartGame page GUI.
+- button functionality to traverse between pages
+- displays current example saved games
+- added css file and image for StartGame styling
