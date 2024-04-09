@@ -13,10 +13,15 @@ The status of each of these implementations is shown by the emojis:
 ```
 POST add_user
 parameter: username 
-headers:
-    Content-type: "application/x-www-form-urlencoded"
+headers: None required
 ```
 - Usage: Frontend StartGame page.
+- example call: 
+    ```
+    POST add_user?username=test1
+    ```
+- ~~Content-type: "application/x-www-form-urlencoded"~~
+    - BUG: getting parameter from form returns None when using postman (parameter past in the body). seems to only work within pytest.
 - when user presses `[New Game]` and enters their name, send it to the backend to validate and save!
 
 ## ✅ Load (read all) users 
