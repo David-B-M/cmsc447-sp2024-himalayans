@@ -29,13 +29,17 @@ const NewGame = ({children, to}) => {
     );
   } else {
     return(
-      //<button className="new-game" onClick={popup}>{children}</button>
-      <Link to={to} className="new-game">{children}</Link>
+      <button className="new-game" onClick={popup}>{children}</button>
     );
   }
 }
 function popup() {
-  add = 1;
+  popup = document.getElementById('popup');
+  if(popup.style.display === "none") {
+    popup.style.display = "block";
+  } else {
+    popup.style.display = "none";
+  }
 }
 
 // @dmiddour
@@ -79,8 +83,15 @@ function StartGame() {
 
         <div style={{display: '', marginTop: '20px'}}>
           <CustomButton to={"/"}>Back</CustomButton>
-          <NewGame to={"/Popup2"}>New Game</NewGame>
+          <NewGame>New Game</NewGame>
         </div>
+      </div>
+      <div id='popup'>
+        <form>
+          <label htmlFor='name'>Name</label>
+          <input type='text' name='name2' id='name' autoComplete='off'></input>
+        </form>
+        <button onClick={popup}>Close</button>
       </div>
     </div>
   );

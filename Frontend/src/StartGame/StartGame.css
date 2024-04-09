@@ -60,3 +60,17 @@
     outline-style: solid;
     margin: 0.5vw;
 }
+
+#popup {
+  z-index: 9;
+  position: fixed;
+  display: block;
+
+  justify-content: center;
+  height: 50vh;
+  width: 50vw;
+  border: solid;
+  border-radius: 15px;
+  background-color: white;
+  display: inline-block;
+}
