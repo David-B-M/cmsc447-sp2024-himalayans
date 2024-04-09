@@ -1,6 +1,7 @@
 # following instructions from this tutorial https://flask.palletsprojects.com/en/3.0.x/tutorial/database/
 import sqlite3
 # ^ just found out this is standard and doesn't need install :<)
+import json
 
 import click
 from flask import current_app, g
@@ -93,10 +94,24 @@ def drop_db_command():
 @click.command('load-users')
 def load_users_command():
     result = load_users_from_db()
-    click.echo(f'Loaded users from db: {result}')
+    click.echo(f'Done running load_users via click command.')
 
 
 def load_users_from_db():
+    """
+    Get all the rows from the `users` table.
+    - No parameters since there is no condition or input.
+
+    :return: [successBool, rowsOfUsers]
+        1. successBool: if we were able to access the rows from the database
+         - Usage: distinguish the event that no rows were returned 
+            because the table is empty not because we weren't able to connect
+        2. rowsOfUsers: list of dictionaries (rows)
+         
+    Example return for 
+        [successBool, rowsOfUsers]
+        [True, [{"user_id": 1, "username": "test1", "levelReached": 1}]]]
+    """
     db = get_db()
     assert db is not None, "[DB: load_users_from_db] Failed to connect to database."
 
@@ -109,7 +124,7 @@ def load_users_from_db():
     if load_result is None:
         print("Failed to load_users_from_db :(")
         close_db()
-        return None
+        return (False, [])
 
     fetched_result = load_result.fetchall()
     close_db()
@@ -120,7 +135,9 @@ def load_users_from_db():
             "username": user_row["username"],
             "levelReached": user_row["levelReached"]
         })
-    return jsonified_result
+    if (DEBUG_DB):
+        print(f"[DB: load_users_from_db] Loaded users: {jsonified_result}")
+    return (True, jsonified_result)
 
 
 def get_usernames_only(load_result):
@@ -140,7 +157,8 @@ def add_user(username):
         (on failure) None
     """
     assert len(username) == USERNAME_LEN, \
-        f"Username should be 5 characters long, but is {len(username)} characters long."
+        f"Username should be 5 characters long, " + \
+        f"but is {len(username)} characters long."
     # todo: maybe validate the username isn't in the database already? i.e. look through the result from load.
     db = get_db()
     assert db is not None, "[DB: add_user] Failed to connect to database."

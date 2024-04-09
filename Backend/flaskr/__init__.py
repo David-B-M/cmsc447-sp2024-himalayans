@@ -35,17 +35,29 @@ def create_app(test_config=None):
         print("Successfully loaded `/` endpoint!")
         return {"ok": True}
 
-    @app.route("/loadUsers", methods=["GET"])
+    @app.route("/load_users", methods=["GET"])
     def load_users():
+        load_response = {}
+        RESULT_BOOL_INDEX = 0
+        RESULT_USERS_JSON_INDEX = 1
         # when the user is on the StartGame page and we display which games they can load from
         # we can call this function!
         loaded_users = db.load_users_from_db()
-        if not loaded_users:
-            return {"ok": False, "users": None}
-        print("Loaded users: ", loaded_users)
-        return {"ok": True, "users": loaded_users}
+        if not loaded_users[RESULT_BOOL_INDEX]:
+            load_response["users"] = []
+            add_response_failure_options(load_response)
+            return load_response
 
-    @app.route("/addUser", methods=["POST"])
+        # =========
+        # Success!
+        # =========
+        users = loaded_users[RESULT_USERS_JSON_INDEX]
+        load_response["users"] = users
+        add_response_success_options(load_response)
+        print("Loaded users: ", users)
+        return load_response
+
+    @app.route("/add_user", methods=["POST"])
     def add_user():
         username = None
         if request.headers["Content-Type"] == "application/json":
@@ -69,5 +81,14 @@ def create_app(test_config=None):
     @app.route('/hello')
     def hello():
         return 'Hello, World!'
+
+    def add_response_success_options(response):
+        # setting the response headers to be json so we can use things like response.status_code later on hopefully
+        response["headers"] = {"content-type": "application/json"}
+        response["ok"] = True
+
+    def add_response_failure_options(response):
+        response['msg'] = 'Content-Type not supported!'
+        response['ok'] = False
 
     return app
