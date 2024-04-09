@@ -31,7 +31,7 @@ https://miro.com/app/board/uXjVNh35L8s=/?moveToWidget=3458764583679328038&cot=14
 
 <figure>
     <img src="current_appearance/ChooseLevel4-9.png" height="300px">
-    <figcaption>ChooseLevel screen as of 3-29. (Still just template, @LT69018 needs to develop it.)</figcaption>
+    <figcaption>ChooseLevel screen as of 4-9. Credits: @cmgilger </figcaption>
 </figure>
 
 <figure>
