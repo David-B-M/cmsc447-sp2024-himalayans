@@ -35,8 +35,13 @@ https://miro.com/app/board/uXjVNh35L8s=/?moveToWidget=3458764583679328038&cot=14
 </figure>
 
 <figure>
+    <img src="current_appearance/ViewLeaderboard 4-9.png" height="300px">
+    <figcaption>ViewLeaderboard as of 4-9.</figcaption>
+</figure>
+
+<figure>
     <img src="current_appearance/LevelExample 4-9.png" height="300px">
-    <figcaption>LevelExample as of 4-9. Level is playable</figcaption>
+    <figcaption>LevelExample as of 4-9. Level is playable Credits: Anna</figcaption>
 </figure>
 
 # Sprint 1 - Design
