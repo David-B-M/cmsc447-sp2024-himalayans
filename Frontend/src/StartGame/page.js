@@ -16,29 +16,17 @@ const CustomGameSave = ({children}) => {
   );
 }
 
-var add = 0;
-const NewGame = ({children, to}) => {
-  if (add === 1) {
-    return(
-      <div style={{zIndex: '9', position: 'fixed'}}>
-        <form>
-          <label htmlFor='name'>Name</label>
-          <input type='text' name='name2' id='name' autoComplete='off'></input>
-        </form>
-      </div>
-    );
-  } else {
-    return(
-      <button className="new-game" onClick={popup}>{children}</button>
-    );
-  }
+const NewGame = ({children}) => {
+  return(
+    <button className="new-game" onClick={popup}>{children}</button>
+  );
 }
 function popup() {
-  popup = document.getElementById('popup');
-  if(popup.style.display === "none") {
-    popup.style.display = "block";
+  var form = document.getElementById('popup');
+  if(form.style.display === "none") {
+    form.style.display = "block";
   } else {
-    popup.style.display = "none";
+    form.style.display = "none";
   }
 }
 
@@ -87,11 +75,12 @@ function StartGame() {
         </div>
       </div>
       <div id='popup'>
-        <form>
+        <h1>Create New user</h1>
+        <form style={{margin: '40px'}}>
           <label htmlFor='name'>Name</label>
           <input type='text' name='name2' id='name' autoComplete='off'></input>
         </form>
-        <button onClick={popup}>Close</button>
+        <NewGame>Close</NewGame>
       </div>
     </div>
   );
