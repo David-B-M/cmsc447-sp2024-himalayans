@@ -33,6 +33,7 @@ function popup() {
 // @dmiddour
 function StartGame() {
     const [data, setData] = useState([{}])
+    /*
     useEffect(() => {
         axios.get("http://localhost:5000").then(res => {
             setData(res.data)
@@ -41,7 +42,7 @@ function StartGame() {
     ).catch(e => {
         console.log(e);
         })
-    }, []);
+    }, []); */
   return (
     <div style={{ backgroundImage: `url('snowy_mountains.jpg')`,  
                   backgroundSize: 'cover',
