@@ -10,6 +10,11 @@ Welcome to the Himalayans group (CMSC447-04 Spring 2024) github project reposito
 Here is how our application is currently lookin!
 You can load the app up and see the the following pages.
 
+To quickstart, either click the `LevelExample` link at the top nap bar of our app, or just go to ChooseLevel then level 1 (the other two levels are still under development). 
+
+See the Use Case Diagram / Use Case document for the general flow of the application. 
+
+Note: currently there is no score saving since the level isn't complete (we don't have a win condition yet).
 
 Shoutout our awesome team of developers for each of those pages.
 - MainMenu: @cmgilger, @LT69018, @David-B-M, @ampham03
@@ -23,11 +28,9 @@ Shoutout our awesome team of developers for each of those pages.
 </figure>
 
 <figure>
-    <img src="current_appearance/StartGame_3-29.png" height="300px">
-    <figcaption>Start Game Screen as of 3-29. User input doesn't go anywhere currently. The goal is for them to search through saved games (referenced by their username), delete and load saves, as well as initialize a new save file (with their new username). Credits - Jess</figcaption>
+    <img src="current_appearance/StartGame_4-9.jpg" height="300px">
+    <figcaption>Start Game Screen as of 4-9. Credits: David. Currently shows skeleton saves for the user to choose from. This will soon show the actual users that have been saved the the database. Basically allow the user to change "who" they play as, i.e. against their friends on the same computer, if they already saved their name. When they press [New Game] they will be prompted to enter their name.</figcaption>
 </figure>
-For more on @LT69018 intentions with this page, see our whiteboard (which I believe is only accessible for team internal members):
-https://miro.com/app/board/uXjVNh35L8s=/?moveToWidget=3458764583679328038&cot=14
 
 <figure>
     <img src="current_appearance/ChooseLevel4-9.png" height="300px">
@@ -41,7 +44,7 @@ https://miro.com/app/board/uXjVNh35L8s=/?moveToWidget=3458764583679328038&cot=14
 
 <figure>
     <img src="current_appearance/LevelExample 4-9.png" height="300px">
-    <figcaption>LevelExample as of 4-9. Level is playable Credits: Anna</figcaption>
+    <figcaption>LevelExample as of 4-9. Level is playable. Credits: Anna.</figcaption>
 </figure>
 
 # Sprint 1 - Design
