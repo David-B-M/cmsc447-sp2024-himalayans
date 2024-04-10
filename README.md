@@ -1,6 +1,17 @@
 # Everest the Olympicat by "The Himalayans"
 Welcome to the Himalayans group (CMSC447-04 Spring 2024) github project repository!
 
+In this README you will find information about our game implementation. (Sprint2 at the top, Sprint1 near the bottom).
+
+**Note for graders - RE: __JIRA__** 
+
+We discussed it with Prof. Allgood and he says that it's alright that we can't give graders access to our JIRA.
+We have met the limit for the numbers we can have on our account (since Jess has 2 group projects and 10 members total), so they had to remove everyone besides the team developers to make the JIRA functional.
+
+For your grading purposes, I have made this video of me scrolling through our JIRA:
+<a>https://drive.google.com/file/d/1VFnRhCT7ANSImjoMtHHZIpmEcs9y-QfY/view?usp=sharing</a>
+- We know this is a software development project becuase there is a backlog, however, as you can see in the video, there is no `Create Sprint` button. So, our team has been using Epics to serve that purpose, although I have not been able to set a usable start and end date for that (i.e. to appear on the timeline).
+
 # Sprint 2 - Implementation
 ## Build Instructions
 1. Load the backend by following the instructions in `./Backend/README.md`
