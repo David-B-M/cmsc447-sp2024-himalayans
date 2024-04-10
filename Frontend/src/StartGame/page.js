@@ -76,8 +76,8 @@ function StartGame() {
       </div>
       <div id='popup'>
         <h1>Create New user</h1>
-        <form style={{margin: '40px'}}>
-          <label htmlFor='name'>Name</label>
+        <form style={{marginTop: '100px', marginBottom: '100px'}}>
+          <label htmlFor='name'>Name:</label>
           <input type='text' name='name2' id='name' autoComplete='off'></input>
         </form>
         <NewGame>Close</NewGame>
