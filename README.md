@@ -17,8 +17,9 @@ See the Use Case Diagram / Use Case document for the general flow of the applica
 Note: currently there is no score saving since the level isn't complete (we don't have a win condition yet).
 
 Shoutout our awesome team of developers for each of those pages.
-- MainMenu: @cmgilger, @LT69018, @David-B-M, @ampham03
-- StartGame: @LT69018 
+- MainMenu: @cmgilger, @samdev193, @LT69018, @David-B-M, @ampham03
+- StartGame: @David-B-M @LT69018
+- ChooseLevel: @cmgilger
 - PauseMenu/LevelFail: @samdev193
 - ViewLeaderboard: @ampham03
 - LevelExample: @ampham03 
