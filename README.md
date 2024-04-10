@@ -10,7 +10,7 @@ Welcome to the Himalayans group (CMSC447-04 Spring 2024) github project reposito
 Here is how our application is currently lookin!
 You can load the app up and see the the following pages.
 
-To quickstart, either click the `LevelExample` link at the top nap bar of our app, or just go to ChooseLevel then level 1 (the other two levels are still under development). 
+To quickstart, either click the `LevelExample` link at the top nap bar of our app, or just go to ChooseLevel then level 1 (the other two levels are still under development). To jump, press the up arrow key. The game will freeze if you hit a rock or when time runs out.
 
 See the Use Case Diagram / Use Case document for the general flow of the application. 
 
@@ -45,7 +45,7 @@ Shoutout our awesome team of developers for each of those pages.
 
 <figure>
     <img src="current_appearance/LevelExample 4-9.png" height="300px">
-    <figcaption>LevelExample as of 4-9. Level is playable. Credits: Anna.</figcaption>
+    <figcaption>LevelExample as of 4-9. Level is playable. To jump, press the up arrow key. The game will freeze if you hit a rock or when time runs out. Credits: Anna.</figcaption>
 </figure>
 
 # Sprint 1 - Design
@@ -117,10 +117,10 @@ Samuel Oyeneyin
 # Notes about our Branches
 ## Anna's Branch: 
 Currently working on an example level using Phaser
-    -implemented an endless runner concept
-    -created a moving background with a static player
-    -created obstacles to avoid and items to collect for points
-    -level ends when player hits an obstacle or time runs out
+- implemented an endless runner concept
+- created a moving background with a static player
+- created obstacles to avoid and items to collect for points
+- level ends when player hits an obstacle or time runs out
 ## Jess' Branch: 
 Will be where I implement the StartGame and ChooseLevel Page.
 - I originally implemented them using classes and custom page switching,
