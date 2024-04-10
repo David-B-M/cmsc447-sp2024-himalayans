@@ -1,5 +1,7 @@
 import os
 
+import flask
+import json
 from flask import Flask, request
 # hopefully Flask will automatically know to find get_db in db.py considering the Flask documentation recommendaed that structure.
 
@@ -38,10 +40,9 @@ def create_app(test_config=None):
     @app.route('/')
     def home():
         print("Successfully loaded `/` endpoint!")
-        home_response = {
-            RESPONSE_MESSAGE_KEY: "Welcome to Everest the Olympicat Backend!"
-        }
-        add_response_success_options(home_response)
+        home_response = flask.Response(response= json.dumps({"msg": "Welcome to Everest the Olympicat Backend!"}))
+        home_response.headers['Access-Control-Allow-Origin'] = '*'
+        home_response.headers["content-type"] = "application/json"
         return home_response
 
     @app.route("/load_users", methods=["GET"])

@@ -1,8 +1,8 @@
-import React, {Component} from 'react';
+import React, { useEffect, useState} from 'react';
 import { Link } from 'react-router-dom';
-import {Container} from 'react-bootstrap';
 
 import './StartGame.css';
+import axios from "axios";
 
 const CustomButton = ({ children, to }) => {
   return (
@@ -32,6 +32,16 @@ function popup() {
 
 // @dmiddour
 function StartGame() {
+    const [data, setData] = useState([{}])
+    useEffect(() => {
+        axios.get("http://localhost:5000").then(res => {
+            setData(res.data)
+            console.log(data["msg"])
+        }
+    ).catch(e => {
+        console.log(e);
+        })
+    }, []);
   return (
     <div style={{ backgroundImage: `url('snowy_mountains.jpg')`,  
                   backgroundSize: 'cover',
