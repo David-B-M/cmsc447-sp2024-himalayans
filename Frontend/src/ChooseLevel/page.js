@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import {Container} from 'react-bootstrap';
 import './ChooseLevel.css'; // Import CSS file for styling
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 const LevelValue = ({}) =>{
   axios.get('localhost:5000/load_users')
