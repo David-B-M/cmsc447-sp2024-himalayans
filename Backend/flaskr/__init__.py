@@ -52,6 +52,7 @@ def create_app(test_config=None):
         home_response.headers['Access-Control-Allow-Origin'] = '*'
         home_response.headers["content-type"] = "application/json"
         return home_response
+
     @cross_origin()
     @app.route("/load_users", methods=["GET"])
     def load_users():
@@ -84,8 +85,9 @@ def create_app(test_config=None):
             load_response["users"] = []
             add_response_failure_options(load_response,
                                          "Failed to load users.")
+            load_user_response.status = 404
             load_user_response.response = json.dumps(load_response)
-            return
+            return load_user_response
 
         # =========
         # Success!
@@ -95,6 +97,7 @@ def create_app(test_config=None):
         load_user_response.response = json.dumps(load_response)
         print("Loaded users: ", users)
         return load_response
+
     @cross_origin()
     @app.route("/add_user", methods=["POST"])
     def add_user():
