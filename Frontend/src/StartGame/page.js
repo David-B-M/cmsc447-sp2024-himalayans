@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 import './StartGame.css';
 import axios from "axios";
-
+import querystring from 'qs'
 const CustomButton = ({ children, to }) => {
   return (
         <Link to={to} className="custom-button">{children}</Link>
@@ -33,16 +33,39 @@ function popup() {
 // @dmiddour
 function StartGame() {
     const [data, setData] = useState([{}])
-    /*
-    useEffect(() => {
-        axios.get("http://localhost:5000").then(res => {
+    const [name, setName] = useState("")
+    const loadUser = () => {
+         axios.get("http://localhost:5000/load_users").then(res => {
             setData(res.data)
-            console.log(data["msg"])
+            console.log(data)
         }
     ).catch(e => {
         console.log(e);
         })
-    }, []); */
+    }
+    useEffect(() => {
+        loadUser()
+    }, []);
+
+
+    const updateName = (event) => {
+        setName(event.target.value)
+    }
+
+    const config = {
+        username: name
+    }
+    const postData = (event) => {
+        event.preventDefault()
+        axios.post('http://localhost:5000/add_user', querystring.stringify(config), {headers: {'Content-Type': 'application/x-www-form-urlencoded'}})
+      .then(function (response) {
+        console.log(response);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+    }
+
   return (
     <div style={{ backgroundImage: `url('snowy_mountains.jpg')`,  
                   backgroundSize: 'cover',
@@ -87,9 +110,10 @@ function StartGame() {
       </div>
       <div id='popup'>
         <h1>Create New user</h1>
-        <form style={{marginTop: '100px', marginBottom: '100px'}}>
+        <form method='post' onSubmit={postData} style={{marginTop: '100px', marginBottom: '100px'}}>
           <label htmlFor='name'>Name:</label>
-          <input type='text' name='name2' id='name' autoComplete='off'></input>
+          <input type='text' name='name2' id='name' autoComplete='off' onChange={updateName}></input>
+        <button type={"submit"}>Submit</button>
         </form>
         <NewGame>Close</NewGame>
       </div>
