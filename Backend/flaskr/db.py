@@ -11,6 +11,11 @@ DEBUG_DB = True
 
 USERNAME_LEN = 20  # <- for easy display on frontend. Also this is how we define it in the database schema.
 
+# custom based on how I return data in this file.
+# load_users() => [successBool, rowsOfUsers]
+NUM_RETURNS_LOAD_USERS = 2
+LOAD_USERS_BOOL_INDEX = 0
+LOAD_USERS_DATA_INDEX = 1
 
 def get_db():
     if 'db' not in g:
@@ -98,7 +103,6 @@ def load_users_command():
     result = load_users()
     click.echo(f'Done running load_users via click command.')
 
-
 def load_users():
     """
     Get all the rows from the `users` table.
@@ -145,11 +149,35 @@ def load_users():
 
 
 def get_usernames_only(load_result):
+    """
+    Parse the result of the load_users function (select all query => jsonified)
+    :param load_result: Expecting format `[successBool, rowsOfUsers]`
+    - recall the bool tells us if we didn't have trouble loading data from the db.
+      False => we had trouble!
+      True  => we didn't have trouble. If the list is empty thats because the db is empty.
+    :return: [successBool, rowOfUsernames]
+    """
+    
+    if load_result[LOAD_USERS_BOOL_INDEX] == False:
+        print("[db: get_usernames_only] load_users returned False, won't bother finding usernames.")
+        return (False, [])
+
+    elif len(load_result) < NUM_RETURNS_LOAD_USERS or (
+        load_result[LOAD_USERS_DATA_INDEX] is None or 
+        load_result[LOAD_USERS_DATA_INDEX] == []):
+
+        print("[db: get_usernames_only] Cannot get usernames from empty load_result[1].")
+        return (False, [])
+
     # considering making a function to get the usernames from the load_result
     # this way I can check if a username is already in the table.
     # I do have a UNIQUE constraint on the username column, so this may or may not be necessary.
     # it just may be more user friendly if the warning comes from our server.
-    pass
+    loaded_data = load_result[LOAD_USERS_DATA_INDEX]
+    usernames = []
+    for row in loaded_data:
+        usernames.append(row.get("username"))
+    return usernames
 
 
 def add_user(username):
@@ -201,3 +229,11 @@ def add_user(username):
     close_db()
     # Reference: https://www.sqlitetutorial.net/sqlite-python/insert/
     return db_cursor.lastrowid
+
+
+def get_level(username):
+    QUERY_LEVEL_SQL = """
+    SELECT levelReached from users 
+    where username == (?)
+    """
+    
