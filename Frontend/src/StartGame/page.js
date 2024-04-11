@@ -45,7 +45,6 @@ function StartGame() {
     }
     useEffect(() => {
         loadUser()
-        console.log("test")
     }, []);
 
 
