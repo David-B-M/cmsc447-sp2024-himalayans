@@ -9,12 +9,19 @@ The status of each of these implementations is shown by the emojis:
 - 🟡 = in progress
 - ❌ = not started
 
-## 🟡 Add/Create user
-(in progress)
+## ✅ Add/Create user
 ```
-POST add_user?username
+POST add_user
+parameter: username 
+headers: None required
 ```
 - Usage: Frontend StartGame page.
+- example call: 
+    ```
+    POST add_user?username=test1
+    ```
+- ~~Content-type: "application/x-www-form-urlencoded"~~
+    - BUG: getting parameter from form returns None when using postman (parameter past in the body). seems to only work within pytest.
 - when user presses `[New Game]` and enters their name, send it to the backend to validate and save!
 
 ## ✅ Load (read all) users 
@@ -102,8 +109,10 @@ Once you have installed the requirements in your virtual environment, you won't 
 
 ## 3. Run the app!
 
-Every terminal session you do this in, you must initialize the name of the app.
-- set the flask app name (reference: https://flask.palletsprojects.com/en/1.1.x/cli/ )
+Every terminal session you do this in, I recommend you initialize the name of the app (see 3.1).
+
+### 3.1 Set the flask app name 
+(reference: https://flask.palletsprojects.com/en/1.1.x/cli/ )
 - Note: If you are unable to set this environment variable, later instead of doing `flask [COMMAND]` you'll have to do `flask --app flaskr [COMMAND]`. I suggest trying to get this environment variable so you have less to type, especially if you run any of our custom click commands for testing.
 ```bash
 $ export FLASK_APP=flaskr
@@ -117,8 +126,11 @@ Windows PowerShell:
 > $env:FLASK_APP = "flaskr"
 ```
 
-- initialize the database by running this command: `flask init-db`
-
+### 3.2 Initialize the database by running this command: 
+```bash
+flask init-db
+```
+### 3.3 The command for running/re-running the backend: `flask run`
 After you've run that, you can just run and re-run the app without re-initializing the datbase.
 ```bash
 flask run 
