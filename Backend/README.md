@@ -175,7 +175,9 @@ General References
 ```
 
 ## Interact with the database
-If the POST/GET endpoints aren't working, you can add/view the data directly in the sqlite3 terminal.
+If the POST/GET endpoints aren't working, you can add/view the data directly in the sqlite3 terminal. 
+
+See `flaskr/schema.sql` for the table definitions. Notably, we have `usernames` max length of 20 (that's how many characters we store).
 
 Make sure you have `sqlite3` installed 
 - tutorial: https://www.sqlitetutorial.net/download-install-sqlite/
