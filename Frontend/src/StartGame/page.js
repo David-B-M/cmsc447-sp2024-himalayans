@@ -34,15 +34,20 @@ function popup() {
 function StartGame() {
     const [data, setData] = useState([{}])
     const [name, setName] = useState("")
-    useEffect(() => {
-        axios.get("http://localhost:5000").then(res => {
+    const loadUser = () => {
+         axios.get("http://localhost:5000/load_users").then(res => {
             setData(res.data)
             console.log(data)
         }
     ).catch(e => {
         console.log(e);
         })
+    }
+    useEffect(() => {
+        loadUser()
+        console.log("test")
     }, []);
+
 
     const updateName = (event) => {
         setName(event.target.value)
