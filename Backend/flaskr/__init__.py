@@ -3,6 +3,8 @@ import os
 import flask
 import json
 from flask import Flask, request
+from flask_cors import CORS, cross_origin
+import sqlite3
 # hopefully Flask will automatically know to find get_db in db.py considering the Flask documentation recommendaed that structure.
 
 RESPONSE_MESSAGE_KEY = "msg"
@@ -11,6 +13,8 @@ RESPONSE_MESSAGE_KEY = "msg"
 def create_app(test_config=None):
     # create and configure the app
     app = Flask(__name__, instance_relative_config=True)
+    cors = CORS(app)
+    app.config['CORS_HEADERS'] = 'Content-Type'
     app.config.from_mapping(
         SECRET_KEY='dev',
         DATABASE=os.path.join(app.instance_path, 'flaskr.sqlite'),
@@ -37,14 +41,18 @@ def create_app(test_config=None):
     # ---------------------------
     # put application's code here
     # ---------------------------
+    @cross_origin()
     @app.route('/')
     def home():
         print("Successfully loaded `/` endpoint!")
-        home_response = flask.Response(response= json.dumps({"msg": "Welcome to Everest the Olympicat Backend!"}))
+        response = {
+            RESPONSE_MESSAGE_KEY: "Welcome to Everest the Olympicat Backend!"
+        }
+        home_response = flask.Response(response=json.dumps(response), status=200)
         home_response.headers['Access-Control-Allow-Origin'] = '*'
         home_response.headers["content-type"] = "application/json"
         return home_response
-
+    @cross_origin()
     @app.route("/load_users", methods=["GET"])
     def load_users():
         """
@@ -67,22 +75,27 @@ def create_app(test_config=None):
         RESULT_BOOL_INDEX = 0
         RESULT_USERS_JSON_INDEX = 1
 
+        load_user_response = flask.Response()
+        load_user_response.headers['Access-Control-Allow-Origin'] = '*'
+        load_user_response.headers["content-type"] = "application/json"
+
         loaded_users = db.load_users()
         if not loaded_users[RESULT_BOOL_INDEX]:
             load_response["users"] = []
             add_response_failure_options(load_response,
                                          "Failed to load users.")
-            return load_response
+            load_user_response.response = json.dumps(load_response)
+            return
 
         # =========
         # Success!
         # =========
         users = loaded_users[RESULT_USERS_JSON_INDEX]
         load_response["users"] = users
-        add_response_success_options(load_response)
+        load_user_response.response = json.dumps(load_response)
         print("Loaded users: ", users)
         return load_response
-
+    @cross_origin()
     @app.route("/add_user", methods=["POST"])
     def add_user():
         """
@@ -109,6 +122,11 @@ def create_app(test_config=None):
         print("%" * 50)
         # get the username they passed to the request.
         username = None
+
+        add_user_response = flask.Response()
+        add_user_response.headers['Access-Control-Allow-Origin'] = '*'
+        add_user_response.headers["content-type"] = "application/json"
+
         if request.headers["Content-Type"] == "application/x-www-form-urlencoded":
             # form data is a multi-dict
             # reference: https://flask-api.github.io/flask-api/api-guide/parsers/
@@ -120,7 +138,9 @@ def create_app(test_config=None):
         if username == None:
             add_response_failure_options(response, 
             "[Endpoint: add_user] Unable to parse username from request. (Got null)")
-            return response
+            add_user_response.response=json.dumps(response)
+            add_user_response.status=404
+            return add_user_response
         # use the database method to try to add the user (validates as well)
         db_add_user_result = db.add_user(username)
 
@@ -128,24 +148,22 @@ def create_app(test_config=None):
             add_response_failure_options(response)
             response[RESPONSE_MESSAGE_KEY] = \
                 f"[Endpoint: add_user] Failed to add user {username} to database. :("
-            return response
+            add_user_response.response = json.dumps(response)
+            add_user_response.status = 404
+            return add_user_response
 
         response["user_id"] = db_add_user_result
-        add_response_success_options(response)
-        return {
-            "ok": True,
-            "msg": f"Successfully added user {username} to database! :D"
-        }
+        response["msg"] = f"Successfully added user {username} to database! :D"
+        add_user_response.response = json.dumps(response)
+        add_user_response.status = 200
+        return add_user_response
 
     # a simple page that says hello
     @app.route('/hello')
     def hello():
         return 'Hello, World!'
 
-    def add_response_success_options(response):
-        # setting the response headers to be json so we can use things like response.status_code later on hopefully
-        response["headers"] = {"content-type": "application/json"}
-        response["ok"] = True
+
 
     def add_response_failure_options(response,
                                      message="Content-Type not supported!"):
