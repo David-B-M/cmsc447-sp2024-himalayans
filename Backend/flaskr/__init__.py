@@ -104,9 +104,6 @@ def create_app(test_config=None):
         response = {
             "user_id": DB_UNABLE_ADD_USER
         }  # <- None by default (db fails to add).
-        print("%" * 50)
-        print(f"DEBUGGING /add_user\n\tRequest=\n\t{request.get_data()}")
-        print("%" * 50)
         # get the username they passed to the request.
         username = None
         if request.headers["Content-Type"] == "application/x-www-form-urlencoded":
