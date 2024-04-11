@@ -1,18 +1,35 @@
-import React, {Component} from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
-import {Container} from 'react-bootstrap';
 import './ChooseLevel.css'; // Import CSS file for styling
 import { useNavigate } from 'react-router-dom';
+import axios from "axios";
 
-const LevelValue = ({}) =>{
+const currUser = "user1";
+
+const LevelValue = ({ currUser }) =>{
+  level = "NULL"
   axios.get('localhost:5000/load_users')
   .then(function (response) {
-    console.log(response);
+    const users = response.data;
+    const userToFind = currUser;
+    const user = users.find(user => user.username === userToFind);
+
+    if(user){
+      level = user.levelReached;
+      console.log(response);
+    }
+    else{
+      console.log(response);
+    }
   })
   .catch(function (error) {
     console.log(error);
   });
+
+  return level;
 }
+
+const userLevel = LevelValue(currUser);
 
 const BackButton = ({ children }) => {
   const navigate = useNavigate();
@@ -51,6 +68,10 @@ const ButtonSwitch = ({ currLevel }) => { // This determines how the buttons are
       <CustomButton>Level 2</CustomButton>
       <CustomButton>Level 3</CustomButton></div>
       break;
+    default:
+      buttons = <div><CustomButton disabled>[LOCKED]</CustomButton>
+      <CustomButton disabled>[LOCKED]</CustomButton>
+      <CustomButton disabled>[LOCKED]</CustomButton></div>
   }
   return <div>{buttons}</div>
 }
@@ -67,7 +88,7 @@ function ChooseLevel() {
         <h1 style={{color:'white', fontSize:'100px'}}>
           Choose a Level
         </h1>
-        <ButtonSwitch currLevel={level} /> 
+        <ButtonSwitch currLevel={userLevel} /> 
         <div>
           <BackButton>Go Back</BackButton>
         </div>

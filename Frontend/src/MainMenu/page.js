@@ -1,7 +1,5 @@
 import React, {Component} from 'react';
 import { Link } from 'react-router-dom';
-import {Container} from 'react-bootstrap';
-import { useNavigate } from 'react-router-dom';
 
 import './MainMenu.css'; // Import CSS file for styling
 

@@ -1,5 +1,5 @@
 
-  .custom-button {
+  /*.custom-button {
     background-image: url('ChooseLevel_normal.png');
     background-size: cover;
     text-align: center;
@@ -10,8 +10,8 @@
     font-size: 35px;
     cursor: pointer;
     border-radius: 15px;
-    width: 20vw; /* Adjust width to desired size */
-    height: 10vh; /* Adjust height to desired size */
+    width: 20vw;
+    height: 10vh;
     outline-width: 4px;
     outline-style: solid;
     margin: 0.5vw;
@@ -34,4 +34,4 @@
     left: 0;
     right: 0; 
     overflow: hidden;
-  }
+  }*/
