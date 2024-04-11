@@ -174,6 +174,32 @@ General References
             It holds our python interpreter and packages! i.e. "flask", etc.
 ```
 
+## Interact with the database
+If the POST/GET endpoints aren't working, you can add/view the data directly in the sqlite3 terminal.
+
+Make sure you have `sqlite3` installed 
+- tutorial: https://www.sqlitetutorial.net/download-install-sqlite/
+- link to download from: https://www.sqlite.org/download.html
+
+Then you can run the instance of the database (assuming you've run `flask init-db`)
+- (windows) `C:\sqlite\sqlite3.exe instance/flaskr.sqlite`
+
+(appearance on powershell)
+```powershell
+PS C:\Users\jturn\Documents\GitHub\cmsc447-sp2024-himalayans\Backend\instance> C:\sqlite\sqlite3.exe .\flaskr.sqlite
+SQLite version 3.45.2 2024-03-12 11:06:23 (UTF-16 console I/O)
+Enter ".help" for usage hints.
+sqlite> .quit
+PS C:\Users\jturn\Documents\GitHub\cmsc447-sp2024-himalayans\Backend\instance>
+```
+- (linux/bash) `sqlite3 instance/flaskr.sqlite3`
+```bash
+jatcs@JessLaptop:.../cmsc447-sp2024-himalayans/Backend$ sqlite3 instance/flaskr.sqlite 
+SQLite version 3.37.2 2022-01-06 13:25:41
+Enter ".help" for usage hints.
+sqlite> .quit
+jatcs@JessLaptop:.../cmsc447-sp2024-himalayans/Backend$
+```
 ## How to contribute:
 ### Make a new endpoint `flaskr/__init__.py`
 Add a subfunction to `create_app`. I recommend using a similar format to the home() function. 
