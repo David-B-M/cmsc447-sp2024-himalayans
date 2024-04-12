@@ -4,29 +4,29 @@ import './ChooseLevel.css'; // Import CSS file for styling
 import { useNavigate } from 'react-router-dom';
 import axios from "axios";
 
-const currUser = "user1";
+const currUser = 1;
 
 const LevelValue = ({ currUser }) =>{
-  level = "NULL"
-  axios.get('localhost:5000/load_users')
+  let data = {}
+  axios.get('http://127.0.0.1:5000/load_users')
   .then(function (response) {
-    const users = response.data;
-    const userToFind = currUser;
-    const user = users.find(user => user.username === userToFind);
-
-    if(user){
-      level = user.levelReached;
-      console.log(response);
-    }
-    else{
-      console.log(response);
+    data = response.data;
+    console.log(response);
+    for(let i = 0; i < data["users"].length; i++){
+      console.log("index = " + i);
+      console.log("id = " + data["users"][i]['user_id']);
+      if(data["users"][i]['user_id'] == currUser){
+        let level = data["users"][i]['levelReached'];
+        console.log(level);
+        return level;
+      }
     }
   })
   .catch(function (error) {
     console.log(error);
   });
 
-  return level;
+  return 0;
 }
 
 const userLevel = LevelValue(currUser);

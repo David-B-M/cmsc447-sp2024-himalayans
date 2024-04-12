@@ -1,5 +1,5 @@
 
-  /*.custom-button {
+  .custom-button {
     background-image: url('ChooseLevel_normal.png');
     background-size: cover;
     text-align: center;
@@ -34,4 +34,4 @@
     left: 0;
     right: 0; 
     overflow: hidden;
-  }*/
+  }
