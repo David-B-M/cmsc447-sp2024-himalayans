@@ -5,7 +5,7 @@ class LevelExampleClass extends Phaser.Scene
 {
     constructor ()
     {
-        super();
+        super({ key: 'LevelExample' });
     }
 
     preload()
@@ -16,6 +16,7 @@ class LevelExampleClass extends Phaser.Scene
         this.load.image('rock', 'snowy_rock.png')
         this.load.image('tree', 'snowy_tree.png')
         this.load.image('fish', 'fish.png')
+        this.load.image('pauseBtn', 'pause_button.png');
     }
 
     create()
@@ -80,15 +81,29 @@ class LevelExampleClass extends Phaser.Scene
         this.rocks = this.physics.add.group({
             key: 'rock',
             repeat: 2,
-            setXY: { x: 600, y: 510, stepX: 450 }
+            setXY: { x: 600, y: 510, stepX: 430 }
         });
         this.rocks.children.iterate(function (child) {
-            child.setScale(1.5)
+            child.setScale(2)
         });
         this.rocksVelocityX = -100; 
         this.physics.add.collider(this.rocks, this.ground);
         this.physics.add.collider(this.player, this.rocks, hitObstacle, null, this);
 
+        // button stuff
+        this.isGamePaused = false;
+
+        this.pauseBtn = this.add.sprite(1350, 10, 'pauseBtn').setOrigin(0, 0);
+        this.pauseBtn.setInteractive({ useHandCursor: true });
+
+        this.pauseBtn.on('pointerdown', () =>
+        {
+            this.scene.sendToBack('LevelExample')
+            this.scene.pause('LevelExample');
+            this.scene.launch('PauseScreen');
+
+            this.pauseBtn.setVisible(false);
+        });
     }
 
     update()
@@ -99,6 +114,7 @@ class LevelExampleClass extends Phaser.Scene
         if (this.gameOver)
         {
             this.player.anims.stop();
+            this.pauseBtn.disableInteractive();
             return;
         }
 
@@ -139,7 +155,74 @@ class LevelExampleClass extends Phaser.Scene
                 child.y = 510;
             }
         });
-    
+    }
+}
+
+class PauseScreen extends Phaser.Scene
+{
+    constructor ()
+    {
+        super({ key: 'PauseScreen'});
+    }
+
+    preload ()
+    {
+        this.load.image('quitLevelBtn', 'QuitLevelBtn.png');
+        this.load.image('resetLevelBtn', 'ResetLevelBtn.png');
+        this.load.image('resumeLevelBtn', 'ResumeLevelBtn.png');
+        this.load.image('backToMainMenuBtn', 'BackToMainMenuBtn.png');
+    }
+
+    create ()
+    {
+
+        this.resumeLevelBtn = this.add.sprite(445, 110, 'resumeLevelBtn').setOrigin(0, 0);
+        this.resumeLevelBtn.setInteractive({ useHandCursor: true });
+        this.resumeLevelBtn.setScale(0.5);
+
+        this.resetLevelBtn = this.add.sprite(555, 230, 'resetLevelBtn').setOrigin(0, 0);
+        this.resetLevelBtn.setInteractive({ useHandCursor: true });
+        this.resetLevelBtn.setScale(0.5);
+
+        this.quitLevelBtn = this.add.sprite(530, 350, 'quitLevelBtn').setOrigin(0, 0);
+        this.quitLevelBtn.setInteractive({ useHandCursor: true });
+        this.quitLevelBtn.setScale(0.5);
+
+        this.backToMainMenuBtn = this.add.sprite(500, 450, 'backToMainMenuBtn').setOrigin(0, 0);
+        this.backToMainMenuBtn.setInteractive({ useHandCursor: true });
+        this.backToMainMenuBtn.setScale(0.5);
+
+        this.resumeLevelBtn.on('pointerdown', () =>
+        {
+            this.scene.resume('LevelExample');
+            this.scene.stop();
+            
+            const levelExampleScene = this.scene.get('LevelExample');
+            levelExampleScene.pauseBtn.setVisible(true); 
+            
+        });
+
+        this.resetLevelBtn.on('pointerdown', () =>
+        {
+            this.scene.start('LevelExample');
+            this.scene.stop();
+        });
+
+        this.quitLevelBtn.on('pointerdown', () =>
+        {
+            
+        });
+
+        this.backToMainMenuBtn.on('pointerdown', () =>
+        {
+            //window.location.href = 
+        });
+
+    }
+
+    update ()
+    {
+
     }
 }
 
@@ -197,7 +280,7 @@ function LevelExample()
             }
         },
         backgroundColor: '#304858',
-        scene: LevelExampleClass
+        scene: [LevelExampleClass, PauseScreen]
     };
 
     const game = new Phaser.Game(config);
@@ -213,6 +296,5 @@ function Game() {
     }, []);
     return <div id={"level-example"}/>;
 }
-
 
 export default Game;

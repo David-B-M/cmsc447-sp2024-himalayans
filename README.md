@@ -1,6 +1,17 @@
 # Everest the Olympicat by "The Himalayans"
 Welcome to the Himalayans group (CMSC447-04 Spring 2024) github project repository!
 
+In this README you will find information about our game implementation. (Sprint2 at the top, Sprint1 near the bottom).
+
+**Note for graders - RE: __JIRA__** 
+
+We discussed it with Prof. Allgood and he says that it's alright that we can't give graders access to our JIRA.
+We have met the limit for the numbers we can have on our account (since Jess has 2 group projects and 10 members total), so they had to remove everyone besides the team developers to make the JIRA functional.
+
+For your grading purposes, I have made this video of me scrolling through our JIRA:
+<a>https://drive.google.com/file/d/1VFnRhCT7ANSImjoMtHHZIpmEcs9y-QfY/view?usp=sharing</a>
+- We know this is a software development project becuase there is a backlog, however, as you can see in the video, there is no `Create Sprint` button. So, our team has been using Epics to serve that purpose, although I have not been able to set a usable start and end date for that (i.e. to appear on the timeline).
+
 # Sprint 2 - Implementation
 ## Build Instructions
 1. Load the backend by following the instructions in `./Backend/README.md`
@@ -10,33 +21,42 @@ Welcome to the Himalayans group (CMSC447-04 Spring 2024) github project reposito
 Here is how our application is currently lookin!
 You can load the app up and see the the following pages.
 
+To quickstart, either click the `LevelExample` link at the top nap bar of our app, or just go to ChooseLevel then level 1 (the other two levels are still under development). To jump, press the up arrow key. The game will freeze if you hit a rock or when time runs out. Refresh to play again.
+
+See the Use Case Diagram / Use Case document for the general flow of the application. 
+
+Note: currently there is no score saving since the level isn't complete (we don't have a win condition yet).
 
 Shoutout our awesome team of developers for each of those pages.
-- MainMenu: @cmgilger, @LT69018, @David-B-M, @ampham03
-- StartGame: @LT69018 
+- MainMenu: @cmgilger, @samdev193, @LT69018, @David-B-M, @ampham03
+- StartGame: @David-B-M @LT69018
+- ChooseLevel: @cmgilger
 - PauseMenu/LevelFail: @samdev193
 - ViewLeaderboard: @ampham03
 - LevelExample: @ampham03 
 <figure>
-    <img src="current_appearance/MainMenu_4_4.png" height="300px">
+    <img src="current_appearance/MainMenu_4_4.jpg" height="300px">
     <figcaption>Main Menu Screen as of 4-4. ChooseLevel navigates to ChooseLevel page, rest are not functional. Credits - Connor, Jess, David. Moving background as of 4-9 (Credits - Anna).</figcaption>
 </figure>
 
 <figure>
-    <img src="current_appearance/StartGame_3-29.png" height="300px">
-    <figcaption>Start Game Screen as of 3-29. User input doesn't go anywhere currently. The goal is for them to search through saved games (referenced by their username), delete and load saves, as well as initialize a new save file (with their new username). Credits - Jess</figcaption>
+    <img src="current_appearance/StartGame_4-9.jpg" height="300px">
+    <figcaption>Start Game Screen as of 4-9. Credits: David. Currently shows skeleton saves for the user to choose from. This will soon show the actual users that have been saved the the database. Basically allow the user to change "who" they play as, i.e. against their friends on the same computer, if they already saved their name. When they press [New Game] they will be prompted to enter their name.</figcaption>
 </figure>
-For more on @LT69018 intentions with this page, see our whiteboard (which I believe is only accessible for team internal members):
-https://miro.com/app/board/uXjVNh35L8s=/?moveToWidget=3458764583679328038&cot=14
 
 <figure>
     <img src="current_appearance/ChooseLevel4-9.png" height="300px">
-    <figcaption>ChooseLevel screen as of 3-29. (Still just template, @LT69018 needs to develop it.)</figcaption>
+    <figcaption>ChooseLevel screen as of 4-9. Credits: @cmgilger </figcaption>
+</figure>
+
+<figure>
+    <img src="current_appearance/ViewLeaderboard 4-9.png" height="300px">
+    <figcaption>ViewLeaderboard as of 4-9.</figcaption>
 </figure>
 
 <figure>
     <img src="current_appearance/LevelExample 4-9.png" height="300px">
-    <figcaption>LevelExample as of 4-9. Level is playable</figcaption>
+    <figcaption>LevelExample as of 4-9. Level is playable. To jump, press the up arrow key. The game will freeze if you hit a rock or when time runs out. Refresh to play again. Credits: Anna.</figcaption>
 </figure>
 
 # Sprint 1 - Design
@@ -108,10 +128,10 @@ Samuel Oyeneyin
 # Notes about our Branches
 ## Anna's Branch: 
 Currently working on an example level using Phaser
-    -implemented an endless runner concept
-    -created a moving background with a static player
-    -created obstacles to avoid and items to collect for points
-    -level ends when player hits an obstacle or time runs out
+- implemented an endless runner concept
+- created a moving background with a static player
+- created obstacles to avoid and items to collect for points
+- level ends when player hits an obstacle or time runs out
 ## Jess' Branch: 
 Will be where I implement the StartGame and ChooseLevel Page.
 - I originally implemented them using classes and custom page switching,
@@ -124,3 +144,12 @@ Connors Branch:
 
 Main Branch: (what have we all agreed on)
 - App that switches between different pages 
+
+## David's Branch:
+<figure>
+    <img src="current_appearance/StartGame_4-9.jpg" height="300px">
+</figure>
+Worked on the StartGame page GUI.
+- button functionality to traverse between pages
+- displays current example saved games
+- added css file and image for StartGame styling

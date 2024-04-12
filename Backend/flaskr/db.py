@@ -9,7 +9,7 @@ from flask import current_app, g
 SCHEMA_SQL_FILE_PATH = 'schema.sql'
 DEBUG_DB = True
 
-USERNAME_LEN = 5  # <- for easy display on frontend. Also this is how we define it in the database schema.
+USERNAME_LEN = 20  # <- for easy display on frontend. Also this is how we define it in the database schema.
 
 
 def get_db():
@@ -160,15 +160,18 @@ def add_user(username):
         (on success) the ID of the new user
         (on failure) None
     """
-    if DEBUG_DB:
-        print(f"[DB: add_user] Top of Function.\n\tUsername = {username}")
+    UNABLE_ADD_USER_RETURN = None
 
-    assert len(username) == USERNAME_LEN, \
-        f"Username should be 5 characters long, " + \
-        f"but is {len(username)} characters long."
     # todo: maybe validate the username isn't in the database already? i.e. look through the result from load.
     db = get_db()
     assert db is not None, "[DB: add_user] Failed to connect to database."
+
+    if not (len(username) <= USERNAME_LEN):
+        # instead of giving an assertion error
+        print(f"Username should be under or equal {USERNAME_LEN} to characters long, " + \
+        f"but is {len(username)} characters long.")
+        return UNABLE_ADD_USER_RETURN
+        
 
     ADD_USER_SQL = """
     INSERT INTO users(username) 
@@ -180,9 +183,9 @@ def add_user(username):
         load_result = db_cursor.execute(ADD_USER_SQL, (username, ))
 
         if load_result is None:
-            print(f"Failed to add_user(username={username}) :(")
+            print(f"Failed to add_user(username={username}):\n\t Couldn't retrieve the result from the query to add the user")
             close_db()
-            return None
+            return UNABLE_ADD_USER_RETURN
     except sqlite3.IntegrityError as e:
         # If it reaches here,
         # the only integrity constraint it should've been able
