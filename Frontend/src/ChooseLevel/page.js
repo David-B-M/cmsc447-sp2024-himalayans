@@ -2,8 +2,30 @@ import React, {Component} from 'react';
 import { Link } from 'react-router-dom';
 import {Container} from 'react-bootstrap';
 import './ChooseLevel.css'; // Import CSS file for styling
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
-let level = 3; // PLACEHOLDER: this should be picked out from the currLevel column of the database
+const LevelValue = ({}) =>{
+  axios.get('localhost:5000/load_users')
+  .then(function (response) {
+    console.log(response);
+  })
+  .catch(function (error) {
+    console.log(error);
+  });
+}
+
+const BackButton = ({ children }) => {
+  const navigate = useNavigate();
+
+  return (
+    <>
+      <button onClick={() => navigate(-1)} className='custom-button'>{children}</button>
+    </>
+  );
+}
+
+let level = 1; // PLACEHOLDER: this should be picked out from the currLevel column of the database
 
 //@cmgilger
 const CustomButton = ({ children, to }) => {
@@ -16,17 +38,17 @@ const ButtonSwitch = ({ currLevel }) => { // This determines how the buttons are
   let buttons;
   switch(currLevel){
     case 1: //Level 1 is currLevel
-      buttons = <div><CustomButton>Level 1</CustomButton>
-      <CustomButton disabled className="disabled">Level 2</CustomButton>
-      <CustomButton disabled className="disabled">Level 3</CustomButton></div>
+      buttons = <div><CustomButton to="/LevelExample">Level 1</CustomButton>
+      <CustomButton disabled>[LOCKED]</CustomButton>
+      <CustomButton disabled>[LOCKED]</CustomButton></div>
       break;
     case 2: //Level 2 is currLevel
-      buttons = <div><CustomButton>Level 1</CustomButton>
+      buttons = <div><CustomButton to="/LevelExample">Level 1</CustomButton>
       <CustomButton>Level 2</CustomButton>
-      <CustomButton disabled className="disabled">Level 3</CustomButton></div>
+      <CustomButton disabled>[LOCKED]</CustomButton></div>
       break;
     case 3: //Level 3 is currLevel
-      buttons = <div><CustomButton>Level 1</CustomButton>
+      buttons = <div><CustomButton to="/LevelExample">Level 1</CustomButton>
       <CustomButton>Level 2</CustomButton>
       <CustomButton>Level 3</CustomButton></div>
       break;
@@ -47,6 +69,9 @@ function ChooseLevel() {
           Choose a Level
         </h1>
         <ButtonSwitch currLevel={level} /> 
+        <div>
+          <BackButton>Go Back</BackButton>
+        </div>
       </div>
     </div>
   );
