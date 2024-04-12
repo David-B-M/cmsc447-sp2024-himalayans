@@ -18,19 +18,19 @@ class PauseScreen extends Phaser.Scene
     create ()
     {
 
-        this.resumeLevelBtn = this.add.sprite(445, 110, 'resumeLevelBtn').setOrigin(0, 0);
+        this.resumeLevelBtn = this.add.sprite(450, 110, 'resumeLevelBtn').setOrigin(0, 0);
         this.resumeLevelBtn.setInteractive({ useHandCursor: true });
         this.resumeLevelBtn.setScale(0.5);
 
-        this.resetLevelBtn = this.add.sprite(555, 230, 'resetLevelBtn').setOrigin(0, 0);
+        this.resetLevelBtn = this.add.sprite(560, 230, 'resetLevelBtn').setOrigin(0, 0);
         this.resetLevelBtn.setInteractive({ useHandCursor: true });
         this.resetLevelBtn.setScale(0.5);
 
-        this.quitLevelBtn = this.add.sprite(530, 350, 'quitLevelBtn').setOrigin(0, 0);
+        this.quitLevelBtn = this.add.sprite(535, 350, 'quitLevelBtn').setOrigin(0, 0);
         this.quitLevelBtn.setInteractive({ useHandCursor: true });
         this.quitLevelBtn.setScale(0.5);
 
-        this.backToMainMenuBtn = this.add.sprite(500, 450, 'backToMainMenuBtn').setOrigin(0, 0);
+        this.backToMainMenuBtn = this.add.sprite(505, 450, 'backToMainMenuBtn').setOrigin(0, 0);
         this.backToMainMenuBtn.setInteractive({ useHandCursor: true });
         this.backToMainMenuBtn.setScale(0.5);
 

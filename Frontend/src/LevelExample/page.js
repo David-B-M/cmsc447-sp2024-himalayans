@@ -1,6 +1,8 @@
 ﻿import Phaser from 'phaser';
 import {useEffect} from 'react';
-import PauseScreen from "../PauseMenu/pause"
+import PauseScreen from "../PauseMenu/page"
+import LevelCompleteScreen from '../LevelCompletion/page';
+import LevelFailScreen from '../LevelFail/page';
 
 class LevelExampleClass extends Phaser.Scene
 {
@@ -14,9 +16,9 @@ class LevelExampleClass extends Phaser.Scene
         this.load.atlas('player', 'cat_sprite.png', 'cat_sprite.json');
         this.load.image('background', 'snowy_mountains.jpg');
         this.load.image('ground', 'platform.jpg');
-        this.load.image('rock', 'snowy_rock.png')
-        this.load.image('tree', 'snowy_tree.png')
-        this.load.image('fish', 'fish.png')
+        this.load.image('rock', 'snowy_rock.png');
+        this.load.image('tree', 'snowy_tree.png');
+        this.load.image('fish', 'fish.png');
         this.load.image('pauseBtn', 'pause_button.png');
     }
 
@@ -49,7 +51,7 @@ class LevelExampleClass extends Phaser.Scene
         // create player
         this.player = this.physics.add.sprite(200, 475, 'player');
         this.player.setCollideWorldBounds(true);
-        this.physics.add.collider(this.player, this.ground)
+        this.physics.add.collider(this.player, this.ground);
         this.player.play('walk');
 
         //  the score
@@ -70,8 +72,8 @@ class LevelExampleClass extends Phaser.Scene
             setXY: { x: 500, y: getRandomY(), stepX: 225 }
         });
         this.fish.children.iterate(function (child) {
-            child.setScale(0.05)
-            child.body.setAllowGravity(false)
+            child.setScale(0.05);
+            child.body.setAllowGravity(false);
             child.y = getRandomY();
         });
         this.fishVelocityX = -100; 
@@ -99,7 +101,7 @@ class LevelExampleClass extends Phaser.Scene
 
         this.pauseBtn.on('pointerdown', () =>
         {
-            this.scene.sendToBack('LevelExample')
+            this.scene.sendToBack('LevelExample');
             this.scene.pause('LevelExample');
             this.scene.launch('PauseScreen');
 
@@ -131,7 +133,7 @@ class LevelExampleClass extends Phaser.Scene
        // player jumping
         if (this.cursors.up.isDown && this.player.body.onFloor())
         {
-            this.player.setVelocityY(-350);
+            this.player.setVelocityY(-275);
         }
         
         // spawn more fish
@@ -152,7 +154,7 @@ class LevelExampleClass extends Phaser.Scene
         // reset rock position when it goes off screen
         this.rocks.children.iterate(function (child) {
             if (child.x < -60) {
-                child.x = 1400;
+                child.x = 1350;
                 child.y = 510;
             }
         });
@@ -169,6 +171,7 @@ function hitObstacle (player, rock)
 {
     this.physics.pause();
     this.gameOver = true;
+    this.scene.launch('LevelFailScreen');
 }
 
 function spawnFish(scene)
@@ -193,6 +196,7 @@ function outOfTime (timerValue, scene)
     {
         scene.physics.pause();
         scene.gameOver = true;
+        scene.scene.launch('LevelCompleteScreen');
     }
 }
 
@@ -213,7 +217,7 @@ function LevelExample()
             }
         },
         backgroundColor: '#304858',
-        scene: [LevelExampleClass, PauseScreen]
+        scene: [LevelExampleClass, PauseScreen, LevelCompleteScreen, LevelFailScreen]
     };
 
     const game = new Phaser.Game(config);
