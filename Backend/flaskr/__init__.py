@@ -72,7 +72,8 @@ def create_app(test_config=None):
                 recognizes its an error when trying to interpret the empty list.
             
         """
-        load_response = {}
+        result = {}
+
         RESULT_BOOL_INDEX = 0
         RESULT_USERS_JSON_INDEX = 1
 
@@ -82,21 +83,22 @@ def create_app(test_config=None):
 
         loaded_users = db.load_users()
         if not loaded_users[RESULT_BOOL_INDEX]:
-            load_response["users"] = []
-            add_response_failure_options(load_response,
-                                         "Failed to load users.")
+            result["users"] = []
+            result[RESPONSE_MESSAGE_KEY] = "Failed to load users."
             load_user_response.status = 404
-            load_user_response.response = json.dumps(load_response)
+
+            load_user_response.response = json.dumps(result)
+
             return load_user_response
 
         # =========
         # Success!
         # =========
         users = loaded_users[RESULT_USERS_JSON_INDEX]
-        load_response["users"] = users
-        load_user_response.response = json.dumps(load_response)
+        result["users"] = users
+        load_user_response.response = json.dumps(result)
         print("Loaded users: ", users)
-        return load_response
+        return load_user_response
 
     @cross_origin()
     @app.route("/add_user", methods=["POST"])
@@ -117,44 +119,31 @@ def create_app(test_config=None):
         DB_UNABLE_ADD_USER = None
 
         # handling the request
-        response = {
+        result = {
             "user_id": DB_UNABLE_ADD_USER
         }  # <- None by default (db fails to add).
         # get the username they passed to the request.
         username = None
 
-        add_user_response = flask.Response()
-        add_user_response.headers['Access-Control-Allow-Origin'] = '*'
-        add_user_response.headers["content-type"] = "application/json"
+        add_user_response = init_response()
 
-        if request.headers["Content-Type"] == "application/x-www-form-urlencoded":
-            # form data is a multi-dict
-            # reference: https://flask-api.github.io/flask-api/api-guide/parsers/
-            # https://tedboy.github.io/flask/generated/generated/werkzeug.MultiDict.html
-            username = request.form.get("username")
-        else:
-            username = request.args.get('username')
-
-        if username == None:
-            add_response_failure_options(response, 
-            "[Endpoint: add_user] Unable to parse username from request. (Got null)")
-            add_user_response.response=json.dumps(response)
-            add_user_response.status=404
+        username = get_username_from_request(response=add_user_response)
+        if username == None:  # ^ function auto sets the status to 404 and the message if it fails.
             return add_user_response
-        # use the database method to try to add the user (validates as well)
+        # use the datadd_user_responseabase method to try to add the user (validates as well)
         db_add_user_result = db.add_user(username)
-
+        result["user_id"] = db_add_user_result
         if db_add_user_result == DB_UNABLE_ADD_USER:
-            add_response_failure_options(response)
-            response[RESPONSE_MESSAGE_KEY] = \
+            result[RESPONSE_MESSAGE_KEY] = \
                 f"[Endpoint: add_user] Failed to add user {username} to database. :("
-            add_user_response.response = json.dumps(response)
+            add_user_response.response = json.dumps(result)
             add_user_response.status = 404
             return add_user_response
 
-        response["user_id"] = db_add_user_result
-        response["msg"] = f"Successfully added user {username} to database! :D"
-        add_user_response.response = json.dumps(response)
+        result[RESPONSE_MESSAGE_KEY] = f"Successfully added user {username} to database! :D"
+        result["user_id"] = db_add_user_result
+
+        add_user_response.response = json.dumps(result)
         add_user_response.status = 200
         return add_user_response
 
@@ -165,9 +154,39 @@ def create_app(test_config=None):
 
 
 
-    def add_response_failure_options(response,
-                                     message="Content-Type not supported!"):
-        response[RESPONSE_MESSAGE_KEY] = message
-        response['ok'] = False
+    def init_response(content_type="application/json"):
+        response = flask.Response()
+        response.headers['Access-Control-Allow-Origin'] = '*'
+        response.headers["content-type"] = content_type
+        return response
 
+
+    def get_username_from_request(response, failure_msg="Unable to get username from request."):
+        """
+        :return: True/False - whether or not we were able to get the username from the request!
+        """
+        if request.headers["Content-Type"] == "application/x-www-form-urlencoded":
+            # form data is a multi-dict
+            # reference: https://flask-api.github.io/flask-api/api-guide/parsers/
+            # https://tedboy.github.io/flask/generated/generated/werkzeug.MultiDict.html
+            
+            #DEBUG
+            print("DEBUGGING (get_username_from_request): Attempting getting username from FORM: ")
+            username = request.form.get("username")
+            print(f"\t{username}")
+        else:
+            print("DEBUGGING (get_username_from_request): Attempting getting username from ARGS: ")
+            username = request.args.get('username')
+            print(f"\t{username}")
+
+        # set the response flags to signify we were unable to get the username
+        if username == None:
+            # DEBUG
+            print("Got None username.")
+            response.status=404
+            response.response = json.dumps({RESPONSE_MESSAGE_KEY: failure_msg})
+            return None
+        # successfully added the user.
+        return username
+        
     return app
