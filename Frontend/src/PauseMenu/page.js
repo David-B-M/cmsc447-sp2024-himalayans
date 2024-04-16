@@ -1,15 +1,66 @@
-import "./PauseMenu.css"
-function PauseMenu() {
+import Phaser from 'phaser';
 
-    return(<div className={"PauseMenu"} style={{background: "url('/himalayan-green-background.jpg')", backgroundSize:"cover"}}>
-            <div className={"control-flow"}>
-                <h1 className={"title"}>Everest the Olympicat <br/>Pause Menu</h1>
-                <button className={"button"}> Resume Game </button>
-                <button className={"button"}> Reset Level </button>
-                <button className={"button"}> Quit Level </button>
-                <button className={"button"}> <span>Back to Main Menu</span> </button>
-            </div>
-    </div>)
+class PauseScreen extends Phaser.Scene
+{
+    constructor ()
+    {
+        super({ key: 'PauseScreen'});
+    }
+
+    preload ()
+    {
+        this.load.image('quitLevelBtn', 'QuitLevelBtn.png');
+        this.load.image('resetLevelBtn', 'ResetLevelBtn.png');
+        this.load.image('resumeLevelBtn', 'ResumeLevelBtn.png');
+        this.load.image('backToMainMenuBtn', 'BackToMainMenuBtn.png');
+    }
+
+    create ()
+    {
+        this.text = this.add.text(530, 100, 'Pause Menu', { font: 'bold 64px Arial' });
+
+        this.resumeLevelBtn = this.add.sprite(450, 160, 'resumeLevelBtn').setOrigin(0, 0);
+        this.resumeLevelBtn.setInteractive({ useHandCursor: true });
+        this.resumeLevelBtn.setScale(0.5);
+
+        this.resetLevelBtn = this.add.sprite(560, 280, 'resetLevelBtn').setOrigin(0, 0);
+        this.resetLevelBtn.setInteractive({ useHandCursor: true });
+        this.resetLevelBtn.setScale(0.5);
+
+        this.quitLevelBtn = this.add.sprite(535, 400, 'quitLevelBtn').setOrigin(0, 0);
+        this.quitLevelBtn.setInteractive({ useHandCursor: true });
+        this.quitLevelBtn.setScale(0.5);
+
+        this.backToMainMenuBtn = this.add.sprite(505, 500, 'backToMainMenuBtn').setOrigin(0, 0);
+        this.backToMainMenuBtn.setInteractive({ useHandCursor: true });
+        this.backToMainMenuBtn.setScale(0.5);
+
+        this.resumeLevelBtn.on('pointerdown', () =>
+        {
+            this.scene.resume('LevelExample');
+            this.scene.stop();
+            
+            const levelExampleScene = this.scene.get('LevelExample');
+            levelExampleScene.pauseBtn.setVisible(true); 
+            
+        });
+
+        this.resetLevelBtn.on('pointerdown', () =>
+        {
+            this.scene.start('LevelExample');
+            this.scene.stop();
+        });
+
+        this.quitLevelBtn.on('pointerdown', () =>
+        {
+            window.location.href = '/ChooseLevel'
+        });
+
+        this.backToMainMenuBtn.on('pointerdown', () =>
+        {
+            window.location.href = '/';
+        });
+    }
 }
 
-export default PauseMenu;
+export default PauseScreen;
