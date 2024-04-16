@@ -33,9 +33,9 @@ axios.get('http://127.0.0.1:5000/load_users')
   data = response.data;
   console.log(response);
   for(let i = 0; i < data["users"].length; i++){
-    console.log("LevelValue: index = " + i);
-    console.log("LevelValue: id = " + data["users"][i]['user_id']);
-    console.log("LevelValue: currUser = " + currUser)
+    //console.log("LevelValue: index = " + i);
+    //console.log("LevelValue: id = " + data["users"][i]['user_id']);
+    //console.log("LevelValue: currUser = " + currUser)
     if(Number(currUser) == Number(data["users"][i]['user_id'])){
       //console.log("levelReached = " + data["users"][i]['levelReached'])
       let level = data["users"][i]['levelReached'];
@@ -49,23 +49,23 @@ axios.get('http://127.0.0.1:5000/load_users')
 });
 //}
 
-const ButtonSwitch = (level) => { // This determines how the buttons are displayed.
+const ButtonSwitch = () => { // This determines how the buttons are displayed.
   let buttons;
   //let currLevel = level;
-  console.log("ButtonSwitch: level = " + Number(level));
+  console.log("ButtonSwitch: level = " + Number(currLevel));
   //switch(Number(currLevel)){
-  if(level == 1){ //Level 1 is currLevel
+  if(Number(currLevel) == 1){ //Level 1 is currLevel
     buttons = <div><CustomButton to="/LevelExample">Level 1</CustomButton>
     <CustomButton disabled>[LOCKED]</CustomButton>
     <CustomButton disabled>[LOCKED]</CustomButton></div>
   }
-  if(level == 2){ //Level 2 is currLevel
+  if(Number(currLevel) == 2){ //Level 2 is currLevel
     buttons = <div><CustomButton to="/LevelExample">Level 1</CustomButton>
     <CustomButton>Level 2</CustomButton>
     <CustomButton disabled>[LOCKED]</CustomButton></div>
     //break;
   }
-  if(level == 3){ //Level 3 is currLevel
+  if(Number(currLevel) == 3){ //Level 3 is currLevel
     buttons = <div><CustomButton to="/LevelExample">Level 1</CustomButton>
     <CustomButton>Level 2</CustomButton>
     <CustomButton>Level 3</CustomButton></div>
@@ -92,7 +92,7 @@ function ChooseLevel() {
         <h1 style={{color:'white', fontSize:'100px'}}>
           Choose a Level
         </h1>
-        <ButtonSwitch level={Number(currLevel)}/> 
+        <ButtonSwitch/> 
         <div>
           <BackButton>Go Back</BackButton>
         </div>
