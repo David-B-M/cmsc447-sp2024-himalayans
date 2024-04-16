@@ -77,9 +77,7 @@ def create_app(test_config=None):
         RESULT_BOOL_INDEX = 0
         RESULT_USERS_JSON_INDEX = 1
 
-        load_user_response = flask.Response()
-        load_user_response.headers['Access-Control-Allow-Origin'] = '*'
-        load_user_response.headers["content-type"] = "application/json"
+        load_user_response = init_response()
 
         loaded_users = db.load_users()
         if not loaded_users[RESULT_BOOL_INDEX]:
@@ -135,17 +133,61 @@ def create_app(test_config=None):
         result["user_id"] = db_add_user_result
         if db_add_user_result == DB_UNABLE_ADD_USER:
             result[RESPONSE_MESSAGE_KEY] = \
-                f"[Endpoint: add_user] Failed to add user {username} to database. :("
+                f"[Endpoint: add_user] Failed to add user `{username}` to database. :("
             add_user_response.response = json.dumps(result)
             add_user_response.status = 404
             return add_user_response
 
-        result[RESPONSE_MESSAGE_KEY] = f"Successfully added user {username} to database! :D"
+        result[RESPONSE_MESSAGE_KEY] = f"Successfully added user `{username}` to database! :D"
         result["user_id"] = db_add_user_result
 
         add_user_response.response = json.dumps(result)
         add_user_response.status = 200
         return add_user_response
+
+    @cross_origin()
+    @app.route("/increment_user_level", methods=["POST"])
+    def increment_user_level():
+        """
+        Call this in the use case "LevelWon", but not in the use case "LevelFailed"
+        Expects a username.
+        Use this to increase their levelReached!
+        """
+        pass
+
+    @cross_origin() 
+    @app.route("/user_level", methods=["GET"])
+    def get_user_level():
+        """
+        Expects a username to be passed to be used for looking up a particular user.
+        :return: 
+            The level number that that user has reached!
+            {"level": 1 or 2 or 3}
+        """
+        result = {"level": None}
+        user_level_response = init_response()
+
+        username = get_username_from_request(response=user_level_response)
+        if username == None: # the user can check the output for reason for failure :p
+            print("[GET /user_level] Unable to get username from request.")
+            return user_level_response
+
+        db_level_result = db.get_user_level(username)
+        print(f"[__init__/get_user_level] DEBUG: Got level={db_level_result} ")
+        if db_level_result == None:
+            result["level"] = None
+            result[RESPONSE_MESSAGE_KEY] = "Failed to get user level."
+            user_level_response.status = 404
+            user_level_response.response = json.dumps(result)
+            return user_level_response
+
+        # =========
+        # Success!
+        # =========
+        result["level"] = db_level_result
+        user_level_response.response = json.dumps(result)
+        print(f"Loaded level for username=`{username}`: ", db_level_result)
+        return user_level_response
 
     # a simple page that says hello
     @app.route('/hello')
@@ -155,9 +197,9 @@ def create_app(test_config=None):
 
 
     def init_response(content_type="application/json"):
-        response = flask.Response()
+        response = flask.Response(mimetype=content_type)
         response.headers['Access-Control-Allow-Origin'] = '*'
-        response.headers["content-type"] = content_type
+        # response.headers["content-type"] = content_type
         return response
 
 
@@ -165,7 +207,8 @@ def create_app(test_config=None):
         """
         :return: True/False - whether or not we were able to get the username from the request!
         """
-        if request.headers["Content-Type"] == "application/x-www-form-urlencoded":
+        # if request.headers["Content-Type"] == "application/x-www-form-urlencoded":
+        if request.content_type == "application/x-www-form-urlencoded":
             # form data is a multi-dict
             # reference: https://flask-api.github.io/flask-api/api-guide/parsers/
             # https://tedboy.github.io/flask/generated/generated/werkzeug.MultiDict.html

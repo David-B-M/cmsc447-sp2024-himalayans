@@ -194,6 +194,10 @@ def add_user(username):
     db = get_db()
     assert db is not None, "[DB: add_user] Failed to connect to database."
 
+    if username is None:
+        print("db.py: Cannot add a null username!")
+        return UNABLE_ADD_USER_RETURN
+
     if not (len(username) <= USERNAME_LEN):
         # instead of giving an assertion error
         print(f"Username should be under or equal {USERNAME_LEN} to characters long, " + \
@@ -231,9 +235,39 @@ def add_user(username):
     return db_cursor.lastrowid
 
 
-def get_level(username):
+def update_level(username):
+    UPDATE_USER_LEVEL_SQL = """
+    UPDATE users 
+    SET levelReached
+    where username=?
+    """
+    pass
+
+
+def get_user_level(username):
+    """
+    :return: (fail case) None
+             (success case) integer from the table `users[levelReached]`
+    """
+    db = get_db()
+    assert db is not None, "[DB: add_user] Failed to connect to database."
+
     QUERY_LEVEL_SQL = """
     SELECT levelReached from users 
-    where username == (?)
+    where username = ?
     """
-    
+    db_cursor = db.cursor()
+    level_result = None
+    try:
+        # assumes there is only 1 result from querying by username
+        # then we can use the column name to get the value itself 
+        level_result = db_cursor.execute(QUERY_LEVEL_SQL, (username, )).fetchall()[0]["levelReached"]
+    except Exception as e:
+        print(f"Unable to get_level(username={username})")
+        close_db()
+        return None
+    db.commit()
+    print(f"Successfully retrieved `levelReached`={level_result} for username={username}.")
+    close_db()
+    # Reference: https://www.sqlitetutorial.net/sqlite-python/insert/
+    return level_result
