@@ -6,7 +6,7 @@ const BackButton = ({ children }) => {
   
     return (
       <>
-        <button onClick={() => navigate(-1)} className='custom-button'>{children}</button>
+        <button onClick={() => navigate('/')} className='custom-button'>{children}</button>
       </>
     );
   }

@@ -4,6 +4,10 @@ import PauseScreen from "../PauseMenu/page"
 import LevelCompleteScreen from '../LevelCompletion/page';
 import LevelFailScreen from '../LevelFail/page';
 
+const powerUpTime = 10;
+const levelTime = 60;
+const velocityX = -100
+
 class LevelExampleClass extends Phaser.Scene
 {
     constructor ()
@@ -60,11 +64,11 @@ class LevelExampleClass extends Phaser.Scene
 
         //  the score
         this.scoreValue = 0;
-        this.scoreText = this.add.text(16, 16, 'score: ' + this.scoreValue, { fontSize: '32px', fill: '#000' });
+        this.scoreText = this.add.text(16, 16, 'Score: ' + this.scoreValue, { fontSize: '32px', fill: '#000' });
 
         // the time
-        this.timerValue = 30;
-        this.timerText = this.add.text(16, 48, 'time: ' + this.timerValue, { fontSize: '32px', fill: '#000' });
+        this.timerValue = levelTime;
+        this.timerText = this.add.text(16, 48, 'Time: ' + this.timerValue, { fontSize: '32px', fill: '#000' });
        
         // game end flag
         this.gameOver = false;
@@ -80,7 +84,7 @@ class LevelExampleClass extends Phaser.Scene
             child.body.setAllowGravity(false);
             child.y = getRandomY();
         });
-        this.fishVelocityX = -100; 
+        this.fishVelocityX = velocityX; 
         this.physics.add.collider(this.fish, this.ground);
         this.physics.add.overlap(this.player, this.fish, collectFish, null, this);
 
@@ -93,7 +97,7 @@ class LevelExampleClass extends Phaser.Scene
         this.rocks.children.iterate(function (child) {
             child.setScale(2)
         });
-        this.rocksVelocityX = -100; 
+        this.rocksVelocityX = velocityX; 
         this.physics.add.collider(this.rocks, this.ground);
         this.physics.add.collider(this.player, this.rocks, hitObstacle, null, this);
 
@@ -113,37 +117,50 @@ class LevelExampleClass extends Phaser.Scene
         });
 
         // powerups
+
         this.jumpBoostActive = false;
         this.speedBoostActive = false;
         this.shieldActive = false;
 
-        //this.add.sprite(50, 30, 'jumpBoost').setScale(0.5);
+        this.jumpBoostTimeLeft = 0;
+        this.speedBoostTimeLeft = 0;
+        this.shieldTimeLeft = 0;
 
-        this.jumpBoosts = this.physics.add.group({
-            key: 'jumpBoost',
-        });
+        this.jumpBoostImg = this.add.sprite(45, 130, 'jumpBoost').setScale(0.35);
+        this.jumpBoostTimeLeftText = this.add.text(75, 125, ': ' + this.jumpBoostTimeLeft, { fontSize: '32px', fill: '#000' });
+
+        this.speedBoostImg = this.add.sprite(45, 200, 'speedBoost').setScale(0.25);
+        this.speedBoostTimeLeftText = this.add.text(75, 185, ': ' + this.speedBoostTimeLeft, { fontSize: '32px', fill: '#000' });
+
+        this.shieldImg = this.add.sprite(43, 270, 'shield').setScale(0.1);
+        this.shieldTimeLeftText = this.add.text(75, 250, ': ' + this.shieldTimeLeft, { fontSize: '32px', fill: '#000' });
+
+
+        this.jumpBoosts = this.physics.add.group();
         this.physics.add.overlap(this.player, this.jumpBoosts, collectJumpBoost, null, this);
+        this.jumpBoostsVelocityX = velocityX; 
 
-        this.speedBoosts = this.physics.add.group({
-            key: 'speedBoost',
-        });
+        this.speedBoosts = this.physics.add.group();
         this.physics.add.overlap(this.player, this.speedBoosts, collectSpeedBoost, null, this);
+        this.speedBoostsVelocityX = velocityX; 
 
-        this.shields = this.physics.add.group({
-            key: 'shield',
-        });
+        this.shields = this.physics.add.group();
         this.physics.add.overlap(this.player, this.shields, collectShield, null, this);
-
-        this.clocks = this.physics.add.group({
-            key: 'clock',
-        });
+        this.shieldsVelocityX = velocityX; 
+        
+        this.clocks = this.physics.add.group();
         this.physics.add.overlap(this.player, this.clocks, collectClock, null, this);
+        this.clocksVelocityX = velocityX; 
     }
 
     update()
     {
         // check if time is left
-        outOfTime(this.timerValue, this);
+        if (this.timerValue <= 0)
+        {
+            this.gameOver = true;
+            this.scene.launch('LevelCompleteScreen');
+        }
 
         if (this.gameOver)
         {
@@ -166,7 +183,7 @@ class LevelExampleClass extends Phaser.Scene
         }
 
         // update timer
-        this.timerText.setText('time: ' + this.timerValue.toFixed(0));
+        this.timerText.setText('Time: ' + this.timerValue.toFixed(0));
         this.timerValue -= 0.025;
 
         
@@ -175,7 +192,7 @@ class LevelExampleClass extends Phaser.Scene
         {
             if (this.jumpBoostActive)
             {
-                this.player.setVelocityY(-300);
+                this.player.setVelocityY(-350);
             }
             else
             {
@@ -190,7 +207,7 @@ class LevelExampleClass extends Phaser.Scene
 
         // fish moving
         this.fish.children.iterate(function (child) {
-            child.x -= 2;
+            child.x -= 3;
         });
 
         // rocks moving
@@ -205,6 +222,96 @@ class LevelExampleClass extends Phaser.Scene
                 child.y = 510;
             }
         });
+
+        // spawn powerup
+        if (Math.abs(this.timerValue % 10) < 0.025) {
+            spawnPowerup(this);
+        }
+
+        // speed boosts moving
+        this.speedBoosts.children.iterate(function (child) {
+            child.x -= 3;
+        });
+
+        // jump boosts moving
+        this.jumpBoosts.children.iterate(function (child) {
+            child.x -= 3;
+        });
+
+        // shields moving
+        this.shields.children.iterate(function (child) {
+            child.x -= 3;
+        });
+
+        // clocks moving
+        this.clocks.children.iterate(function (child) {
+            child.x -= 3;
+        });
+
+        if (this.jumpBoostTimeLeft <= 0)
+        {
+            this.jumpBoostTimeLeft = 0;
+            this.jumpBoostActive = false;
+        }
+
+        if (this.speedBoostTimeLeft <= 0)
+        {
+            this.speedBoostTimeLeft = 0;
+            this.speedBoostActive = false;
+        }
+
+        if (this.shieldTimeLeft <= 0)
+        {
+            this.shieldTimeLeft = 0;
+            this.shieldActive = false;
+        }
+
+        if (this.jumpBoostActive)
+        {
+            this.jumpBoostTimeLeftText.setText(': ' + this.jumpBoostTimeLeft.toFixed(0));
+            this.jumpBoostTimeLeft -= 0.025;
+        }
+
+        if (this.speedBoostActive)
+        {
+            this.speedBoostTimeLeftText.setText(': ' + this.speedBoostTimeLeft.toFixed(0));
+            this.speedBoostTimeLeft -= 0.025;
+        }
+
+        if (this.shieldActive)
+        {
+            this.shieldTimeLeftText.setText(': ' + this.shieldTimeLeft.toFixed(0));
+            this.shieldTimeLeft -= 0.025;
+        }
+    }
+}
+
+function spawnPowerup(scene)
+{
+    const powerup = Math.floor(Math.random() * 4) + 1;;
+    if (powerup === 1)
+    {
+        const jumpBoost = scene.jumpBoosts.create(1400, getRandomY(), 'jumpBoost');
+        jumpBoost.setScale(0.5);
+        jumpBoost.body.setAllowGravity(false);
+    }
+    else if (powerup === 2)
+    {
+        const speedBoost = scene.speedBoosts.create(1400, getRandomY(), 'speedBoost');
+        speedBoost.setScale(0.25);
+        speedBoost.body.setAllowGravity(false);
+    }
+    else if (powerup === 3)
+    {
+        const shield = scene.shields.create(1400, getRandomY(), 'shield');
+        shield.setScale(0.1);
+        shield.body.setAllowGravity(false);
+    }
+    else if (powerup === 4)
+    {
+        const clock = scene.clocks.create(1400, getRandomY(), 'clock');
+        clock.setScale(0.05);
+        clock.body.setAllowGravity(false);
     }
 }
 
@@ -218,18 +325,21 @@ function collectShield(player, shield)
 {
     shield.disableBody(true, true);
     this.shieldActive = true;
+    this.shieldTimeLeft = powerUpTime;
 }
 
 function collectSpeedBoost(player, speedBoost)
 {
     speedBoost.disableBody(true, true);
     this.speedBoostActive = true;
+    this.speedBoostTimeLeft = powerUpTime;
 }
 
 function collectJumpBoost(player, jumpBoost)
 {
     jumpBoost.disableBody(true, true);
     this.jumpBoostActive = true;
+    this.jumpBoostTimeLeft = powerUpTime;
 }
 
 // gets a y position ranging from 350-510 to spawn fish
@@ -261,15 +371,6 @@ function collectFish (player, fish)
     //  add and update the score
     this.scoreValue += 10;
     this.scoreText.setText('Score: ' + this.scoreValue);
-}
-
-function outOfTime (timerValue, game)
-{
-    if (timerValue <= 0)
-    {
-        game.gameOver = true;
-        game.scene.launch('LevelCompleteScreen');
-    }
 }
 
 function LevelExample()
