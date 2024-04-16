@@ -20,6 +20,10 @@ class LevelExampleClass extends Phaser.Scene
         this.load.image('tree', 'snowy_tree.png');
         this.load.image('fish', 'fish.png');
         this.load.image('pauseBtn', 'pause_button.png');
+        this.load.image('jumpBoost', 'jump_boost.png');
+        this.load.image('speedBoost', 'speed_boost.png');
+        this.load.image('clock', 'clock.png');
+        this.load.image('shield', 'shield.png');
     }
 
     create()
@@ -93,7 +97,7 @@ class LevelExampleClass extends Phaser.Scene
         this.physics.add.collider(this.rocks, this.ground);
         this.physics.add.collider(this.player, this.rocks, hitObstacle, null, this);
 
-        // button stuff
+        // pause button 
         this.isGamePaused = false;
 
         this.pauseBtn = this.add.sprite(1350, 10, 'pauseBtn').setOrigin(0, 0);
@@ -107,6 +111,33 @@ class LevelExampleClass extends Phaser.Scene
 
             this.pauseBtn.setVisible(false);
         });
+
+        // powerups
+        this.jumpBoostActive = false;
+        this.speedBoostActive = false;
+        this.shieldActive = false;
+
+        //this.add.sprite(50, 30, 'jumpBoost').setScale(0.5);
+
+        this.jumpBoosts = this.physics.add.group({
+            key: 'jumpBoost',
+        });
+        this.physics.add.overlap(this.player, this.jumpBoosts, collectJumpBoost, null, this);
+
+        this.speedBoosts = this.physics.add.group({
+            key: 'speedBoost',
+        });
+        this.physics.add.overlap(this.player, this.speedBoosts, collectSpeedBoost, null, this);
+
+        this.shields = this.physics.add.group({
+            key: 'shield',
+        });
+        this.physics.add.overlap(this.player, this.shields, collectShield, null, this);
+
+        this.clocks = this.physics.add.group({
+            key: 'clock',
+        });
+        this.physics.add.overlap(this.player, this.clocks, collectClock, null, this);
     }
 
     update()
@@ -116,14 +147,23 @@ class LevelExampleClass extends Phaser.Scene
 
         if (this.gameOver)
         {
+            this.physics.pause();
             this.player.anims.stop();
             this.pauseBtn.disableInteractive();
             return;
         }
 
         // update background and ground
-        this.bg.tilePositionX += 2;
-        this.ground.tilePositionX += 2;
+        if (this.speedBoostActive)
+        {
+            this.bg.tilePositionX += 4;
+            this.ground.tilePositionX += 4;
+        }
+        else
+        {
+            this.bg.tilePositionX += 2;
+            this.ground.tilePositionX += 2;
+        }
 
         // update timer
         this.timerText.setText('time: ' + this.timerValue.toFixed(0));
@@ -133,7 +173,14 @@ class LevelExampleClass extends Phaser.Scene
        // player jumping
         if (this.cursors.up.isDown && this.player.body.onFloor())
         {
-            this.player.setVelocityY(-275);
+            if (this.jumpBoostActive)
+            {
+                this.player.setVelocityY(-300);
+            }
+            else
+            {
+                this.player.setVelocityY(-275);
+            }
         }
         
         // spawn more fish
@@ -161,6 +208,30 @@ class LevelExampleClass extends Phaser.Scene
     }
 }
 
+function collectClock(player, clock)
+{
+    clock.disableBody(true, true);
+    this.timerValue += 5;
+}
+
+function collectShield(player, shield)
+{
+    shield.disableBody(true, true);
+    this.shieldActive = true;
+}
+
+function collectSpeedBoost(player, speedBoost)
+{
+    speedBoost.disableBody(true, true);
+    this.speedBoostActive = true;
+}
+
+function collectJumpBoost(player, jumpBoost)
+{
+    jumpBoost.disableBody(true, true);
+    this.jumpBoostActive = true;
+}
+
 // gets a y position ranging from 350-510 to spawn fish
 function getRandomY()
 {
@@ -169,9 +240,11 @@ function getRandomY()
 
 function hitObstacle (player, rock)
 {
-    this.physics.pause();
-    this.gameOver = true;
-    this.scene.launch('LevelFailScreen');
+    if (!this.shieldActive)
+    {
+        this.gameOver = true;
+        this.scene.launch('LevelFailScreen');
+    }
 }
 
 function spawnFish(scene)
@@ -190,13 +263,12 @@ function collectFish (player, fish)
     this.scoreText.setText('Score: ' + this.scoreValue);
 }
 
-function outOfTime (timerValue, scene)
+function outOfTime (timerValue, game)
 {
     if (timerValue <= 0)
     {
-        scene.physics.pause();
-        scene.gameOver = true;
-        scene.scene.launch('LevelCompleteScreen');
+        game.gameOver = true;
+        game.scene.launch('LevelCompleteScreen');
     }
 }
 
