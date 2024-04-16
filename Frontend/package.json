@@ -9,7 +9,7 @@
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
-    "axios": "^0.21.4",
+    "axios": "^1.6.8",
     "csstools": "^0.1.5",
     "phaser": "^3.80.1",
     "react": "^18.2.0",
