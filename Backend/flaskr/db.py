@@ -103,6 +103,45 @@ def load_users_command():
     result = load_users()
     click.echo(f'Done running load_users via click command.')
 
+
+def get_user_id(username, db=None):
+    """
+    :return: [successBool, user_id]
+        successBool describes if we were able to access and query the db.
+        user_id is None if there is no entry in the table.
+    """
+    if not db:
+        db = get_db()
+        assert db is not None, "[DB: get_user_id] Failed to connect to database."
+    db_cursor = db.cursor()
+
+    GET_ID_SQL = """
+    SELECT user_id from users
+    where username = ?
+    """
+    user_id = None
+    try:
+        # assumes there is only 1 result from querying by username
+        # then we can use the column name to get the value itself 
+        user_id_result = db_cursor.execute(GET_ID_SQL, (username, )).fetchall()
+        
+        # ^ returns the username in a list. [user_id], can be empty if there's no entry, so leave it as None
+        if user_id_result:
+            user_id = user_id_result[0]["user_id"]
+    except Exception as e:
+        print(f"Unable to get_user_id(username={username})")
+        close_db()
+        return [False, None]
+
+    db.commit()
+    print(f"Successfully retrieved `user_id`={user_id} for username={username}.")
+    close_db()
+    # Reference: https://www.sqlitetutorial.net/sqlite-python/insert/
+    return [True, user_id]
+    # checks if they have an entry in the `usernames` table.
+    
+
+
 def load_users():
     """
     Get all the rows from the `users` table.
@@ -246,7 +285,7 @@ def read_user_level(username):
 
     QUERY_LEVEL_SQL = """
     SELECT levelReached from users 
-    where username = ?
+    where username = ?;
     """
     db_cursor = db.cursor()
     level_result = None
@@ -286,7 +325,7 @@ def increment_user_level(username):
     INCREMENT_USER_LEVEL_SQL = """
     UPDATE users 
     SET levelReached = levelReached + 1
-    WHERE username = ? AND levelReached < 3
+    WHERE username = ? AND levelReached < 3;
     """
     db_cursor = db.cursor()
     num_affected_rows = None
@@ -357,8 +396,129 @@ def load_leaderboard(exclude_columns=["user_id"]):
         for key in user_row:
             if key not in exclude_columns:
                 json_row[key] = user_row[key]
+        jsonified_result.append(json_row)
 
     print(f"[DB: load_leaderboard] Successfully loaded rows from `leaderboard` table in database!")
     if DEBUG_DB:
         print(f"\tResult: {jsonified_result}")
     return (True, jsonified_result)
+
+
+def get_leaderboard_row(username, db=None):
+    if not db:
+        db = get_db()
+        assert db is not None, "[DB: load_leaderboard] Failed to connect to database."
+    
+    GET_ROW_SQL = """
+    SELECT * from leaderboard
+    where username = ?;
+    """
+    db_cursor = db.cursor()
+    load_result = db_cursor.execute(GET_ROW_SQL, (username,))
+
+    if load_result is None:
+        print("Failed to get_leaderboard_row :(")
+        close_db()
+        return (False, [])
+
+    fetched_result = load_result.fetchall()
+    close_db()
+    jsonified_result = []
+    for user_row in fetched_result:
+        json_row = {}
+        # Expecting: rank , user_id, username, score
+        for key in user_row:
+            if key not in exclude_columns:
+                json_row[key] = user_row[key]
+
+    print(f"[DB: get_leaderboard_row] Successfully loaded username row from `leaderboard` table in database!")
+    if DEBUG_DB:
+        print(f"\tResult: {jsonified_result}")
+    return (True, jsonified_result)
+
+
+def initialize_score(username, score, db=None, user_id=None):
+    if not db:
+        db = get_db()
+        assert db is not None, "[DB: load_leaderboard] Failed to connect to database."
+    
+    INITIALIZE_SCORE_SQL = """
+    INSERT INTO leaderboard
+    VALUES (?);
+    """
+
+    if user_id is None:
+        # try to get the ID (maybe for the 2nd time) from the database
+        user_id = get_user_id()
+        if user_id is None:
+            print("[db: init_score] Will not initialize a score for a player that doesn't exist!")
+            return None
+    
+    db_cursor = db.cursor()
+    try:
+        load_result = db_cursor.execute(INITIALIZE_SCORE_SQL, (rank, user_id
+username
+score))
+
+        if load_result is None:
+            print(f"Failed to initialize_score(username={username}, score={score}):\n\t Couldn't retrieve the result from the query to add the user")
+            close_db()
+            return None
+    except sqlite3.IntegrityError as e:
+        print(f"[DB: initialize_score] Unable to add user '{username}.'" +
+              "\nuser_id already exists in `leaderboard` table database.")
+        if DEBUG_DB:
+            print("Got this exact integrity error: ", e)
+        return None
+
+    db.commit()
+    print(f"Successfully initialied leaderboard row for username={username} with score={score}.")
+    close_db()
+    # Reference: https://www.sqlitetutorial.net/sqlite-python/insert/
+    return db_cursor.lastrowid
+
+def update_score(username, score):
+    """
+    Checks if there is an entry for them in the scores table.
+    """
+    db = get_db()
+    assert db is not None, "[DB: load_leaderboard] Failed to connect to database."
+
+    UPDATE_SCORE_SQL = """
+    UPDATE leaderboard 
+    SET score = score + ?
+    WHERE username = ?;
+    """
+    
+    this_users_row = get_leaderboard_row(username)
+    if not this_users_row[LOAD_USERS_BOOL_INDEX]:
+        pass
+
+    db_cursor = db.cursor()
+    num_affected_rows = None
+    try:
+        update_result = db_cursor.execute(INCREMENT_USER_LEVEL_SQL, (username, ))
+        # according to documentation, you have to fetchall in order for the rowcount to update
+        # Reference: https://docs.python.org/3/library/sqlite3.html#sqlite3.Cursor.rowcount
+        db_cursor.fetchall()
+        num_affected_rows = db_cursor.rowcount
+    except Exception as e:
+        print(f"[DB: increment_score] Oh no! Something went wrong! Unable to increment_score(username={username})")
+        if DEBUG_DB:
+            print(f"\n\tExeption:\n\t{e}")
+        close_db()
+        return False
+
+    if num_affected_rows is None:
+        print("[DB: increment_score] Unable to verify if update completed. Giving up.")
+        return False
+    elif num_affected_rows == -1:
+        print("[DB: increment_score] Update failed, maybe check the query syntax.")
+        return False
+    # ~~~~~~~~~
+    # Success!
+    # ~~~~~~~~~
+    db.commit()
+    print(f"Successfully incremented score by `{score} pts` for {username}!")
+    close_db()
+    return True

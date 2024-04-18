@@ -260,6 +260,16 @@ def create_app(test_config=None):
         print("Loaded leaderboard rows: ", rows)
         return load_leaderboard_response
 
+    @cross_origin() 
+    @app.route("/increment_score", methods=["POST"])
+    def increment_score():
+        """
+        :params: (throught the request)
+        - username
+        - score (to increment the score they already have with.)
+        """
+        pass
+
     # a simple page that says hello
     @app.route('/hello')
     def hello():
