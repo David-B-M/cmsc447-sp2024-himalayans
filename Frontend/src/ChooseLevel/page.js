@@ -25,9 +25,11 @@ const CustomButton = ({ children, to }) => {
 }
 
 
+
 // buttons = <div><CustomButton to="/LevelExample">Level 1</CustomButton>
 //       <CustomButton disabled>[LOCKED]</CustomButton>
 function ChooseLevel() {
+  let currUser = 0;
   const [userData, setUserData] = useState([{}])
     const loadUser = () => {
          axios.get("http://localhost:5000/load_users").then(res => {
@@ -46,7 +48,7 @@ function ChooseLevel() {
     let buttons = []
 
     // change later to be based off usecontext.
-    let levelReached = userData["users"][0]["levelReached"]
+    let levelReached = userData["users"][currUser]["levelReached"]
     let i = 0;
     while (i < levelReached) {
       buttons.push(<CustomButton to="/LevelExample">Level {i+1}</CustomButton>)
@@ -82,6 +84,9 @@ function ChooseLevel() {
         <div>
           <BackButton>Go Back</BackButton>
         </div>
+      </div>
+      <div>
+        <p style={{color:'white'}}>Current User: {userData["users"][currUser]["username"]}</p>
       </div>
     </div>
   );
