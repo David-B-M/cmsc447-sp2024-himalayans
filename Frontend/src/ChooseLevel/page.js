@@ -27,7 +27,7 @@ function ChooseLevel() {
   let currUser = 1;
   let currLevel = 0;
   const [data, setData] = useState([{}])
-  const [name, setName] = useState("")
+  //const [name, setName] = useState("")
   const loadUser = () => {
         axios.get("http://localhost:5000/load_users").then(res => {
           setData(res.data)
@@ -43,8 +43,8 @@ function ChooseLevel() {
   //}
   //let currLevel = LevelValue(currUser);
 
-  for(let i = 0; i < res.data["users"].length; i++){
-    if(Number(currUser) == Number(res.data["users"][i]['user_id'])){
+  for(let i = 0; i < data["users"].length; i++){
+    if(Number(currUser) == Number(data["users"][i]['user_id'])){
       //console.log("levelReached = " + data["users"][i]['levelReached'])
       let level = data["users"][i]['levelReached'];
       console.log("LevelValue: Level returned: " + level);
