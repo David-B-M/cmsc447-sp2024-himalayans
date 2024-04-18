@@ -156,8 +156,8 @@ def create_app(test_config=None):
         pass
 
     @cross_origin() 
-    @app.route("/user_level", methods=["GET"])
-    def get_user_level():
+    @app.route("/read_user_level", methods=["GET"])
+    def read_user_level():
         """
         Expects a username to be passed to be used for looking up a particular user.
         :return: 
@@ -169,14 +169,14 @@ def create_app(test_config=None):
 
         username = get_username_from_request(response=user_level_response)
         if username == None: # the user can check the output for reason for failure :p
-            print("[GET /user_level] Unable to get username from request.")
+            print("[GET /read_user_level] Unable to get username from request.")
             return user_level_response
 
         db_level_result = db.get_user_level(username)
-        print(f"[__init__/get_user_level] DEBUG: Got level={db_level_result} ")
+        print(f"[__init__/read_user_level] DEBUG: Got level={db_level_result} ")
         if db_level_result == None:
             result["level"] = None
-            result[RESPONSE_MESSAGE_KEY] = "Failed to get user level."
+            result[RESPONSE_MESSAGE_KEY] = "Failed to read user level."
             user_level_response.status = 404
             user_level_response.response = json.dumps(result)
             return user_level_response
@@ -186,7 +186,7 @@ def create_app(test_config=None):
         # =========
         result["level"] = db_level_result
         user_level_response.response = json.dumps(result)
-        print(f"Loaded level for username=`{username}`: ", db_level_result)
+        print(f"Done reading level for username=`{username}`: ", db_level_result)
         return user_level_response
 
     # a simple page that says hello

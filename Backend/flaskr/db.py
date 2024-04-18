@@ -119,7 +119,7 @@ def load_users():
         [True, [{"user_id": 1, "username": "test1", "levelReached": 1}]]]
     """
     db = get_db()
-    assert db is not None, "[DB: load_users_from_db] Failed to connect to database."
+    assert db is not None, "[DB: load_users] Failed to connect to database."
 
     LOAD_USERS_SQL = """
     SELECT * from users;
@@ -128,7 +128,7 @@ def load_users():
     load_result = db_cursor.execute(LOAD_USERS_SQL)
 
     if load_result is None:
-        print("Failed to load_users_from_db :(")
+        print("[DB: load_users] Failed to load_users :(")
         close_db()
         return (False, [])
 
@@ -142,7 +142,7 @@ def load_users():
             "levelReached": user_row["levelReached"]
         })
 
-    print(f"[DB: load_users_from_db] Successfully loaded users from database!")
+    print(f"[DB: load_users] Successfully loaded users from database!")
     if DEBUG_DB:
         print(f"\tResult: {jsonified_result}")
     return (True, jsonified_result)
@@ -235,22 +235,14 @@ def add_user(username):
     return db_cursor.lastrowid
 
 
-def update_level(username):
-    UPDATE_USER_LEVEL_SQL = """
-    UPDATE users 
-    SET levelReached
-    where username=?
-    """
-    pass
 
-
-def get_user_level(username):
+def read_user_level(username):
     """
     :return: (fail case) None
              (success case) integer from the table `users[levelReached]`
     """
     db = get_db()
-    assert db is not None, "[DB: add_user] Failed to connect to database."
+    assert db is not None, "[DB: read_user_level] Failed to connect to database."
 
     QUERY_LEVEL_SQL = """
     SELECT levelReached from users 
@@ -263,7 +255,7 @@ def get_user_level(username):
         # then we can use the column name to get the value itself 
         level_result = db_cursor.execute(QUERY_LEVEL_SQL, (username, )).fetchall()[0]["levelReached"]
     except Exception as e:
-        print(f"Unable to get_level(username={username})")
+        print(f"Unable to read_user_level(username={username})")
         close_db()
         return None
     db.commit()
@@ -271,3 +263,101 @@ def get_user_level(username):
     close_db()
     # Reference: https://www.sqlitetutorial.net/sqlite-python/insert/
     return level_result
+
+
+def increment_user_level(username):
+    """
+    Usage: if they win a level, call the endpoint that will call this ("/POST update_level)!
+
+    Increment their current level by 1, but only if they haven't already beat all 3 levels.
+    Use "GET /user_level" endpoint 
+
+    :return: True/False based on if the update was successful.
+    ============================================================================
+                                    Note!
+    ---------------------------------------------------------------------------
+        It still returns True if they were at level 3 and the value didn't change :p
+    ============================================================================
+    It's only False if it failed to connect to the database or we got an error.
+    """
+    db = get_db()
+    assert db is not None, "[DB: increment_user_level] Failed to connect to database."
+
+    INCREMENT_USER_LEVEL_SQL = """
+    UPDATE users 
+    SET levelReached = levelReached + 1
+    WHERE username = ? AND levelReached < 3
+    """
+    db_cursor = db.cursor()
+    num_affected_rows = None
+    try:
+        update_result = db_cursor.execute(INCREMENT_USER_LEVEL_SQL, (username, ))
+        # according to documentation, you have to fetchall in order for the rowcount to update
+        # Reference: https://docs.python.org/3/library/sqlite3.html#sqlite3.Cursor.rowcount
+        db_cursor.fetchall()
+        num_affected_rows = db_cursor.rowcount
+    except Exception as e:
+        print(f"[DB: increment_user_level] Oh no! Something went wrong! Unable to increment_user_level(username={username})")
+        if DEBUG_DB:
+            print(f"\n\tExeption:\n\t{e}")
+        close_db()
+        return False
+
+    if num_affected_rows is None:
+        print("[DB: increment_user_level] Unable to verify if update completed. Giving up.")
+        return False
+    elif num_affected_rows == -1:
+        print("[DB: increment_user_level] Update failed, maybe check the query syntax.")
+        return False
+    # ~~~~~~~~~
+    # Success!
+    # ~~~~~~~~~
+    db.commit()
+    print(f"Successfully incremented levelReached for {username}!")
+    close_db()
+    return True
+
+
+def load_leaderboard():
+    """
+    Get all the rows from the `leaderboard` table.
+    - Same logic as load_users except it accesses the leaderboard table.
+
+    :return: [successBool, rowsFromLeaderboard]
+        1. successBool: if we were able to access the rows from the database
+         - Usage: distinguish the event that no rows were returned 
+            because the table is empty not because we weren't able to connect
+        2. rowsFromLeaderboard: list of dictionaries (rows)
+        - attributes (keys): rank , user_id, username, score
+         
+    Example return for 
+        [successBool, rowsFromLeaderboard]
+        [True, [{"rank": 1, "user_id": 1, "username": "test1", "score": 100}]]]
+    """
+    db = get_db()
+    assert db is not None, "[DB: load_leaderboard] Failed to connect to database."
+
+    LOAD_LEADERBOARD_SQL = """
+    SELECT * from leaderboard;
+    """
+    db_cursor = db.cursor()
+    load_result = db_cursor.execute(LOAD_LEADERBOARD_SQL)
+
+    if load_result is None:
+        print("Failed to load_leaderboard :(")
+        close_db()
+        return (False, [])
+
+    fetched_result = load_result.fetchall()
+    close_db()
+    jsonified_result = []
+    for user_row in fetched_result:
+        json_row = {}
+        # Expecting: rank , user_id, username, score
+        for key in user_row:
+            json_row[key] = user_row[key]
+
+    print(f"[DB: load_leaderboard] Successfully loaded rows from `leaderboard` table in database!")
+    if DEBUG_DB:
+        print(f"\tResult: {jsonified_result}")
+    return (True, jsonified_result)
