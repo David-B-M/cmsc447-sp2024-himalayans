@@ -10,9 +10,9 @@ const CustomButton = ({ children, to }) => {
   );
 }
 
-const CustomGameSave = ({children}) => {
+const CustomGameSave = ({children, id}) => {
   return (
-    <button className="gamesave">{children}</button>
+    <button id={id} className="gamesave">{children}</button>
   );
 }
 
@@ -32,20 +32,20 @@ function popup() {
 
 // @dmiddour
 function StartGame() {
-    const [data, setData] = useState([{}])
+    const [userData, setUserData] = useState([{}])
     const [name, setName] = useState("")
     const loadUser = () => {
          axios.get("http://localhost:5000/load_users").then(res => {
-            setData(res.data)
-            console.log(data)
+            setUserData(res.data)
         }
     ).catch(e => {
         console.log(e);
         })
     }
+
     useEffect(() => {
-        loadUser()
-    }, []);
+            loadUser()
+    }, [userData]);
 
 
     const updateName = (event) => {
@@ -66,8 +66,26 @@ function StartGame() {
       });
     }
 
+    const gameSave = () => {
+        let loadGameButtons = []
+        let i = 0;
+        while (i < userData["users"].length) {
+            loadGameButtons.push(<CustomGameSave id={userData["users"][i]["user_id"]}> {userData["users"][i]["username"]} </CustomGameSave>)
+            i++
+        }
+        while (i < 5) {
+            loadGameButtons.push(<CustomGameSave id={i+1}>Game {i+1} </CustomGameSave>)
+            i++
+        }
+        return loadGameButtons
+    }
+
+    if (userData["users"] === undefined) {
+        return <div> Still loading.... </div>
+    }
+
   return (
-    <div style={{ backgroundImage: `url('snowy_mountains.jpg')`,  
+    <div style={{ backgroundImage: `url('snowy_mountains.jpg')`,
                   backgroundSize: 'cover',
                   backgroundPosition: 'left', 
                   display: 'flex',
@@ -96,10 +114,7 @@ function StartGame() {
         <div className='saved-game-box'>
 
           <div className="GameSaveList">
-            <button className='gamesave'>Game 2</button>
-            <button className='gamesave'>Game 3</button>
-            <CustomGameSave>Game 4</CustomGameSave>
-            <CustomGameSave>Game 5</CustomGameSave>
+              {gameSave()}
           </div>
         </div>
 

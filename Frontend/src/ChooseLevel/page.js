@@ -1,9 +1,11 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import { Link } from 'react-router-dom';
+import {Container} from 'react-bootstrap';
 import './ChooseLevel.css'; // Import CSS file for styling
 import { useNavigate } from 'react-router-dom';
-import axios from "axios";
-import querystring from 'qs'
+
+import axios from 'axios';
+
 
 const BackButton = ({ children }) => {
   const navigate = useNavigate();
@@ -15,8 +17,6 @@ const BackButton = ({ children }) => {
   );
 }
 
-let level = 1; // PLACEHOLDER: this should be picked out from the currLevel column of the database
-
 //@cmgilger
 const CustomButton = ({ children, to }) => {
   return (
@@ -24,65 +24,47 @@ const CustomButton = ({ children, to }) => {
   );
 }
 
+
+// buttons = <div><CustomButton to="/LevelExample">Level 1</CustomButton>
+//       <CustomButton disabled>[LOCKED]</CustomButton>
 function ChooseLevel() {
-  let currUser = 1;
-  let currLevel = 0;
-  const [data, setData] = useState([{}])
-  //const [name, setName] = useState("")
-  const loadUser = () => {
-        axios.get("http://localhost:5000/load_users").then(res => {
-          setData(res.data)
-          console.log(data)
-      }
-  ).catch(e => {
-      console.log(e);
-      })
-  }
-  useEffect(() => {
-      loadUser()
-  }, []);
-  //}
-  //let currLevel = LevelValue(currUser);
+  const [userData, setUserData] = useState([{}])
+    const loadUser = () => {
+         axios.get("http://localhost:5000/load_users").then(res => {
+            setUserData(res.data)
+        }
+    ).catch(e => {
+        console.log(e);
+        })
+    }
 
-  for(let i = 0; i < data["users"].length; i++){
-    if(Number(currUser) == Number(data["users"][i]['user_id'])){
-      //console.log("levelReached = " + data["users"][i]['levelReached'])
-      let level = data["users"][i]['levelReached'];
-      console.log("LevelValue: Level returned: " + level);
-      currLevel = level;
-    }
-  };
+    useEffect(() => {
+            loadUser()
+    }, [userData]);
 
-  const ButtonSwitch = () => { // This determines how the buttons are displayed.
-    let buttons;
-    //let currLevel = level;
-    console.log("ButtonSwitch: level = " + Number(currLevel));
-    //switch(Number(currLevel)){
-    if(Number(currLevel) == 1){ //Level 1 is currLevel
-      buttons = <div><CustomButton to="/LevelExample">Level 1</CustomButton>
-      <CustomButton disabled>[LOCKED]</CustomButton>
-      <CustomButton disabled>[LOCKED]</CustomButton></div>
+  const loadButtons = () => {
+    let buttons = []
+
+    // change later to be based off usecontext.
+    let levelReached = userData["users"][0]["levelReached"]
+    let i = 0;
+    while (i < levelReached) {
+      buttons.push(<CustomButton to="/LevelExample">Level {i+1}</CustomButton>)
+      i++;
     }
-    if(Number(currLevel) == 2){ //Level 2 is currLevel
-      buttons = <div><CustomButton to="/LevelExample">Level 1</CustomButton>
-      <CustomButton>Level 2</CustomButton>
-      <CustomButton disabled>[LOCKED]</CustomButton></div>
-      //break;
+
+    while (i < 3) {
+      buttons.push(<CustomButton disabled>[LOCKED]</CustomButton>)
+      i++;
     }
-    if(Number(currLevel) == 3){ //Level 3 is currLevel
-      buttons = <div><CustomButton to="/LevelExample">Level 1</CustomButton>
-      <CustomButton>Level 2</CustomButton>
-      <CustomButton>Level 3</CustomButton></div>
-      //break;
-    }
-    else{
-      buttons = <div><CustomButton disabled>Please Load Game and Return!</CustomButton></div>
-    }
-    //}
-    return <div>{buttons}</div>
+    return buttons
   }
 
-  console.log("ChooseLevel: LevelValue = " + currLevel);
+  if (userData["users"] === undefined) {
+        return <div> Still loading.... </div>
+  }
+
+
   return (
     <div style={{ backgroundImage: `url('snowy_mountains.jpg')`,  
                         backgroundSize: 'cover',
@@ -94,7 +76,9 @@ function ChooseLevel() {
         <h1 style={{color:'white', fontSize:'100px'}}>
           Choose a Level
         </h1>
-        <ButtonSwitch/> 
+        <div>
+        {loadButtons()}
+        </div>
         <div>
           <BackButton>Go Back</BackButton>
         </div>
