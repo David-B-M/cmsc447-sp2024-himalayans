@@ -1,10 +1,10 @@
 import Phaser from 'phaser';
 
-class LevelFailScreen extends Phaser.Scene
+class LevelOneFailScreen extends Phaser.Scene
 {
     constructor ()
     {
-        super({ key: 'LevelFailScreen'});
+        super({ key: 'LevelOneFailScreen'});
     }
 
     preload ()
@@ -33,13 +33,13 @@ class LevelFailScreen extends Phaser.Scene
 
         this.resetLevelBtn.on('pointerdown', () =>
         {
-            this.scene.start('LevelExample');
+            this.scene.start('LevelOne');
             this.scene.stop();
         });
 
         this.viewLeaderboardBtn.on('pointerdown', () =>
         {
-            window.location.href = '/ViewLeaderboard'
+            window.location.href = '/ViewLeaderboard';
         });
 
         this.backToMainMenuBtn.on('pointerdown', () =>
@@ -49,4 +49,4 @@ class LevelFailScreen extends Phaser.Scene
     }
 }
 
-export default LevelFailScreen;
+export default LevelOneFailScreen;

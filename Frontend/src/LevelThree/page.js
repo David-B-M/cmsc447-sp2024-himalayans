@@ -1,18 +1,18 @@
-﻿import Phaser from 'phaser';
+import Phaser from 'phaser';
 import {useEffect} from 'react';
-import PauseScreen from "../PauseMenu/page"
-import LevelCompleteScreen from '../LevelCompletion/page';
-import LevelFailScreen from '../LevelFail/page';
+import LevelThreePauseMenu from "../LevelThreePauseMenu/page"
+import LevelThreeCompleteScreen from '../LevelThreeComplete/page';
+import LevelThreeFailScreen from '../LevelThreeFail/page';
 
 const powerUpTime = 10;
 const levelTime = 60;
 const velocityX = -100
 
-class LevelExampleClass extends Phaser.Scene
+class LevelThreeClass extends Phaser.Scene
 {
     constructor ()
     {
-        super({ key: 'LevelExample' });
+        super({ key: 'LevelThree' });
     }
 
     preload()
@@ -28,6 +28,7 @@ class LevelExampleClass extends Phaser.Scene
         this.load.image('speedBoost', 'speed_boost.png');
         this.load.image('clock', 'clock.png');
         this.load.image('shield', 'shield.png');
+        this.load.image('boulder', 'boulder.png');
     }
 
     create()
@@ -109,9 +110,9 @@ class LevelExampleClass extends Phaser.Scene
 
         this.pauseBtn.on('pointerdown', () =>
         {
-            this.scene.sendToBack('LevelExample');
-            this.scene.pause('LevelExample');
-            this.scene.launch('PauseScreen');
+            this.scene.sendToBack('LevelThree');
+            this.scene.pause('LevelThree');
+            this.scene.launch('LevelThreePauseMenu');
 
             this.pauseBtn.setVisible(false);
         });
@@ -151,6 +152,11 @@ class LevelExampleClass extends Phaser.Scene
         this.clocks = this.physics.add.group();
         this.physics.add.overlap(this.player, this.clocks, collectClock, null, this);
         this.clocksVelocityX = velocityX; 
+
+        // boulder
+        this.boulders = this.physics.add.group();
+        this.physics.add.collider(this.player, this.boulders, hitObstacle, null, this);
+        this.physics.add.collider(this.boulders, this.ground);
     }
 
     update()
@@ -159,7 +165,7 @@ class LevelExampleClass extends Phaser.Scene
         if (this.timerValue <= 0)
         {
             this.gameOver = true;
-            this.scene.launch('LevelCompleteScreen');
+            this.scene.launch('LevelThreeCompleteScreen');
         }
 
         if (this.gameOver)
@@ -173,13 +179,13 @@ class LevelExampleClass extends Phaser.Scene
         // update background and ground
         if (this.speedBoostActive)
         {
-            this.bg.tilePositionX += 4;
-            this.ground.tilePositionX += 4;
+            this.bg.tilePositionX += 6;
+            this.ground.tilePositionX += 6;
         }
         else
         {
-            this.bg.tilePositionX += 2;
-            this.ground.tilePositionX += 2;
+            this.bg.tilePositionX += 4;
+            this.ground.tilePositionX += 4;
         }
 
         // update timer
@@ -283,7 +289,26 @@ class LevelExampleClass extends Phaser.Scene
             this.shieldTimeLeftText.setText(': ' + this.shieldTimeLeft.toFixed(0));
             this.shieldTimeLeft -= 0.025;
         }
+        if (Math.abs(this.timerValue % 10) < 0.025) {
+            spawnBoulder(this);
+        }
     }
+}
+
+function spawnBoulder(scene)
+{
+    const boulder = scene.boulders.create(1400, 300, 'boulder')
+            .setAccelerationX(-100)
+            .setBounce(1)
+            .setCollideWorldBounds(true)
+            .setScale(.75);
+
+        scene.physics.world.on('worldstep', () =>
+        {
+            boulder.setAngularVelocity(
+                Phaser.Math.RadToDeg(boulder.body.velocity.x / boulder.body.halfWidth)
+            );
+        });
 }
 
 function spawnPowerup(scene)
@@ -353,7 +378,7 @@ function hitObstacle (player, rock)
     if (!this.shieldActive)
     {
         this.gameOver = true;
-        this.scene.launch('LevelFailScreen');
+        this.scene.launch('LevelThreeFailScreen');
     }
 }
 
@@ -373,7 +398,7 @@ function collectFish (player, fish)
     this.scoreText.setText('Score: ' + this.scoreValue);
 }
 
-function LevelExample()
+function LevelThree()
 {
     const config = {
         type: Phaser.AUTO,
@@ -390,7 +415,7 @@ function LevelExample()
             }
         },
         backgroundColor: '#304858',
-        scene: [LevelExampleClass, PauseScreen, LevelCompleteScreen, LevelFailScreen]
+        scene: [LevelThreeClass, LevelThreePauseMenu, LevelThreeCompleteScreen, LevelThreeFailScreen]
     };
 
     const game = new Phaser.Game(config);
@@ -399,12 +424,12 @@ function LevelExample()
 
 function Game() {
     useEffect(() => {
-        const game = LevelExample();
+        const game = LevelThree();
         return () => {
             game.destroy(true); 
         };
     }, []);
-    return <div id={"level-example"}/>;
+    return <div id={"Level-Three"}/>;
 }
 
 export default Game;

@@ -38,17 +38,17 @@ const ButtonSwitch = ({ currLevel }) => { // This determines how the buttons are
   let buttons;
   switch(currLevel){
     case 1: //Level 1 is currLevel
-      buttons = <div><CustomButton to="/LevelExample">Level 1</CustomButton>
+      buttons = <div><CustomButton to="/LevelOne">Level 1</CustomButton>
       <CustomButton disabled>[LOCKED]</CustomButton>
       <CustomButton disabled>[LOCKED]</CustomButton></div>
       break;
     case 2: //Level 2 is currLevel
-      buttons = <div><CustomButton to="/LevelExample">Level 1</CustomButton>
+      buttons = <div><CustomButton to="/LevelOne">Level 1</CustomButton>
       <CustomButton>Level 2</CustomButton>
       <CustomButton disabled>[LOCKED]</CustomButton></div>
       break;
     case 3: //Level 3 is currLevel
-      buttons = <div><CustomButton to="/LevelExample">Level 1</CustomButton>
+      buttons = <div><CustomButton to="/LevelOne">Level 1</CustomButton>
       <CustomButton>Level 2</CustomButton>
       <CustomButton>Level 3</CustomButton></div>
       break;

@@ -5,7 +5,8 @@ import MainMenu from "./MainMenu/page"
 import ChooseLevel from './ChooseLevel/page'
 import StartGame from './StartGame/page'
 import ViewLeaderboard from "./ViewLeaderboard/page"
-import LevelExample from "./LevelExample/page"
+import LevelOne from "./LevelOne/page"
+import LevelThree from "./LevelThree/page"
 import {BrowserRouter as Router, Routes, Route, Link} from "react-router-dom";
 import React, {useState, useEffect} from 'react'
 function App() {
@@ -25,14 +26,16 @@ function App() {
                 <Link to={"/StartGame"}> Start Game </Link>
                 <Link to={"/ChooseLevel"}>Choose Level </Link>
                 <Link to={"/ViewLeaderboard"}> View Leaderboard</Link>
-                <Link to={"/LevelExample"}> Level Example</Link>
+                <Link to={"/LevelOne"}> Level One</Link>
+                <Link to={"/LevelThree"}> Level Three</Link>
             </div>
             <Routes> {/* Routes navbar connects to goes here */}
                 <Route path={"/"} element={<MainMenu/>}></Route>
                 <Route path={"/StartGame"} element={<StartGame/>}></Route>
                 <Route path={"/ChooseLevel"} element={<ChooseLevel/>}></Route>
                 <Route path={"/ViewLeaderboard"} element={<ViewLeaderboard/>}></Route>
-                <Route path={"/LevelExample"} element={<LevelExample/>}></Route>
+                <Route path={"/LevelOne"} element={<LevelOne/>}></Route>
+                <Route path={"/LevelThree"} element={<LevelThree/>}></Route>
             </Routes>
         </Router>
     </div>
