@@ -46,14 +46,23 @@ GET /load_users
 </figure>
 
 
-## ❌ Check user level
+## ✅ Get/check user level
 (not implemented, however you can parse the data from load_users for now)
 ```
 GET user_level?username="[username]"
+    i.e. GET /user_level?username=test1
 ```
 - Usage: Frontend ChooseLevel page.
-- Will be used in Connor's switch statement to determine which levels are disabled
-- (i.e. can't chose from 2 if they only haven't level 1)
+    - Get the integer value by accessing the key "level"
+    - Will be used in Connor's switch statement to determine which levels are disabled
+- (i.e. frontend enforces that players can't chose from 2 if they only completed level 1)
+<figure>
+    <img src="./example_requests/GET-user_level-success.png" 
+         style="height:200px">
+    <figcaption>
+        Example of a successful GET /load_users request.
+    </figcaption>
+</figure>
 
 ## ❌ Update user score
 ```

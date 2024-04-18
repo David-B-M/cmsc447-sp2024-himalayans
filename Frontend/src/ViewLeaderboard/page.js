@@ -1,13 +1,32 @@
 import "./ViewLeaderboard.css"
-import {Link} from "react-router-dom";
+import { useNavigate } from 'react-router-dom';
+
+const BackButton = ({ children }) => {
+    const navigate = useNavigate();
+  
+    return (
+      <>
+        <button onClick={() => navigate('/')} className='custom-button'>{children}</button>
+      </>
+    );
+  }
+
 function ViewLeaderboard() {
 
-    return(<div className={"ViewLeaderboard"} style={{background: "url('/himalayan-green-background.jpg')"}}>
-            <div className={"control-flow"}>
-                <h1 className={"title"}>Everest the Olympicat <br/>View Leaderboard</h1>
-                <Link to={"/"}> <button className={"return"}> <span>Back to Main Menu</span> </button> </Link>
+    return (
+        <div style={{ backgroundImage: `url('snowy_mountains.jpg')`,  
+                            backgroundSize: 'cover',
+                            backgroundPosition: 'left', 
+                            display: 'flex',
+                            height: '100vh',
+                            flexDirection: 'column'}}>
+          <div className={"control-flow"}>
+            <div>
+              <BackButton>Go Back</BackButton>
             </div>
-    </div>)
+          </div>
+        </div>
+      );
 }
 
 export default ViewLeaderboard;

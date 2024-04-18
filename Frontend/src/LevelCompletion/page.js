@@ -1,14 +1,40 @@
-import "./LevelCompletion.css"
-function LevelComplete() {
+import Phaser from 'phaser';
 
-    return(
-        <div className={"LevelComplete"} style={{background: "url('/himalayan-green-background.jpg')", backgroundSize:"cover"}}>
-            <div className={"level"}>
-                <h1 className={"title"}>Level Failed</h1>
-                <button className={"reset"}> Reset Level</button>
-                <button className={"quit"}> View Leaderboard</button>
-            </div>
-    </div>)
+class LevelCompleteScreen extends Phaser.Scene
+{
+    constructor ()
+    {
+        super({ key: 'LevelCompleteScreen'});
+    }
+
+    preload ()
+    {
+        this.load.image('viewLeaderboardBtn', 'ViewLeaderboardBtn.png');
+        this.load.image('backToMainMenuBtn', 'BackToMainMenuBtn.png');
+    }
+
+    create ()
+    {
+        this.text = this.add.text(500, 150, 'Level Complete', { font: 'bold 64px Arial' });
+
+        this.viewLeaderboardBtn = this.add.sprite(475, 300, 'viewLeaderboardBtn').setOrigin(0, 0);
+        this.viewLeaderboardBtn.setInteractive({ useHandCursor: true });
+        this.viewLeaderboardBtn.setScale(0.5);
+
+        this.backToMainMenuBtn = this.add.sprite(505, 400, 'backToMainMenuBtn').setOrigin(0, 0);
+        this.backToMainMenuBtn.setInteractive({ useHandCursor: true });
+        this.backToMainMenuBtn.setScale(0.5);
+
+        this.viewLeaderboardBtn.on('pointerdown', () =>
+        {
+            window.location.href = '/ViewLeaderboard'
+        });
+
+        this.backToMainMenuBtn.on('pointerdown', () =>
+        {
+            window.location.href = '/';
+        });
+    }
 }
 
-export default LevelComplete;
+export default LevelCompleteScreen;
