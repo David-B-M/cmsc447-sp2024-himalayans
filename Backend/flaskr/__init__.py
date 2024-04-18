@@ -152,8 +152,34 @@ def create_app(test_config=None):
         Call this in the use case "LevelWon", but not in the use case "LevelFailed"
         Expects a username.
         Use this to increase their levelReached!
+        :return:
+            {"success": updatedLevelSuccess}
         """
-        pass
+        # handling the request
+        result = {
+            "success": False
+        }  # <- None by default (db fails to add).
+        
+        increment_level_response = init_response()
+        # get the username they passed to the request.
+        username = None
+        username = get_username_from_request(response=increment_level_response)
+        if username == None:  # ^ function auto sets the status to 404 and the message if it fails.
+            return increment_level_response
+
+        db_increment_level_success = db.increment_user_level(username)
+        result["success"] = db_increment_level_success
+        if not db_increment_level_success:
+            result[RESPONSE_MESSAGE_KEY] = \
+                f"[Endpoint: add_user] Failed to increment user level for `{username}` () :("
+            increment_level_response.response = json.dumps(result)
+            increment_level_response.status = 404
+            return increment_level_response
+
+        result[RESPONSE_MESSAGE_KEY] = f"Successfully increment level for user = `{username}` :D"
+        increment_level_response.response = json.dumps(result)
+        increment_level_response.status = 200
+        return increment_level_response
 
     @cross_origin() 
     @app.route("/read_user_level", methods=["GET"])
@@ -188,6 +214,51 @@ def create_app(test_config=None):
         user_level_response.response = json.dumps(result)
         print(f"Done reading level for username=`{username}`: ", db_level_result)
         return user_level_response
+
+    @cross_origin() 
+    @app.route("/load_leaderboard", methods=["GET"])
+    def load_leaderboard():
+        """
+        Example usage: Frontend ViewLeaderboard page 
+            display ranks, usernames, and their scores!
+
+        :return:
+            (on success) JSON response with user rows. 
+                {"ok": True,
+                "rows": 
+                    [{..., "username": "ab123", ...}, {...}]
+                }
+            (on failure) msg - "Failed to load users"
+                - Idea: not setting type to JSON 
+                so that the frontend 
+                recognizes its an error when trying to interpret the empty list.
+            
+        """
+        result = {}
+
+        RESULT_BOOL_INDEX = 0
+        RESULT_USERS_JSON_INDEX = 1
+
+        load_leaderboard_response = init_response()
+
+        loaded_leaderboard = db.load_leaderboard()
+        if not loaded_leaderboard[RESULT_BOOL_INDEX]:
+            result["rows"] = []
+            result[RESPONSE_MESSAGE_KEY] = "Failed to load leaderboard."
+            load_leaderboard_response.status = 404
+
+            load_leaderboard_response.response = json.dumps(result)
+
+            return load_leaderboard_response
+
+        # =========
+        # Success!
+        # =========
+        rows = loaded_leaderboard[RESULT_USERS_JSON_INDEX]
+        result["rows"] = rows
+        load_leaderboard_response.response = json.dumps(result)
+        print("Loaded leaderboard rows: ", rows)
+        return load_leaderboard_response
 
     # a simple page that says hello
     @app.route('/hello')

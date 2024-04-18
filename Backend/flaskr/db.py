@@ -318,11 +318,11 @@ def increment_user_level(username):
     return True
 
 
-def load_leaderboard():
+def load_leaderboard(exclude_columns=["user_id"]):
     """
     Get all the rows from the `leaderboard` table.
-    - Same logic as load_users except it accesses the leaderboard table.
-
+    - Basically the same logic as load_users except it accesses the leaderboard table.
+    - ignore the user_id by default, if you want to keep it, pass in exclude_columns=[]
     :return: [successBool, rowsFromLeaderboard]
         1. successBool: if we were able to access the rows from the database
          - Usage: distinguish the event that no rows were returned 
@@ -332,7 +332,7 @@ def load_leaderboard():
          
     Example return for 
         [successBool, rowsFromLeaderboard]
-        [True, [{"rank": 1, "user_id": 1, "username": "test1", "score": 100}]]]
+        [True, [{"rank": 1, "username": "test1", "score": 100}]]]
     """
     db = get_db()
     assert db is not None, "[DB: load_leaderboard] Failed to connect to database."
@@ -355,7 +355,8 @@ def load_leaderboard():
         json_row = {}
         # Expecting: rank , user_id, username, score
         for key in user_row:
-            json_row[key] = user_row[key]
+            if key not in exclude_columns:
+                json_row[key] = user_row[key]
 
     print(f"[DB: load_leaderboard] Successfully loaded rows from `leaderboard` table in database!")
     if DEBUG_DB:

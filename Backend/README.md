@@ -78,9 +78,10 @@ i.e. POST /increment_user_level?username=jatcs
 - Use "GET /read_user_level" to verify the value of this increment occured as you wished :)
 ## 🟡 Update user score
 ```
-POST save_score
+POST increment_score
 Expects {body:{username: "...", score: ..N..}}
 ```
+- score is the score they received on the current level, that is what we will add on to the current score.
 - Usage: Frontend LevelComplete page (which gets this information from PlayLevel)
 
 ## ❌ Load leaderboard table
