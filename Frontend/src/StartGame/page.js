@@ -32,11 +32,11 @@ function popup() {
 
 // @dmiddour
 function StartGame() {
-    const [data, setData] = useState([{}])
+    const [userData, setUserData] = useState([{}])
     const [name, setName] = useState("")
     const loadUser = () => {
          axios.get("http://localhost:5000/load_users").then(res => {
-            setData(res.data)
+            setUserData(res.data)
         }
     ).catch(e => {
         console.log(e);
@@ -45,7 +45,7 @@ function StartGame() {
 
     useEffect(() => {
             loadUser()
-    }, [data]);
+    }, [userData]);
 
 
     const updateName = (event) => {
@@ -69,8 +69,8 @@ function StartGame() {
     const gameSave = () => {
         let loadGameButtons = []
         let i = 0;
-        while (i < data["users"].length) {
-            loadGameButtons.push(<CustomGameSave id={data["users"][i]["user_id"]}> {data["users"][i]["username"]} </CustomGameSave>)
+        while (i < userData["users"].length) {
+            loadGameButtons.push(<CustomGameSave id={userData["users"][i]["user_id"]}> {userData["users"][i]["username"]} </CustomGameSave>)
             i++
         }
         while (i < 5) {
@@ -80,7 +80,7 @@ function StartGame() {
         return loadGameButtons
     }
 
-    if (data["users"] === undefined) {
+    if (userData["users"] === undefined) {
         return <div> Still loading.... </div>
     }
 
