@@ -14,6 +14,13 @@ The status of each of these implementations is shown by the emojis:
 POST add_user
 parameter: username 
 headers: None required
+
+Returns: json
+Example:
+    {
+        "user_id": 1,
+        "msg": "Successfully added user `jess` to database! :D"
+    }
 ```
 - Usage: Frontend StartGame page.
 - example call: 
