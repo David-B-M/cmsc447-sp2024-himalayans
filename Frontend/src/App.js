@@ -9,13 +9,29 @@ import StartGame from './StartGame/page'
 import ViewLeaderboard from "./ViewLeaderboard/page"
 import LevelExample from "./LevelExample/page"
 import {BrowserRouter as Router, Routes, Route, Link} from "react-router-dom";
-import React, {useState, useEffect} from 'react'
+import React, {useState, useEffect, createContext} from 'react'
+import axios from "axios";
+export const AppContext = createContext()
+
 function App() {
     {/* This is an example of getting the api from the backend. */}
-  const [data, setData] = useState([{}])
+    const [arrayId, setArrayId] = useState(-1)
+    const [userData, setUserData] = useState([{}])
+    const loadUser = () => {
+         axios.get("http://localhost:5000/load_users").then(res => {
+            setUserData(res.data)
+        }
+    ).catch(e => {
+        console.log(e);
+        })
+    }
 
+    useEffect(() => {
+            loadUser()
+    }, [userData]);
   return (
     <div className="App">
+        <AppContext.Provider value={{userData, arrayId, setArrayId}}>
         <Router> {/* Navbar goes here */}
             <div>
                 {/* The navbar below is an example of how to use Navbar until main menu is complete. But for testing purposes,
@@ -41,6 +57,7 @@ function App() {
                 <Route path={"/LevelExample"} element={<LevelExample/>}></Route>
             </Routes>
         </Router>
+        </AppContext.Provider>
     </div>
   );
 }

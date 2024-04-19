@@ -1,21 +1,13 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import { Link } from 'react-router-dom';
 import {Container} from 'react-bootstrap';
 import './ChooseLevel.css'; // Import CSS file for styling
 import { useNavigate } from 'react-router-dom';
 
-import axios from 'axios';
+import {AppContext} from "../App";
 
 
-const BackButton = ({ children }) => {
-  const navigate = useNavigate();
 
-  return (
-    <>
-      <button onClick={() => navigate(-1)} className='custom-button'>{children}</button>
-    </>
-  );
-}
 
 //@cmgilger
 const CustomButton = ({ children, to }) => {
@@ -25,28 +17,19 @@ const CustomButton = ({ children, to }) => {
 }
 
 
-// buttons = <div><CustomButton to="/LevelExample">Level 1</CustomButton>
-//       <CustomButton disabled>[LOCKED]</CustomButton>
 function ChooseLevel() {
-  const [userData, setUserData] = useState([{}])
-    const loadUser = () => {
-         axios.get("http://localhost:5000/load_users").then(res => {
-            setUserData(res.data)
+    const {userData, arrayId} = useContext(AppContext)
+    const navigate = useNavigate();
+    const goBack = () => {
+          navigate(-1)
         }
-    ).catch(e => {
-        console.log(e);
-        })
-    }
 
-    useEffect(() => {
-            loadUser()
-    }, [userData]);
+    let levelReached = parseInt(userData["users"][arrayId]["levelReached"])
 
   const loadButtons = () => {
     let buttons = []
 
     // change later to be based off usecontext.
-    let levelReached = userData["users"][0]["levelReached"]
     let i = 0;
     while (i < levelReached) {
       buttons.push(<CustomButton to="/LevelExample">Level {i+1}</CustomButton>)
@@ -66,9 +49,9 @@ function ChooseLevel() {
 
 
   return (
-    <div style={{ backgroundImage: `url('snowy_mountains.jpg')`,  
+    <div style={{ backgroundImage: `url('snowy_mountains.jpg')`,
                         backgroundSize: 'cover',
-                        backgroundPosition: 'left', 
+                        backgroundPosition: 'left',
                         display: 'flex',
                         height: '100vh',
                         flexDirection: 'column'}}>
@@ -79,8 +62,8 @@ function ChooseLevel() {
         <div>
         {loadButtons()}
         </div>
-        <div>
-          <BackButton>Go Back</BackButton>
+        <div style={{marginTop: `10px`}}>
+          <button onClick={goBack} className={"custom-button"}>Go Back</button>
         </div>
       </div>
     </div>
