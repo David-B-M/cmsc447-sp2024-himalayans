@@ -75,10 +75,6 @@ const currentUser = (event) => {
             loadGameButtons.push(<CustomGameSave id={userData["users"][i]["user_id"]} onClick = {currentUser}> {userData["users"][i]["username"]} </CustomGameSave>)
             i++
         }
-        while (i < 5) {
-            loadGameButtons.push(<CustomGameSave id={i+1}>Game {i+1} </CustomGameSave>)
-            i++
-        }
         return loadGameButtons
     }
 
