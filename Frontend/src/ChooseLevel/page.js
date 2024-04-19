@@ -56,7 +56,7 @@ const ButtonSwitch = ({ currLevel }) => { // This determines how the buttons are
   return <div>{buttons}</div>
 }
 
-function ChooseLevel() {
+function ChooseLevel({getUser}) {
   return (
     <div style={{ backgroundImage: `url('snowy_mountains.jpg')`,  
                         backgroundSize: 'cover',
@@ -68,6 +68,7 @@ function ChooseLevel() {
         <h1 style={{color:'white', fontSize:'100px'}}>
           Choose a Level
         </h1>
+        <h1>{getUser()}</h1>
         <ButtonSwitch currLevel={level} /> 
         <div>
           <BackButton>Go Back</BackButton>
