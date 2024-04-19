@@ -1,6 +1,17 @@
 # Everest the Olympicat by "The Himalayans"
 Welcome to the Himalayans group (CMSC447-04 Spring 2024) github project repository!
 
+In this README you will find information about our game implementation. (Sprint2 at the top, Sprint1 near the bottom).
+
+**Note for graders - RE: __JIRA__** 
+
+We discussed it with Prof. Allgood and he says that it's alright that we can't give graders access to our JIRA.
+We have met the limit for the numbers we can have on our account (since Jess has 2 group projects and 10 members total), so they had to remove everyone besides the team developers to make the JIRA functional.
+
+For your grading purposes, I have made this video of me scrolling through our JIRA:
+<a>https://drive.google.com/file/d/1VFnRhCT7ANSImjoMtHHZIpmEcs9y-QfY/view?usp=sharing</a>
+- We know this is a software development project becuase there is a backlog, however, as you can see in the video, there is no `Create Sprint` button. So, our team has been using Epics to serve that purpose, although I have not been able to set a usable start and end date for that (i.e. to appear on the timeline).
+
 # Sprint 2 - Implementation
 ## Build Instructions
 1. Load the backend by following the instructions in `./Backend/README.md`
@@ -10,15 +21,16 @@ Welcome to the Himalayans group (CMSC447-04 Spring 2024) github project reposito
 Here is how our application is currently lookin!
 You can load the app up and see the the following pages.
 
-To quickstart, either click the `LevelExample` link at the top nap bar of our app, or just go to ChooseLevel then level 1 (the other two levels are still under development). 
+To quickstart, either click the `LevelExample` link at the top nap bar of our app, or just go to ChooseLevel then level 1 (the other two levels are still under development). To jump, press the up arrow key. The game will freeze if you hit a rock or when time runs out. Refresh to play again.
 
 See the Use Case Diagram / Use Case document for the general flow of the application. 
 
 Note: currently there is no score saving since the level isn't complete (we don't have a win condition yet).
 
 Shoutout our awesome team of developers for each of those pages.
-- MainMenu: @cmgilger, @LT69018, @David-B-M, @ampham03
-- StartGame: @LT69018 
+- MainMenu: @cmgilger, @samdev193, @LT69018, @David-B-M, @ampham03
+- StartGame: @David-B-M @LT69018
+- ChooseLevel: @cmgilger
 - PauseMenu/LevelFail: @samdev193
 - ViewLeaderboard: @ampham03
 - LevelExample: @ampham03 
@@ -44,7 +56,7 @@ Shoutout our awesome team of developers for each of those pages.
 
 <figure>
     <img src="current_appearance/LevelExample 4-9.png" height="300px">
-    <figcaption>LevelExample as of 4-9. Level is playable. Credits: Anna.</figcaption>
+    <figcaption>LevelExample as of 4-9. Level is playable. To jump, press the up arrow key. The game will freeze if you hit a rock or when time runs out. Refresh to play again. Credits: Anna.</figcaption>
 </figure>
 
 # Sprint 1 - Design
@@ -116,10 +128,10 @@ Samuel Oyeneyin
 # Notes about our Branches
 ## Anna's Branch: 
 Currently working on an example level using Phaser
-    -implemented an endless runner concept
-    -created a moving background with a static player
-    -created obstacles to avoid and items to collect for points
-    -level ends when player hits an obstacle or time runs out
+- implemented an endless runner concept
+- created a moving background with a static player
+- created obstacles to avoid and items to collect for points
+- level ends when player hits an obstacle or time runs out
 ## Jess' Branch: 
 Will be where I implement the StartGame and ChooseLevel Page.
 - I originally implemented them using classes and custom page switching,

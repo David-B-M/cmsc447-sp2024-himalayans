@@ -2,8 +2,6 @@ import './App.css';
 
 /* IMPORT YOUR PAGE HERE! */
 import MainMenu from "./MainMenu/page"
-import PauseMenu from "./PauseMenu/page"
-import LevelComplete from "./LevelCompletion/page"
 import ChooseLevel from './ChooseLevel/page'
 import StartGame from './StartGame/page'
 import ViewLeaderboard from "./ViewLeaderboard/page"
@@ -26,8 +24,6 @@ function App() {
                 <Link to={"/"}> Home</Link>
                 <Link to={"/StartGame"}> Start Game </Link>
                 <Link to={"/ChooseLevel"}>Choose Level </Link>
-                <Link to={"/Pause"}> Pause Menu</Link>
-                <Link to={"/LevelComplete"}> Level Complete</Link>
                 <Link to={"/ViewLeaderboard"}> View Leaderboard</Link>
                 <Link to={"/LevelExample"}> Level Example</Link>
             </div>
@@ -35,8 +31,6 @@ function App() {
                 <Route path={"/"} element={<MainMenu/>}></Route>
                 <Route path={"/StartGame"} element={<StartGame/>}></Route>
                 <Route path={"/ChooseLevel"} element={<ChooseLevel/>}></Route>
-                <Route path={"/Pause"} element={<PauseMenu/>}></Route>
-                <Route path={"/LevelComplete"} element={<LevelComplete/>}></Route>
                 <Route path={"/ViewLeaderboard"} element={<ViewLeaderboard/>}></Route>
                 <Route path={"/LevelExample"} element={<LevelExample/>}></Route>
             </Routes>

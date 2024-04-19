@@ -2,3 +2,5 @@
 .venv/
 venv/
 instance/
+.pytest_cache
+test_shell_commands.txt

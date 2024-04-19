@@ -1,18 +1,18 @@
-import React, {Component} from 'react';
+import React, { useEffect, useState} from 'react';
 import { Link } from 'react-router-dom';
-import {Container} from 'react-bootstrap';
 
 import './StartGame.css';
-
+import axios from "axios";
+import querystring from 'qs'
 const CustomButton = ({ children, to }) => {
   return (
         <Link to={to} className="custom-button">{children}</Link>
   );
 }
 
-const CustomGameSave = ({children}) => {
+const CustomGameSave = ({children, id}) => {
   return (
-    <button className="gamesave">{children}</button>
+    <button id={id} className="gamesave">{children}</button>
   );
 }
 
@@ -32,8 +32,60 @@ function popup() {
 
 // @dmiddour
 function StartGame() {
+    const [data, setData] = useState([{}])
+    const [name, setName] = useState("")
+    const loadUser = () => {
+         axios.get("http://localhost:5000/load_users").then(res => {
+            setData(res.data)
+        }
+    ).catch(e => {
+        console.log(e);
+        })
+    }
+
+    useEffect(() => {
+            loadUser()
+    }, [data]);
+
+
+    const updateName = (event) => {
+        setName(event.target.value)
+    }
+
+    const config = {
+        username: name
+    }
+    const postData = (event) => {
+        event.preventDefault()
+        axios.post('http://localhost:5000/add_user', querystring.stringify(config), {headers: {'Content-Type': 'application/x-www-form-urlencoded'}})
+      .then(function (response) {
+        console.log(response);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+    }
+
+    const gameSave = () => {
+        let loadGameButtons = []
+        let i = 0;
+        while (i < data["users"].length) {
+            loadGameButtons.push(<CustomGameSave id={data["users"][i]["user_id"]}> {data["users"][i]["username"]} </CustomGameSave>)
+            i++
+        }
+        while (i < 5) {
+            loadGameButtons.push(<CustomGameSave id={i+1}>Game {i+1} </CustomGameSave>)
+            i++
+        }
+        return loadGameButtons
+    }
+
+    if (data["users"] === undefined) {
+        return <div> Still loading.... </div>
+    }
+
   return (
-    <div style={{ backgroundImage: `url('snowy_mountains.jpg')`,  
+    <div style={{ backgroundImage: `url('snowy_mountains.jpg')`,
                   backgroundSize: 'cover',
                   backgroundPosition: 'left', 
                   display: 'flex',
@@ -62,10 +114,7 @@ function StartGame() {
         <div className='saved-game-box'>
 
           <div className="GameSaveList">
-            <button className='gamesave'>Game 2</button>
-            <button className='gamesave'>Game 3</button>
-            <CustomGameSave>Game 4</CustomGameSave>
-            <CustomGameSave>Game 5</CustomGameSave>
+              {gameSave()}
           </div>
         </div>
 
@@ -76,9 +125,10 @@ function StartGame() {
       </div>
       <div id='popup'>
         <h1>Create New user</h1>
-        <form style={{marginTop: '100px', marginBottom: '100px'}}>
+        <form method='post' onSubmit={postData} style={{marginTop: '100px', marginBottom: '100px'}}>
           <label htmlFor='name'>Name:</label>
-          <input type='text' name='name2' id='name' autoComplete='off'></input>
+          <input type='text' name='name2' id='name' autoComplete='off' onChange={updateName}></input>
+        <button type={"submit"}>Submit</button>
         </form>
         <NewGame>Close</NewGame>
       </div>
