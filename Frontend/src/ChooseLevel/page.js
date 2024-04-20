@@ -23,9 +23,13 @@ function ChooseLevel() {
     const goBack = () => {
           navigate(-1)
         }
-
-    let levelReached = parseInt(userData["users"][arrayId]["levelReached"])
-
+    let levelReached;
+    if(arrayId == -1){
+      levelReached = 0;
+    }
+    else{
+      levelReached = parseInt(userData["users"][arrayId]["levelReached"])
+    }
   const loadButtons = () => {
     let buttons = []
 
