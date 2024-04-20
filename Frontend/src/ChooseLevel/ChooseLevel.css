@@ -10,13 +10,17 @@
     font-size: 35px;
     cursor: pointer;
     border-radius: 15px;
-    width: 20vw;
-    height: 10vh;
+    width: 20vw; /* Adjust width to desired size */
+    height: 10vh; /* Adjust height to desired size */
     outline-width: 4px;
     outline-style: solid;
     margin: 1vw;
   }
-  
+
+  .disabled {
+    opacity: 0.5;
+  }
+
   .control-flow {
     display: flex;
     flex-direction: column;

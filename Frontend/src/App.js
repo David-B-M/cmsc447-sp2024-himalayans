@@ -9,10 +9,25 @@ import StartGame from './StartGame/page'
 import ViewLeaderboard from "./ViewLeaderboard/page"
 import LevelExample from "./LevelExample/page"
 import {BrowserRouter as Router, Routes, Route, Link} from "react-router-dom";
-import React, {useState, useEffect} from 'react'
+import React, { useState, useEffect} from 'react'
+
+
 function App() {
     {/* This is an example of getting the api from the backend. */}
   const [data, setData] = useState([{}])
+  const [curUser, setUser] = useState(null)
+  const [curLevel, setLevel] = useState(null)
+
+  const updateUser = (user) => {
+    setUser(user["username"])
+    setLevel(user["levelReached"])
+    console.log(curUser)
+    //console.log(curLevel)
+  }
+
+  const getUser = () => {
+    return curUser
+  }
 
   return (
     <div className="App">
@@ -33,8 +48,8 @@ function App() {
             </div>
             <Routes> {/* Routes navbar connects to goes here */}
                 <Route path={"/"} element={<MainMenu/>}></Route>
-                <Route path={"/StartGame"} element={<StartGame/>}></Route>
-                <Route path={"/ChooseLevel"} element={<ChooseLevel/>}></Route>
+                <Route path={"/StartGame"} element={<StartGame updateUser={updateUser} getUser={getUser}/>}></Route>
+                <Route path={"/ChooseLevel"} element={<ChooseLevel getUser={getUser}/>}></Route>
                 <Route path={"/Pause"} element={<PauseMenu/>}></Route>
                 <Route path={"/LevelComplete"} element={<LevelComplete/>}></Route>
                 <Route path={"/ViewLeaderboard"} element={<ViewLeaderboard/>}></Route>
