@@ -1,18 +1,19 @@
-import React, {createContext, useContext, useEffect, useState} from 'react';
-import { Link } from 'react-router-dom';
+import React, { useContext, useState} from 'react';
+import {Link, useNavigate} from 'react-router-dom';
 
 import './StartGame.css';
 import axios from "axios";
 import querystring from 'qs'
+import {AppContext} from "../App";
 const CustomButton = ({ children, to }) => {
   return (
         <Link to={to} className="custom-button">{children}</Link>
   );
 }
 
-const CustomGameSave = ({children, id, onClick}) => {
+const CustomGameSave = ({children, id, onClick, to}) => {
   return (
-    <button id={id} className="gamesave" onClick={(e) => onClick(e)}>{children}</button>
+    <button id={id} className="gamesave" onClick={ (e) => onClick(e)}>{children}</button>
   );
 }
 
@@ -29,37 +30,12 @@ function popup() {
     form.style.display = "none";
   }
 }
-/*
-let change = 0;
-let targetID = null;
-function changeUser(ID) {
-  change = 1;
-  targetID = ID;
-}
-*/
-
-//const UserContext = createContext(null);
 
 // @dmiddour
-function StartGame({updateUser, getUser}) {
-    const [data, setData] = useState([{}])
+function StartGame() {
     const [name, setName] = useState("")
-    const [user, setUser] = useState([])
-    const loadUser = () => {
-         axios.get("http://localhost:5000/load_users").then(res => {
-            setData(res.data)
-            //console.log(data)
-        }
-    ).catch(e => {
-        console.log(e);
-        })
-    }
-
-    useEffect(() => {
-            loadUser()
-    }, [data]);
-
-
+    const {userData, setArrayId} = useContext(AppContext)
+    const navigate = useNavigate()
     const updateName = (event) => {
         setName(event.target.value)
     }
@@ -77,63 +53,34 @@ function StartGame({updateUser, getUser}) {
         console.log(error);
       });
     }
-    
-    const saveUser = (event) => {
-      const id = event.target.id;
-      console.log(id);
-      //updateUser(data["users"][id-1]);
-      /*
-      setUser(prevData => {
-        const updatedUsers = [...prevData["users"]];
-        const updatedUser = updatedUsers[id - 1];
-        
-        // Call updateUser with the updated user
-        updateUser(updatedUser);
-        
-        return { ...prevData, users: updatedUsers };
-      });
-      */
-     setUser(data["users"][id-1]);
-     updateUser(user);
+
+
+const currentUser = (event) => {
+        event.preventDefault()
+        let target_id = parseInt(event.target.id)
+        for (let i = 0; i < userData["users"].length; i++) {
+            if (userData["users"][i]["user_id"] === target_id) {
+                setArrayId(i)
+                navigate("/ChooseLevel")
+                return
+            }
+        }
     }
-    
-    useEffect(() => {
-      // This will be triggered whenever data changes
-      if (user) {
-          //console.log("Data updated:", data["users"]);
-          // Assuming you want to update the user every time data changes
-          updateUser(user);
-      }
-    }, [user]);
-    
+
 
     const gameSave = () => {
         let loadGameButtons = []
         let i = 0;
-        while (i < data["users"].length) {
-            //loadGameButtons.push(<CustomGameSave id={data["users"][i]["user_id"]} onClick={saveUser(data["users"][i]["user_id"])}> {data["users"][i]["username"]} </CustomGameSave>)
-            loadGameButtons.push(<CustomGameSave id={data["users"][i]["user_id"]} onClick={saveUser}> {data["users"][i]["username"]} </CustomGameSave>)
-            //loadGameButtons.push(<CustomGameSave id={data["users"][i]["user_id"]}> {data["users"][i]["username"]} </CustomGameSave>)
+        while (i < userData["users"].length) {
+            loadGameButtons.push(<CustomGameSave id={userData["users"][i]["user_id"]} onClick = {currentUser}> {userData["users"][i]["username"]} </CustomGameSave>)
             i++
         }
-        /*
-        while (i < 5) {
-            loadGameButtons.push(<CustomGameSave id={i+1}>Game {i+1} </CustomGameSave>)
-            i++
-        }
-        */
         return loadGameButtons
     }
 
-    if (data["users"] === undefined) {
+    if (userData["users"] === undefined) {
         return <div> Still loading.... </div>
     }
-
-    /*
-    const displayUser = () => {
-      return user
-    }
-    */
 
   return (
     <div style={{ backgroundImage: `url('snowy_mountains.jpg')`,
@@ -160,7 +107,6 @@ function StartGame({updateUser, getUser}) {
                       marginBottom: '0',
                       textAlign:"center",
                       borderRadius: '15px'}}>Load Game</h1>
-          <h1>{getUser()}</h1>
         </div>
 
         <div className='saved-game-box'>
