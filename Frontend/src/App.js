@@ -7,7 +7,8 @@ import LevelComplete from "./LevelCompletion/page"
 import ChooseLevel from './ChooseLevel/page'
 import StartGame from './StartGame/page'
 import ViewLeaderboard from "./ViewLeaderboard/page"
-import LevelExample from "./LevelExample/page"
+import LevelOne from "./LevelOne/page"
+import LevelThree from "./LevelThree/page"
 import {BrowserRouter as Router, Routes, Route, Link} from "react-router-dom";
 import React, {useState, useEffect, createContext} from 'react'
 import axios from "axios";
@@ -45,7 +46,8 @@ function App() {
                 <Link to={"/Pause"}> Pause Menu</Link>
                 <Link to={"/LevelComplete"}> Level Complete</Link>
                 <Link to={"/ViewLeaderboard"}> View Leaderboard</Link>
-                <Link to={"/LevelExample"}> Level Example</Link>
+                <Link to={"/LevelOne"}> Level One</Link>
+                <Link to={"/LevelThree"}> Level Three</Link>
             </div>
             <Routes> {/* Routes navbar connects to goes here */}
                 <Route path={"/"} element={<MainMenu/>}></Route>
@@ -54,7 +56,8 @@ function App() {
                 <Route path={"/Pause"} element={<PauseMenu/>}></Route>
                 <Route path={"/LevelComplete"} element={<LevelComplete/>}></Route>
                 <Route path={"/ViewLeaderboard"} element={<ViewLeaderboard/>}></Route>
-                <Route path={"/LevelExample"} element={<LevelExample/>}></Route>
+                <Route path={"/LevelOne"} element={<LevelOne/>}></Route>
+                <Route path={"/LevelThree"} element={<LevelThree/>}></Route>
             </Routes>
         </Router>
         </AppContext.Provider>
