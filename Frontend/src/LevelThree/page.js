@@ -157,6 +157,20 @@ class LevelThreeClass extends Phaser.Scene
         this.boulders = this.physics.add.group();
         this.physics.add.collider(this.player, this.boulders, hitObstacle, null, this);
         this.physics.add.collider(this.boulders, this.ground);
+
+        // more platforms
+        this.platforms = this.physics.add.group({
+            key: 'ground',
+            repeat: 2,
+            setXY: { x: 1500, y: 450, stepX: 600 }
+        });
+        this.platforms.children.iterate(function (child) {
+            child.body.setAllowGravity(false);
+            child.body.setImmovable(true);
+            child.displayWidth /= 2
+        });
+        this.physics.add.collider(this.player, this.platforms);
+        this.physics.add.collider(this.platforms, this.boulders);
     }
 
     update()
@@ -289,9 +303,23 @@ class LevelThreeClass extends Phaser.Scene
             this.shieldTimeLeftText.setText(': ' + this.shieldTimeLeft.toFixed(0));
             this.shieldTimeLeft -= 0.025;
         }
-        if (Math.abs(this.timerValue % 10) < 0.025) {
+        if (Math.abs(this.timerValue % 15) < 0.025) {
             spawnBoulder(this);
         }
+
+        // platforms moving
+        this.platforms.children.iterate(function (child) {
+            child.x -= 3;
+        });
+
+        // reset platform position when it goes off screen
+        this.platforms.children.iterate(function (child) {
+            if (child.x < -100) {
+                child.x = 1500;
+                child.y = getRandomYPlatform();
+            }
+        });
+
     }
 }
 
@@ -299,9 +327,8 @@ function spawnBoulder(scene)
 {
     const boulder = scene.boulders.create(1400, 300, 'boulder')
             .setAccelerationX(-100)
-            .setBounce(1)
-            .setCollideWorldBounds(true)
-            .setScale(.75);
+            .setBounce(.5)
+            .setScale(.45);
 
         scene.physics.world.on('worldstep', () =>
         {
@@ -367,10 +394,15 @@ function collectJumpBoost(player, jumpBoost)
     this.jumpBoostTimeLeft = powerUpTime;
 }
 
-// gets a y position ranging from 350-510 to spawn fish
+// gets a y position 
 function getRandomY()
 {
-    return Math.random() * (510 - 350) + 350;
+    return Math.random() * (510 - 200) + 200;
+}
+
+function getRandomYPlatform()
+{
+    return Math.random() * (450 - 350) + 350;
 }
 
 function hitObstacle (player, rock)
