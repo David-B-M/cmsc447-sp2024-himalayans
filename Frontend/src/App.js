@@ -13,7 +13,7 @@ import axios from "axios";
 export const AppContext = createContext()
 
 function App() {
-    {/* This is an example of getting the api from the backend. */}
+    /* This is an example of getting the api from the backend. */
     const [arrayId, setArrayId] = useState(-1)
     const [userData, setUserData] = useState([{}])
     const loadUser = () => {

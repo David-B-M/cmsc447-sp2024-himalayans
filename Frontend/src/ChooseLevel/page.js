@@ -1,6 +1,5 @@
-import React, {useState, useEffect, useContext} from 'react';
+import React, {useContext} from 'react';
 import { Link } from 'react-router-dom';
-import {Container} from 'react-bootstrap';
 import './ChooseLevel.css'; // Import CSS file for styling
 import { useNavigate } from 'react-router-dom';
 
@@ -24,11 +23,14 @@ function ChooseLevel() {
           navigate(-1)
         }
     let levelReached;
-    if(arrayId == -1){
+    let userName;
+    if(arrayId === -1){
       levelReached = 0;
+      userName = "NULL"
     }
     else{
       levelReached = parseInt(userData["users"][arrayId]["levelReached"])
+      userName = userData["users"][arrayId]["username"]
     }
   const loadButtons = () => {
     let buttons = []
@@ -36,7 +38,15 @@ function ChooseLevel() {
     // change later to be based off usecontext.
     let i = 0;
     while (i < levelReached) {
-      buttons.push(<CustomButton to="/LevelExample">Level {i+1}</CustomButton>)
+      if(i === 0){
+        buttons.push(<CustomButton to="/LevelOne">Level 1</CustomButton>)
+      }
+      if(i === 1){
+        buttons.push(<CustomButton to="/LevelTwo">Level 2</CustomButton>)
+      }
+      if(i === 2){
+        buttons.push(<CustomButton to="/LevelThree">Level 3</CustomButton>)
+      }
       i++;
     }
 
@@ -69,6 +79,7 @@ function ChooseLevel() {
         <div style={{marginTop: `10px`}}>
           <button onClick={goBack} className={"custom-button"}>Go Back</button>
         </div>
+        <div  style={{color:'white', fontSize:'30px'}}>Current User: {userName}</div>
       </div>
     </div>
   );

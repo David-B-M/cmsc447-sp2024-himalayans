@@ -1,7 +1,7 @@
-import React, {Component, useEffect} from 'react';
+import React, {useEffect, useContext} from 'react';
 import { Link } from 'react-router-dom';
 import Phaser from 'phaser';
-
+import {AppContext} from "../App";
 import './MainMenu.css'; // Import CSS file for styling
 
 
@@ -58,13 +58,37 @@ function MovingBackground()
 }
 
 function MainMenu() {
-  
+  const {userData, arrayId} = useContext(AppContext)
+  let userLoaded = 0;
+  let userName = "NULL";
+  if(arrayId !== -1){
+    userLoaded = 1;
+    userName = userData["users"][arrayId]["username"]
+  }
   useEffect(() => {
     const game = MovingBackground();
     return () => {
       game.destroy(true); 
     };
   }, []);
+
+  const chooseLevelOption = () => {
+    if(userLoaded === 0){
+      return <CustomButton disabled>Choose Level [LOCKED]</CustomButton>
+    }
+    else{
+      return <CustomButton to="/ChooseLevel">Choose Level</CustomButton>
+    }
+  }
+
+  const userNameOption = () => {
+    if(userName === "NULL"){
+      return <div  style={{color:'white', fontSize:'30px'}}>No User Loaded.</div>
+    }
+    else{
+      return <div  style={{color:'white', fontSize:'30px'}}>Current User: {userName}</div>
+    }
+  }
 
   return (
     <div className='menu-content'>
@@ -76,11 +100,12 @@ function MainMenu() {
           <CustomButton to="/StartGame">Start or Load Game</CustomButton>
         </h1>
         <h1>
-          <CustomButton to="/ChooseLevel">Choose Level</CustomButton>
+          {chooseLevelOption(userLoaded)}
         </h1>
         <h1>
           <CustomButton to="/ViewLeaderboard">View Leaderboard</CustomButton>
         </h1>
+        {userNameOption()}
       </div>
     </div>
   );
