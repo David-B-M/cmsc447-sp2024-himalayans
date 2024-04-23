@@ -14,6 +14,13 @@ The status of each of these implementations is shown by the emojis:
 POST add_user
 parameter: username 
 headers: None required
+
+Returns: json
+Example:
+    {
+        "user_id": 1,
+        "msg": "Successfully added user `jess` to database! :D"
+    }
 ```
 - Usage: Frontend StartGame page.
 - example call: 
@@ -47,10 +54,11 @@ GET /load_users
 
 
 ## ✅ Get/check user level
+**Note: Updated 4/18 from `/get_level` to `/read_user_level`** 
 (not implemented, however you can parse the data from load_users for now)
 ```
-GET user_level?username="[username]"
-    i.e. GET /user_level?username=test1
+GET read_user_level?username="[username]"
+    i.e. GET /read_user_level?username=test1
 ```
 - Usage: Frontend ChooseLevel page.
     - Get the integer value by accessing the key "level"
@@ -64,11 +72,23 @@ GET user_level?username="[username]"
     </figcaption>
 </figure>
 
-## ❌ Update user score
+## 🟡 Increment user level
+When the user complete's a level successfully POST to this method!
+
+(See `LevelSuccess` use case in our use case document)
 ```
-POST save_score
+POST /increment_user_level?username=[username]
+    
+i.e. POST /increment_user_level?username=jatcs
+```
+**NOTE: the value of the level only changes if they hadn't yet reached the final level (3).**
+- Use "GET /read_user_level" to verify the value of this increment occured as you wished :)
+## 🟡 Update user score
+```
+POST increment_score
 Expects {body:{username: "...", score: ..N..}}
 ```
+- score is the score they received on the current level, that is what we will add on to the current score.
 - Usage: Frontend LevelComplete page (which gets this information from PlayLevel)
 
 ## ❌ Load leaderboard table

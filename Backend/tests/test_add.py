@@ -8,7 +8,7 @@ ADD_USER_ENDPOINT = "/add_user"
 def test_add_via_form_with_valid_username(client):
 
     headers = {'Content-Type': "application/x-www-form-urlencoded"}
-    query_dict = {"username": "test1"}
+    query_dict = {"username": "formU2s"}
 
     response = client.post(ADD_USER_ENDPOINT, data=query_dict, headers=headers)
     parsed_response = response.data.decode('UTF-8')
