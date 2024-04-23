@@ -1,12 +1,15 @@
 ﻿import Phaser from 'phaser';
-import {useEffect} from 'react';
+import {useEffect, useContext} from 'react';
 import LevelOnePauseMenu from "../LevelOnePauseMenu/page"
 import LevelOneCompleteScreen from '../LevelOneComplete/page';
 import LevelOneFailScreen from '../LevelOneFail/page';
+import axios from "axios";
+import {AppContext} from "../App";
 
 const powerUpTime = 10;
 const levelTime = 60;
 const velocityX = -100
+let userName;
 
 class LevelOneClass extends Phaser.Scene
 {
@@ -31,7 +34,7 @@ class LevelOneClass extends Phaser.Scene
     }
 
     create()
-    {
+    { 
         // create background
         const { width, height } = this.sys.game.canvas;
         this.bg = this.add.tileSprite(0, 0, width, height, 'background').setOrigin(0, 0);
@@ -167,19 +170,33 @@ class LevelOneClass extends Phaser.Scene
             this.physics.pause();
             this.player.anims.stop();
             this.pauseBtn.disableInteractive();
+            //Upload Score to Leaderboard
+            //Score = this.scoreValue
+            if(userName != 'NULL'){
+                axios.post('http://localhost:5000/increment_score', {
+                    username: Text(userName),
+                    score: Number(this.scoreValue)
+                })
+                .then(function (response) {
+                    console.log(response);
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+            }
             return;
         }
 
         // update background and ground
         if (this.speedBoostActive)
         {
-            this.bg.tilePositionX += 4;
-            this.ground.tilePositionX += 4;
+            this.bg.tilePositionX += 2;
+            this.ground.tilePositionX += 2;
         }
         else
         {
-            this.bg.tilePositionX += 2;
-            this.ground.tilePositionX += 2;
+            this.bg.tilePositionX += 1;
+            this.ground.tilePositionX += 1;
         }
 
         // update timer
@@ -398,6 +415,13 @@ function LevelOne()
 }
 
 function Game() {
+    const {userData, arrayId} = useContext(AppContext)
+    if(arrayId === -1){
+        userName = "NULL"
+    }
+    else{
+        userName = userData["users"][arrayId]["username"]
+    }
     useEffect(() => {
         const game = LevelOne();
         return () => {
