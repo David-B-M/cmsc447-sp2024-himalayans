@@ -8,6 +8,7 @@
 .idea/modules.xml
 .idea/misc.xml
 .idea/cs447-himalayans-repo.iml
+phaser-dependencies
 
 # from repl.it
 .replit
@@ -21,4 +22,3 @@ poetry.lock
 pyproject.toml
 .breakpoints
 Backend/tests/__pycache__/
-Backend/tests/test_add.py
