@@ -138,7 +138,56 @@ def get_user_id(username, db=None):
     return [True, user_id]
     # checks if they have an entry in the `usernames` table.
     
+def get_saved_user(username, db=None, do_close_db=False, silence=True):
+    """
+    Get the info from the `users` table for this one user.
+    Usage: tell the frontend/user what's going on in case a user isn't found (in this func)
+    :return: [True/False, {user_id: ..., username: ..., levelReached: ...}]
+        => [True, {}] means we were able to load the result, but {} means they weren't found
+    """
+    GET_ONE_USER_SQL = """
+    SELECT * from users
+    WHERE username = ?
+    """
+    # If we get an empty result => user doesn't exist.
+    if db == None:
+        db = get_db()
+        assert db is not None, "[DB: get_saved_user] Failed to connect to database."
+        
+    db_cursor = db.cursor()
+    get_user_result = db_cursor.execute(GET_ONE_USER_SQL, (username,))
 
+    if get_user_result is None:
+        if not silence:
+            print("[DB: get_saved_user] Failed to get_saved_user :(")
+        close_db()
+        return (False, {})
+
+    fetched_result = get_user_result.fetchall()
+    if do_close_db:
+        close_db()
+    
+    if len(fetched_result) > 1:
+        if not silence:
+            print(f"[DB: get_saved_user] Found too many users with username `{username}`." +
+                f"\n\tExpected 1. Got {len(fetched_result)}")
+        return [True, fetched_result]
+    elif len(fetched_result) == 0:
+        if not silence:
+            print(f"[DB: get_saved_user] Found NO users with username `{username}`.")
+        return [True, {}]
+
+    jsonified_result = {
+        "user_id": fetched_result[0]["user_id"],
+        "username": fetched_result[0]["username"],
+        "levelReached": fetched_result[0]["levelReached"]
+    }
+
+    if not silence:
+        print(f"[DB: get_saved_user] Successfully loaded users from database!")
+    if DEBUG_DB:
+        print(f"\tResult: {jsonified_result}")
+    return (True, jsonified_result)
 
 def load_users():
     """
@@ -338,6 +387,15 @@ def increment_user_level(username):
     SET levelReached = levelReached + 1
     WHERE username = ? AND levelReached < 3;
     """
+
+    existing_user_result = get_saved_user(username, db, do_close_db=False, silence=True)
+    if not existing_user_result[RETURN_BOOL_INDEX]:
+        print(f"[DB: increment_user_level ] Unable to verify existence of user {username}. Check logs.")
+        return False
+    elif not existing_user_result[RETURN_DATA_INDEX]:
+        print(f"[DB: increment_user_level] Will not increment level for nonexistent user: {username}")
+        return False
+
     db_cursor = db.cursor()
     num_affected_rows = None
     try:

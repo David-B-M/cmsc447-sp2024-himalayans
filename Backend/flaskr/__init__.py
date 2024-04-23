@@ -164,14 +164,15 @@ def create_app(test_config=None):
         # get the username they passed to the request.
         username = None
         username = get_username_from_request(response=increment_level_response)
-        if username == None:  # ^ function auto sets the status to 404 and the message if it fails.
+        if username == None:  
+            print("Will not increment user level for nonexistent user.")
             return increment_level_response
 
         db_increment_level_success = db.increment_user_level(username)
         result["success"] = db_increment_level_success
         if not db_increment_level_success:
             result[RESPONSE_MESSAGE_KEY] = \
-                f"[Endpoint: add_user] Failed to increment user level for `{username}` () :("
+                f"[Endpoint: add_user] Failed to increment user level for `{username}` :("
             increment_level_response.response = json.dumps(result)
             increment_level_response.status = 404
             return increment_level_response
