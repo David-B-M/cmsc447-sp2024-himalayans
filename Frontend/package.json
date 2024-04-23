@@ -12,6 +12,7 @@
     "axios": "^1.6.8",
     "csstools": "^0.1.5",
     "phaser": "^3.80.1",
+    "postcss-normalize": "^10.0.1",
     "react": "^18.2.0",
     "react-bootstrap": "^2.10.2",
     "react-dom": "^18.2.0",

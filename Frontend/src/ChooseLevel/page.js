@@ -1,31 +1,12 @@
-import React, {Component} from 'react';
+import React, {useContext} from 'react';
 import { Link } from 'react-router-dom';
-import {Container} from 'react-bootstrap';
 import './ChooseLevel.css'; // Import CSS file for styling
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
 
-const LevelValue = ({}) =>{
-  axios.get('localhost:5000/load_users')
-  .then(function (response) {
-    console.log(response);
-  })
-  .catch(function (error) {
-    console.log(error);
-  });
-}
+import {AppContext} from "../App";
 
-const BackButton = ({ children }) => {
-  const navigate = useNavigate();
 
-  return (
-    <>
-      <button onClick={() => navigate(-1)} className='custom-button'>{children}</button>
-    </>
-  );
-}
 
-let level = 1; // PLACEHOLDER: this should be picked out from the currLevel column of the database
 
 //@cmgilger
 const CustomButton = ({ children, to }) => {
@@ -34,33 +15,57 @@ const CustomButton = ({ children, to }) => {
   );
 }
 
-const ButtonSwitch = ({ currLevel }) => { // This determines how the buttons are displayed.
-  let buttons;
-  switch(currLevel){
-    case 1: //Level 1 is currLevel
-      buttons = <div><CustomButton to="/LevelOne">Level 1</CustomButton>
-      <CustomButton disabled>[LOCKED]</CustomButton>
-      <CustomButton disabled>[LOCKED]</CustomButton></div>
-      break;
-    case 2: //Level 2 is currLevel
-      buttons = <div><CustomButton to="/LevelOne">Level 1</CustomButton>
-      <CustomButton>Level 2</CustomButton>
-      <CustomButton disabled>[LOCKED]</CustomButton></div>
-      break;
-    case 3: //Level 3 is currLevel
-      buttons = <div><CustomButton to="/LevelOne">Level 1</CustomButton>
-      <CustomButton>Level 2</CustomButton>
-      <CustomButton>Level 3</CustomButton></div>
-      break;
-  }
-  return <div>{buttons}</div>
-}
 
 function ChooseLevel() {
+    const {userData, arrayId} = useContext(AppContext)
+    const navigate = useNavigate();
+    const goBack = () => {
+          navigate(-1)
+        }
+    let levelReached;
+    let userName;
+    if(arrayId === -1){
+      levelReached = 0;
+      userName = "NULL"
+    }
+    else{
+      levelReached = parseInt(userData["users"][arrayId]["levelReached"])
+      userName = userData["users"][arrayId]["username"]
+    }
+  const loadButtons = () => {
+    let buttons = []
+
+    // change later to be based off usecontext.
+    let i = 0;
+    while (i < levelReached) {
+      if(i === 0){
+        buttons.push(<CustomButton to="/LevelOne">Level 1</CustomButton>)
+      }
+      if(i === 1){
+        buttons.push(<CustomButton to="/LevelTwo">Level 2</CustomButton>)
+      }
+      if(i === 2){
+        buttons.push(<CustomButton to="/LevelThree">Level 3</CustomButton>)
+      }
+      i++;
+    }
+
+    while (i < 3) {
+      buttons.push(<CustomButton disabled>[LOCKED]</CustomButton>)
+      i++;
+    }
+    return buttons
+  }
+
+  if (userData["users"] === undefined) {
+        return <div> Still loading.... </div>
+  }
+
+
   return (
-    <div style={{ backgroundImage: `url('snowy_mountains.jpg')`,  
+    <div style={{ backgroundImage: `url('snowy_mountains.jpg')`,
                         backgroundSize: 'cover',
-                        backgroundPosition: 'left', 
+                        backgroundPosition: 'left',
                         display: 'flex',
                         height: '100vh',
                         flexDirection: 'column'}}>
@@ -68,10 +73,13 @@ function ChooseLevel() {
         <h1 style={{color:'white', fontSize:'100px'}}>
           Choose a Level
         </h1>
-        <ButtonSwitch currLevel={level} /> 
         <div>
-          <BackButton>Go Back</BackButton>
+        {loadButtons()}
         </div>
+        <div style={{marginTop: `10px`}}>
+          <button onClick={goBack} className={"custom-button"}>Go Back</button>
+        </div>
+        <div  style={{color:'white', fontSize:'30px'}}>Current User: {userName}</div>
       </div>
     </div>
   );
