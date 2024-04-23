@@ -67,11 +67,11 @@ class LevelOneClass extends Phaser.Scene
 
         //  the score
         this.scoreValue = 0;
-        this.scoreText = this.add.text(16, 16, 'Score: ' + this.scoreValue, { fontSize: '32px', fill: '#000' });
+        this.scoreText = this.add.text(100, 16, 'Score: ' + this.scoreValue, { fontSize: '32px', fill: '#000' });
 
         // the time
         this.timerValue = levelTime;
-        this.timerText = this.add.text(16, 48, 'Time: ' + this.timerValue, { fontSize: '32px', fill: '#000' });
+        this.timerText = this.add.text(100, 48, 'Time: ' + this.timerValue, { fontSize: '32px', fill: '#000' });
        
         // game end flag
         this.gameOver = false;
@@ -107,7 +107,7 @@ class LevelOneClass extends Phaser.Scene
         // pause button 
         this.isGamePaused = false;
 
-        this.pauseBtn = this.add.sprite(1350, 10, 'pauseBtn').setOrigin(0, 0);
+        this.pauseBtn = this.add.sprite(16, 10, 'pauseBtn').setOrigin(0, 0);
         this.pauseBtn.setInteractive({ useHandCursor: true });
 
         this.pauseBtn.on('pointerdown', () =>

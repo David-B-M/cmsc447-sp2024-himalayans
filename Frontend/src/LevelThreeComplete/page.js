@@ -11,7 +11,7 @@ class LevelThreeCompleteScreen extends Phaser.Scene
     {
         this.load.image('viewLeaderboardBtn', 'ViewLeaderboardBtn.png');
         this.load.image('backToMainMenuBtn', 'BackToMainMenuBtn.png');
-        this.load.image('nextLevelBtn', 'nextLevelBtn.png');
+        this.load.image('resetLevelBtn', 'resetLevelBtn.png');
     }
 
     create ()

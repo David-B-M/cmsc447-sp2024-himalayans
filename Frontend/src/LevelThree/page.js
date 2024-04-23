@@ -5,7 +5,7 @@ import LevelThreeCompleteScreen from '../LevelThreeComplete/page';
 import LevelThreeFailScreen from '../LevelThreeFail/page';
 
 const powerUpTime = 10;
-const levelTime = 60;
+const levelTime = 30;
 const velocityX = -100
 
 class LevelThreeClass extends Phaser.Scene
@@ -18,17 +18,15 @@ class LevelThreeClass extends Phaser.Scene
     preload()
     {
         this.load.atlas('player', 'cat_sprite.png', 'cat_sprite.json');
+        this.load.atlas('hawk', 'hawk_sprite.png', 'hawk_sprite.json');
         this.load.image('background', 'snowy_mountains.jpg');
         this.load.image('ground', 'platform.jpg');
-        this.load.image('rock', 'snowy_rock.png');
-        this.load.image('tree', 'snowy_tree.png');
         this.load.image('fish', 'fish.png');
         this.load.image('pauseBtn', 'pause_button.png');
         this.load.image('jumpBoost', 'jump_boost.png');
         this.load.image('speedBoost', 'speed_boost.png');
         this.load.image('clock', 'clock.png');
         this.load.image('shield', 'shield.png');
-        this.load.image('boulder', 'boulder.png');
     }
 
     create()
@@ -41,7 +39,9 @@ class LevelThreeClass extends Phaser.Scene
         // create ground
         this.ground = this.add.tileSprite(0, 525, width, height, 'ground').setOrigin(0, 0);
         this.ground.setTileScale(3);
+        this.ground.tint = 0xff0000;
         this.physics.add.existing(this.ground, true);
+
 
         // user input
         this.cursors = this.input.keyboard.createCursorKeys();
@@ -58,18 +58,20 @@ class LevelThreeClass extends Phaser.Scene
         });
 
         // create player
-        this.player = this.physics.add.sprite(200, 475, 'player');
+        this.player = this.physics.add.sprite(200, 375, 'player');
         this.player.setCollideWorldBounds(true);
-        this.physics.add.collider(this.player, this.ground);
         this.player.play('walk');
+        this.player.setDepth(2);
+
+        this.physics.add.collider(this.player, this.ground, hitObstacle, null, this);
 
         //  the score
         this.scoreValue = 0;
-        this.scoreText = this.add.text(16, 16, 'Score: ' + this.scoreValue, { fontSize: '32px', fill: '#000' });
+        this.scoreText = this.add.text(100, 16, 'Score: ' + this.scoreValue, { fontSize: '32px', fill: '#000' });
 
         // the time
         this.timerValue = levelTime;
-        this.timerText = this.add.text(16, 48, 'Time: ' + this.timerValue, { fontSize: '32px', fill: '#000' });
+        this.timerText = this.add.text(100, 48, 'Time: ' + this.timerValue, { fontSize: '32px', fill: '#000' });
        
         // game end flag
         this.gameOver = false;
@@ -89,23 +91,10 @@ class LevelThreeClass extends Phaser.Scene
         this.physics.add.collider(this.fish, this.ground);
         this.physics.add.overlap(this.player, this.fish, collectFish, null, this);
 
-        // create rock obstacles
-        this.rocks = this.physics.add.group({
-            key: 'rock',
-            repeat: 2,
-            setXY: { x: 600, y: 510, stepX: 410 }
-        });
-        this.rocks.children.iterate(function (child) {
-            child.setScale(2)
-        });
-        this.rocksVelocityX = velocityX; 
-        this.physics.add.collider(this.rocks, this.ground);
-        this.physics.add.collider(this.player, this.rocks, hitObstacle, null, this);
-
         // pause button 
         this.isGamePaused = false;
 
-        this.pauseBtn = this.add.sprite(1350, 10, 'pauseBtn').setOrigin(0, 0);
+        this.pauseBtn = this.add.sprite(16, 10, 'pauseBtn').setOrigin(0, 0);
         this.pauseBtn.setInteractive({ useHandCursor: true });
 
         this.pauseBtn.on('pointerdown', () =>
@@ -153,16 +142,11 @@ class LevelThreeClass extends Phaser.Scene
         this.physics.add.overlap(this.player, this.clocks, collectClock, null, this);
         this.clocksVelocityX = velocityX; 
 
-        // boulder
-        this.boulders = this.physics.add.group();
-        this.physics.add.collider(this.player, this.boulders, hitObstacle, null, this);
-        this.physics.add.collider(this.boulders, this.ground);
-
         // more platforms
         this.platforms = this.physics.add.group({
             key: 'ground',
             repeat: 2,
-            setXY: { x: 1500, y: 450, stepX: 600 }
+            setXY: { x: 400, y: 450, stepX: 600 }
         });
         this.platforms.children.iterate(function (child) {
             child.body.setAllowGravity(false);
@@ -170,7 +154,33 @@ class LevelThreeClass extends Phaser.Scene
             child.displayWidth /= 2
         });
         this.physics.add.collider(this.player, this.platforms);
-        this.physics.add.collider(this.platforms, this.boulders);
+
+        // hawk animation
+        this.anims.create({ 
+            key:'fly', 
+            frames: this.anims.generateFrameNames('hawk', {
+                prefix:'hawk_sprite', 
+                end: 2, 
+                zeroPad: 1
+            }),
+            frameRate: 10,
+            repeat: -1
+        });
+
+        this.hawks = this.physics.add.group({
+            key: 'hawk', 
+            repeat: 1,   
+            setXY: { x: 700, y: 200, stepX: 600 }
+        });
+
+        this.hawks.children.iterate(function(child) {
+            child.anims.play('fly', true);
+            child.setScale(0.75);
+            child.body.setAllowGravity(false);
+        });
+
+        this.physics.add.collider(this.player, this.hawks, hitObstacle, null, this);
+
     }
 
     update()
@@ -186,6 +196,9 @@ class LevelThreeClass extends Phaser.Scene
         {
             this.physics.pause();
             this.player.anims.stop();
+            this.hawks.children.iterate(function(child) {
+                child.anims.stop();
+            });
             this.pauseBtn.disableInteractive();
             return;
         }
@@ -228,19 +241,6 @@ class LevelThreeClass extends Phaser.Scene
         // fish moving
         this.fish.children.iterate(function (child) {
             child.x -= 3;
-        });
-
-        // rocks moving
-        this.rocks.children.iterate(function (child) {
-            child.x -= 3;
-        });
-
-        // reset rock position when it goes off screen
-        this.rocks.children.iterate(function (child) {
-            if (child.x < -60) {
-                child.x = 1350;
-                child.y = 510;
-            }
         });
 
         // spawn powerup
@@ -303,9 +303,6 @@ class LevelThreeClass extends Phaser.Scene
             this.shieldTimeLeftText.setText(': ' + this.shieldTimeLeft.toFixed(0));
             this.shieldTimeLeft -= 0.025;
         }
-        if (Math.abs(this.timerValue % 15) < 0.025) {
-            spawnBoulder(this);
-        }
 
         // platforms moving
         this.platforms.children.iterate(function (child) {
@@ -320,22 +317,20 @@ class LevelThreeClass extends Phaser.Scene
             }
         });
 
-    }
-}
-
-function spawnBoulder(scene)
-{
-    const boulder = scene.boulders.create(1400, 300, 'boulder')
-            .setAccelerationX(-100)
-            .setBounce(.5)
-            .setScale(.45);
-
-        scene.physics.world.on('worldstep', () =>
-        {
-            boulder.setAngularVelocity(
-                Phaser.Math.RadToDeg(boulder.body.velocity.x / boulder.body.halfWidth)
-            );
+        // platforms moving
+        this.hawks.children.iterate(function (child) {
+            child.x -= 4;
         });
+
+        // reset platform position when it goes off screen
+        this.hawks.children.iterate(function (child) {
+            if (child.x < -60) {
+                child.x = 1350;
+                child.y = getRandomYHawk();
+            }
+        });
+
+    }
 }
 
 function spawnPowerup(scene)
@@ -403,6 +398,11 @@ function getRandomY()
 function getRandomYPlatform()
 {
     return Math.random() * (450 - 350) + 350;
+}
+
+function getRandomYHawk()
+{
+    return Math.random() * (475 - 200) + 200;
 }
 
 function hitObstacle (player, rock)
