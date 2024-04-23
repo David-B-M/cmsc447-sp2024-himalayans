@@ -39,7 +39,9 @@ class LevelThreeClass extends Phaser.Scene
         // create ground
         this.ground = this.add.tileSprite(0, 525, width, height, 'ground').setOrigin(0, 0);
         this.ground.setTileScale(3);
+        this.ground.tint = 0xff0000;
         this.physics.add.existing(this.ground, true);
+
 
         // user input
         this.cursors = this.input.keyboard.createCursorKeys();
@@ -58,9 +60,10 @@ class LevelThreeClass extends Phaser.Scene
         // create player
         this.player = this.physics.add.sprite(200, 375, 'player');
         this.player.setCollideWorldBounds(true);
-        this.physics.add.collider(this.player, this.ground);
         this.player.play('walk');
         this.player.setDepth(2);
+
+        this.physics.add.collider(this.player, this.ground, hitObstacle, null, this);
 
         //  the score
         this.scoreValue = 0;
@@ -151,7 +154,6 @@ class LevelThreeClass extends Phaser.Scene
             child.displayWidth /= 2
         });
         this.physics.add.collider(this.player, this.platforms);
-        this.physics.add.collider(this.platforms, this.boulders);
 
         // hawk animation
         this.anims.create({ 
@@ -168,7 +170,7 @@ class LevelThreeClass extends Phaser.Scene
         this.hawks = this.physics.add.group({
             key: 'hawk', 
             repeat: 1,   
-            setXY: { x: 700, y: 300, stepX: 600 }
+            setXY: { x: 700, y: 200, stepX: 600 }
         });
 
         this.hawks.children.iterate(function(child) {
