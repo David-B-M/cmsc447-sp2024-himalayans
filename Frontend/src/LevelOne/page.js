@@ -174,7 +174,7 @@ class LevelOneClass extends Phaser.Scene
             //Score = this.scoreValue
             if(userName != 'NULL'){
                 axios.post('http://localhost:5000/increment_score', {
-                    username: Text(userName),
+                    username: userName,
                     score: Number(this.scoreValue)
                 })
                 .then(function (response) {
@@ -184,7 +184,7 @@ class LevelOneClass extends Phaser.Scene
                     console.log(error);
                 });
                 axios.post('http://localhost:5000/increment_level', {
-                    username: Text(userName),
+                    username: userName,
                 })
                 .then(function (response) {
                     console.log(response);
