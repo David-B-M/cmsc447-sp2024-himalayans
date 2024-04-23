@@ -462,9 +462,9 @@ def load_leaderboard(exclude_columns=["user_id"]):
     for user_row in fetched_result:
         json_row = {}
         # Expecting: rank , user_id, username, score
-        for key in user_row:
-            if key not in exclude_columns:
-                json_row[key] = user_row[key]
+        for column in ["rank", "user_id", "username", "score"]:
+            if column not in exclude_columns:
+                json_row[column] = user_row[column]
         jsonified_result.append(json_row)
 
     print(f"[DB: load_leaderboard] Successfully loaded rows from `leaderboard` table in database!")
