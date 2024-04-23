@@ -72,7 +72,7 @@ GET read_user_level?username="[username]"
     </figcaption>
 </figure>
 
-## 🟡 Increment user level
+## ✅ Increment user level
 When the user complete's a level successfully POST to this method!
 
 (See `LevelSuccess` use case in our use case document)
@@ -83,12 +83,14 @@ i.e. POST /increment_user_level?username=jatcs
 ```
 **NOTE: the value of the level only changes if they hadn't yet reached the final level (3).**
 - Use "GET /read_user_level" to verify the value of this increment occured as you wished :)
-## 🟡 Update user score
+## ✅ Update user score
 ```
 POST increment_score
-Expects {body:{username: "...", score: ..N..}}
+Params:
+- username
+- score
 ```
-- score is the score they received on the current level, that is what we will add on to the current score.
+- score is the score they received on the current level, that is what we will add on to the current score. Basically, you don't have to remember what the previous score was.
 - Usage: Frontend LevelComplete page (which gets this information from PlayLevel)
 
 ## ✅ Load leaderboard table

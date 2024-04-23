@@ -509,14 +509,15 @@ def get_leaderboard_row(username, db=None, do_close=False, exclude_columns=["use
     return (True, jsonified_result)
 
 
-def initialize_score(username, score, user_id=None, do_close=False):
+def initialize_score(username, score, db=None, user_id=None, do_close=False):
     """
     :param do_close: Signal if I should close the database. i.e. if this is called from a solo endpoint.
     :return: rank!
     """
-    db = get_db()
-    assert db is not None, "[DB: initialize_score] Failed to connect to database."
-    
+    if not db:
+        db = get_db()
+        assert db is not None, "[DB: initialize_score] Failed to connect to database."
+        
     # not specifying rank because it should auto set and increment
     INITIALIZE_SCORE_SQL = \
     """
