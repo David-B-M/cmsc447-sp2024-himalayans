@@ -23,7 +23,7 @@ class LevelOneClass extends Phaser.Scene
         this.load.image('rock', 'snowy_rock.png');
         this.load.image('tree', 'snowy_tree.png');
         this.load.image('fish', 'fish.png');
-        this.load.image('pauseBtn', 'pause_button.png');
+        this.load.image('pauseBtn', 'pause.png');
         this.load.image('jumpBoost', 'jump_boost.png');
         this.load.image('speedBoost', 'speed_boost.png');
         this.load.image('clock', 'clock.png');

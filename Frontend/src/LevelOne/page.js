@@ -23,17 +23,16 @@ class LevelOneClass extends Phaser.Scene
         this.load.image('rock', 'snowy_rock.png');
         this.load.image('tree', 'snowy_tree.png');
         this.load.image('fish', 'fish.png');
-        this.load.image('pauseBtn', 'pause_button.png');
+        this.load.image('pauseBtn', 'pause.png');
         this.load.image('jumpBoost', 'jump_boost.png');
         this.load.image('speedBoost', 'speed_boost.png');
         this.load.image('clock', 'clock.png');
         this.load.image('shield', 'shield.png');
     }
 
-    create()
-    {
+    create() {
         // create background
-        const { width, height } = this.sys.game.canvas;
+        const {width, height} = this.sys.game.canvas;
         this.bg = this.add.tileSprite(0, 0, width, height, 'background').setOrigin(0, 0);
         this.bg.setTileScale(2);
 
@@ -46,11 +45,11 @@ class LevelOneClass extends Phaser.Scene
         this.cursors = this.input.keyboard.createCursorKeys();
 
         // player animation
-        this.anims.create({ 
-            key:'walk', 
+        this.anims.create({
+            key: 'walk',
             frames: this.anims.generateFrameNames('player', {
-                prefix:'cat_sprite', 
-                end: 2, 
+                prefix: 'cat_sprite',
+                end: 2,
                 zeroPad: 1
             }),
             repeat: -1
@@ -64,12 +63,12 @@ class LevelOneClass extends Phaser.Scene
 
         //  the score
         this.scoreValue = 0;
-        this.scoreText = this.add.text(100, 16, 'Score: ' + this.scoreValue, { fontSize: '32px', fill: '#000' });
+        this.scoreText = this.add.text(100, 16, 'Score: ' + this.scoreValue, {fontSize: '32px', fill: '#000'});
 
         // the time
         this.timerValue = levelTime;
-        this.timerText = this.add.text(100, 48, 'Time: ' + this.timerValue, { fontSize: '32px', fill: '#000' });
-       
+        this.timerText = this.add.text(100, 48, 'Time: ' + this.timerValue, {fontSize: '32px', fill: '#000'});
+
         // game end flag
         this.gameOver = false;
 
@@ -77,14 +76,14 @@ class LevelOneClass extends Phaser.Scene
         this.fish = this.physics.add.group({
             key: 'fish',
             repeat: 4,
-            setXY: { x: 500, y: getRandomY(), stepX: 225 }
+            setXY: {x: 500, y: getRandomY(), stepX: 225}
         });
         this.fish.children.iterate(function (child) {
             child.setScale(0.05);
             child.body.setAllowGravity(false);
             child.y = getRandomY();
         });
-        this.fishVelocityX = velocityX; 
+        this.fishVelocityX = velocityX;
         this.physics.add.collider(this.fish, this.ground);
         this.physics.add.overlap(this.player, this.fish, collectFish, null, this);
 
@@ -92,23 +91,23 @@ class LevelOneClass extends Phaser.Scene
         this.rocks = this.physics.add.group({
             key: 'rock',
             repeat: 2,
-            setXY: { x: 600, y: 510, stepX: 410 }
+            setXY: {x: 600, y: 510, stepX: 410}
         });
         this.rocks.children.iterate(function (child) {
             child.setScale(2)
         });
-        this.rocksVelocityX = velocityX; 
+        this.rocksVelocityX = velocityX;
         this.physics.add.collider(this.rocks, this.ground);
         this.physics.add.collider(this.player, this.rocks, hitObstacle, null, this);
 
         // pause button 
         this.isGamePaused = false;
 
-        this.pauseBtn = this.add.sprite(16, 10, 'pauseBtn').setOrigin(0, 0);
-        this.pauseBtn.setInteractive({ useHandCursor: true });
+        this.pauseBtn = this.add.sprite(13, 10, 'pauseBtn').setOrigin(0, 0);
+        this.pauseBtn.setScale(.12);
+        this.pauseBtn.setInteractive({useHandCursor: true});
 
-        this.pauseBtn.on('pointerdown', () =>
-        {
+        this.pauseBtn.on('pointerdown', () => {
             this.scene.sendToBack('LevelOne');
             this.scene.pause('LevelOne');
             this.scene.launch('LevelOnePauseMenu');
@@ -127,34 +126,39 @@ class LevelOneClass extends Phaser.Scene
         this.shieldTimeLeft = 0;
 
         this.jumpBoostImg = this.add.sprite(45, 130, 'jumpBoost').setScale(0.35);
-        this.jumpBoostTimeLeftText = this.add.text(75, 125, ': ' + this.jumpBoostTimeLeft, { fontSize: '32px', fill: '#000' });
+        this.jumpBoostTimeLeftText = this.add.text(75, 125, ': ' + this.jumpBoostTimeLeft, {
+            fontSize: '32px',
+            fill: '#000'
+        });
 
         this.speedBoostImg = this.add.sprite(45, 200, 'speedBoost').setScale(0.25);
-        this.speedBoostTimeLeftText = this.add.text(75, 185, ': ' + this.speedBoostTimeLeft, { fontSize: '32px', fill: '#000' });
+        this.speedBoostTimeLeftText = this.add.text(75, 185, ': ' + this.speedBoostTimeLeft, {
+            fontSize: '32px',
+            fill: '#000'
+        });
 
         this.shieldImg = this.add.sprite(43, 270, 'shield').setScale(0.1);
-        this.shieldTimeLeftText = this.add.text(75, 250, ': ' + this.shieldTimeLeft, { fontSize: '32px', fill: '#000' });
+        this.shieldTimeLeftText = this.add.text(75, 250, ': ' + this.shieldTimeLeft, {fontSize: '32px', fill: '#000'});
 
 
         this.jumpBoosts = this.physics.add.group();
         this.physics.add.overlap(this.player, this.jumpBoosts, collectJumpBoost, null, this);
-        this.jumpBoostsVelocityX = velocityX; 
+        this.jumpBoostsVelocityX = velocityX;
 
         this.speedBoosts = this.physics.add.group();
         this.physics.add.overlap(this.player, this.speedBoosts, collectSpeedBoost, null, this);
-        this.speedBoostsVelocityX = velocityX; 
+        this.speedBoostsVelocityX = velocityX;
 
         this.shields = this.physics.add.group();
         this.physics.add.overlap(this.player, this.shields, collectShield, null, this);
-        this.shieldsVelocityX = velocityX; 
-        
+        this.shieldsVelocityX = velocityX;
+
         this.clocks = this.physics.add.group();
         this.physics.add.overlap(this.player, this.clocks, collectClock, null, this);
-        this.clocksVelocityX = velocityX; 
+        this.clocksVelocityX = velocityX;
     }
 
-    update()
-    {
+    update() {
         // check if time is left
         if (this.timerValue <= 0)
         {
