@@ -91,12 +91,23 @@ Expects {body:{username: "...", score: ..N..}}
 - score is the score they received on the current level, that is what we will add on to the current score.
 - Usage: Frontend LevelComplete page (which gets this information from PlayLevel)
 
-## ❌ Load leaderboard table
+## ✅ Load leaderboard table
 ```
-GET load_leaderboard
+GET /load_leaderboard
+- No params required
+- Return: A list of rows to display (example). Currently it returns all the score results.
+{
+    "rows": [
+        {
+            "rank": 1,
+            "username": "jat101",
+            "score": 0
+        }
+    ]
+}
 ```
 - Usage: Frontend ViewLeaderboard page.
-- [ ] todo: figure out format we want to return the data for displaying.
+
 
 
 # Build Instructions
