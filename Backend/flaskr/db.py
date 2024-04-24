@@ -572,9 +572,13 @@ def increment_score(username, score):
     WHERE username = ?;
     """
     
-    # this_users_row = get_leaderboard_row(username)
-    # if not this_users_row[RETURN_BOOL_INDEX]:
-    #     pass
+    existing_user_result = get_saved_user(username, db, do_close_db=False, silence=True)
+    if not existing_user_result[RETURN_BOOL_INDEX]:
+        print(f"[DB: increment_score] Unable to verify existence of user {username}. Check logs.")
+        return False
+    elif not existing_user_result[RETURN_DATA_INDEX]:
+        print(f"[DB: increment_score] Will NOT increment score of non-existent user: {username}")
+        return False
 
     db_cursor = db.cursor()
     num_affected_rows = None
