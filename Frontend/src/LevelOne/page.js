@@ -103,7 +103,7 @@ class LevelOneClass extends Phaser.Scene
         // pause button 
         this.isGamePaused = false;
 
-        this.pauseBtn = this.add.sprite(13, 10, 'pauseBtn').setOrigin(0, 0);
+        this.pauseBtn = this.add.sprite(13, 14, 'pauseBtn').setOrigin(0, 0);
         this.pauseBtn.setScale(.12);
         this.pauseBtn.setInteractive({useHandCursor: true});
 
