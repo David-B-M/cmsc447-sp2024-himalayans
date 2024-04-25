@@ -31,6 +31,10 @@ class LevelOneClass extends Phaser.Scene
         this.load.audio('collect', 'collect.mp3');
         this.load.audio('jump', 'jump.mp3');
         this.load.audio('gameOver', 'game_over.mp3');
+        this.load.audio('pickUpJumpBoost', 'Yippee.wav');
+        this.load.audio('pickUpShield', 'shield.mp3');
+        this.load.audio('pickUpSpeedBoost', 'speed.mp3');
+        this.load.audio('pickUpClock', 'clock.mp3');
     }
 
     create() {
@@ -326,12 +330,14 @@ function spawnPowerup(scene)
 
 function collectClock(player, clock)
 {
+    this.sound.play('pickUpClock');
     clock.disableBody(true, true);
     this.timerValue += 5;
 }
 
 function collectShield(player, shield)
 {
+    this.sound.play('pickUpShield');
     shield.disableBody(true, true);
     this.shieldActive = true;
     this.shieldTimeLeft = powerUpTime;
@@ -339,6 +345,7 @@ function collectShield(player, shield)
 
 function collectSpeedBoost(player, speedBoost)
 {
+    this.sound.play('pickUpSpeedBoost');
     speedBoost.disableBody(true, true);
     this.speedBoostActive = true;
     this.speedBoostTimeLeft = powerUpTime;
@@ -346,6 +353,7 @@ function collectSpeedBoost(player, speedBoost)
 
 function collectJumpBoost(player, jumpBoost)
 {
+    this.sound.play('pickUpJumpBoost');
     jumpBoost.disableBody(true, true);
     this.jumpBoostActive = true;
     this.jumpBoostTimeLeft = powerUpTime;
