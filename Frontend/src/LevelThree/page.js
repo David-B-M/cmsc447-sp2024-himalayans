@@ -1,33 +1,35 @@
-﻿import Phaser from 'phaser';
+import Phaser from 'phaser';
 import {useEffect} from 'react';
-import PauseScreen from "../PauseMenu/page"
-import LevelCompleteScreen from '../LevelCompletion/page';
-import LevelFailScreen from '../LevelFail/page';
+import LevelThreePauseMenu from "../LevelThreePauseMenu/page"
+import LevelThreeCompleteScreen from '../LevelThreeComplete/page';
+import LevelThreeFailScreen from '../LevelThreeFail/page';
 
 const powerUpTime = 10;
-const levelTime = 60;
+const levelTime = 30;
 const velocityX = -100
 
-class LevelExampleClass extends Phaser.Scene
+class LevelThreeClass extends Phaser.Scene
 {
     constructor ()
     {
-        super({ key: 'LevelExample' });
+        super({ key: 'LevelThree' });
     }
 
     preload()
     {
         this.load.atlas('player', 'cat_sprite.png', 'cat_sprite.json');
+        this.load.atlas('hawk', 'hawk_sprite.png', 'hawk_sprite.json');
         this.load.image('background', 'snowy_mountains.jpg');
         this.load.image('ground', 'platform.jpg');
-        this.load.image('rock', 'snowy_rock.png');
-        this.load.image('tree', 'snowy_tree.png');
         this.load.image('fish', 'fish.png');
-        this.load.image('pauseBtn', 'pause_button.png');
+        this.load.image('pauseBtn', 'pause.png');
         this.load.image('jumpBoost', 'jump_boost.png');
         this.load.image('speedBoost', 'speed_boost.png');
         this.load.image('clock', 'clock.png');
         this.load.image('shield', 'shield.png');
+        this.load.audio('collect', 'collect.mp3');
+        this.load.audio('jump', 'jump.mp3');
+        this.load.audio('gameOver', 'game_over.mp3');
     }
 
     create()
@@ -36,11 +38,14 @@ class LevelExampleClass extends Phaser.Scene
         const { width, height } = this.sys.game.canvas;
         this.bg = this.add.tileSprite(0, 0, width, height, 'background').setOrigin(0, 0);
         this.bg.setTileScale(2);
+        this.bg.tint = 0xff0000;
 
         // create ground
         this.ground = this.add.tileSprite(0, 525, width, height, 'ground').setOrigin(0, 0);
         this.ground.setTileScale(3);
+        this.ground.tint = 0xff0000;
         this.physics.add.existing(this.ground, true);
+
 
         // user input
         this.cursors = this.input.keyboard.createCursorKeys();
@@ -57,18 +62,20 @@ class LevelExampleClass extends Phaser.Scene
         });
 
         // create player
-        this.player = this.physics.add.sprite(200, 475, 'player');
+        this.player = this.physics.add.sprite(200, 375, 'player');
         this.player.setCollideWorldBounds(true);
-        this.physics.add.collider(this.player, this.ground);
         this.player.play('walk');
+        this.player.setDepth(2);
+
+        this.physics.add.collider(this.player, this.ground, hitObstacle, null, this);
 
         //  the score
         this.scoreValue = 0;
-        this.scoreText = this.add.text(16, 16, 'Score: ' + this.scoreValue, { fontSize: '32px', fill: '#000' });
+        this.scoreText = this.add.text(100, 16, 'Score: ' + this.scoreValue, { fontSize: '32px', fill: '#000' });
 
         // the time
         this.timerValue = levelTime;
-        this.timerText = this.add.text(16, 48, 'Time: ' + this.timerValue, { fontSize: '32px', fill: '#000' });
+        this.timerText = this.add.text(100, 48, 'Time: ' + this.timerValue, { fontSize: '32px', fill: '#000' });
        
         // game end flag
         this.gameOver = false;
@@ -88,30 +95,18 @@ class LevelExampleClass extends Phaser.Scene
         this.physics.add.collider(this.fish, this.ground);
         this.physics.add.overlap(this.player, this.fish, collectFish, null, this);
 
-        // create rock obstacles
-        this.rocks = this.physics.add.group({
-            key: 'rock',
-            repeat: 2,
-            setXY: { x: 600, y: 510, stepX: 410 }
-        });
-        this.rocks.children.iterate(function (child) {
-            child.setScale(2)
-        });
-        this.rocksVelocityX = velocityX; 
-        this.physics.add.collider(this.rocks, this.ground);
-        this.physics.add.collider(this.player, this.rocks, hitObstacle, null, this);
-
         // pause button 
         this.isGamePaused = false;
-
-        this.pauseBtn = this.add.sprite(1350, 10, 'pauseBtn').setOrigin(0, 0);
+      
+        this.pauseBtn = this.add.sprite(13, 10, 'pauseBtn').setOrigin(0, 0);
+        this.pauseBtn.setScale(.12);
         this.pauseBtn.setInteractive({ useHandCursor: true });
 
         this.pauseBtn.on('pointerdown', () =>
         {
-            this.scene.sendToBack('LevelExample');
-            this.scene.pause('LevelExample');
-            this.scene.launch('PauseScreen');
+            this.scene.sendToBack('LevelThree');
+            this.scene.pause('LevelThree');
+            this.scene.launch('LevelThreePauseMenu');
 
             this.pauseBtn.setVisible(false);
         });
@@ -151,6 +146,46 @@ class LevelExampleClass extends Phaser.Scene
         this.clocks = this.physics.add.group();
         this.physics.add.overlap(this.player, this.clocks, collectClock, null, this);
         this.clocksVelocityX = velocityX; 
+
+        // more platforms
+        this.platforms = this.physics.add.group({
+            key: 'ground',
+            repeat: 2,
+            setXY: { x: 400, y: 450, stepX: 600 }
+        });
+        this.platforms.children.iterate(function (child) {
+            child.body.setAllowGravity(false);
+            child.body.setImmovable(true);
+            child.displayWidth /= 2
+        });
+        this.physics.add.collider(this.player, this.platforms);
+
+        // hawk animation
+        this.anims.create({ 
+            key:'fly', 
+            frames: this.anims.generateFrameNames('hawk', {
+                prefix:'hawk_sprite', 
+                end: 2, 
+                zeroPad: 1
+            }),
+            frameRate: 10,
+            repeat: -1
+        });
+
+        this.hawks = this.physics.add.group({
+            key: 'hawk', 
+            repeat: 1,   
+            setXY: { x: 700, y: 200, stepX: 600 }
+        });
+
+        this.hawks.children.iterate(function(child) {
+            child.anims.play('fly', true);
+            child.setScale(0.75);
+            child.body.setAllowGravity(false);
+        });
+
+        this.physics.add.collider(this.player, this.hawks, hitObstacle, null, this);
+
     }
 
     update()
@@ -159,13 +194,16 @@ class LevelExampleClass extends Phaser.Scene
         if (this.timerValue <= 0)
         {
             this.gameOver = true;
-            this.scene.launch('LevelCompleteScreen');
+            this.scene.launch('LevelThreeCompleteScreen');
         }
 
         if (this.gameOver)
         {
             this.physics.pause();
             this.player.anims.stop();
+            this.hawks.children.iterate(function(child) {
+                child.anims.stop();
+            });
             this.pauseBtn.disableInteractive();
             return;
         }
@@ -173,13 +211,13 @@ class LevelExampleClass extends Phaser.Scene
         // update background and ground
         if (this.speedBoostActive)
         {
-            this.bg.tilePositionX += 4;
-            this.ground.tilePositionX += 4;
+            this.bg.tilePositionX += 6;
+            this.ground.tilePositionX += 6;
         }
         else
         {
-            this.bg.tilePositionX += 2;
-            this.ground.tilePositionX += 2;
+            this.bg.tilePositionX += 4;
+            this.ground.tilePositionX += 4;
         }
 
         // update timer
@@ -190,6 +228,8 @@ class LevelExampleClass extends Phaser.Scene
        // player jumping
         if (this.cursors.up.isDown && this.player.body.onFloor())
         {
+            this.sound.play('jump');
+
             if (this.jumpBoostActive)
             {
                 this.player.setVelocityY(-350);
@@ -208,19 +248,6 @@ class LevelExampleClass extends Phaser.Scene
         // fish moving
         this.fish.children.iterate(function (child) {
             child.x -= 3;
-        });
-
-        // rocks moving
-        this.rocks.children.iterate(function (child) {
-            child.x -= 3;
-        });
-
-        // reset rock position when it goes off screen
-        this.rocks.children.iterate(function (child) {
-            if (child.x < -60) {
-                child.x = 1350;
-                child.y = 510;
-            }
         });
 
         // spawn powerup
@@ -283,6 +310,33 @@ class LevelExampleClass extends Phaser.Scene
             this.shieldTimeLeftText.setText(': ' + this.shieldTimeLeft.toFixed(0));
             this.shieldTimeLeft -= 0.025;
         }
+
+        // platforms moving
+        this.platforms.children.iterate(function (child) {
+            child.x -= 3;
+        });
+
+        // reset platform position when it goes off screen
+        this.platforms.children.iterate(function (child) {
+            if (child.x < -100) {
+                child.x = 1500;
+                child.y = getRandomYPlatform();
+            }
+        });
+
+        // platforms moving
+        this.hawks.children.iterate(function (child) {
+            child.x -= 4;
+        });
+
+        // reset platform position when it goes off screen
+        this.hawks.children.iterate(function (child) {
+            if (child.x < -60) {
+                child.x = 1350;
+                child.y = getRandomYHawk();
+            }
+        });
+
     }
 }
 
@@ -342,18 +396,29 @@ function collectJumpBoost(player, jumpBoost)
     this.jumpBoostTimeLeft = powerUpTime;
 }
 
-// gets a y position ranging from 350-510 to spawn fish
+// gets a y position 
 function getRandomY()
 {
-    return Math.random() * (510 - 350) + 350;
+    return Math.random() * (510 - 200) + 200;
+}
+
+function getRandomYPlatform()
+{
+    return Math.random() * (450 - 350) + 350;
+}
+
+function getRandomYHawk()
+{
+    return Math.random() * (475 - 200) + 200;
 }
 
 function hitObstacle (player, rock)
 {
     if (!this.shieldActive)
     {
+        this.sound.play('gameOver');
         this.gameOver = true;
-        this.scene.launch('LevelFailScreen');
+        this.scene.launch('LevelThreeFailScreen');
     }
 }
 
@@ -366,6 +431,8 @@ function spawnFish(scene)
 
 function collectFish (player, fish)
 {
+    this.sound.play('collect');
+
     fish.disableBody(true, true);
 
     //  add and update the score
@@ -373,7 +440,7 @@ function collectFish (player, fish)
     this.scoreText.setText('Score: ' + this.scoreValue);
 }
 
-function LevelExample()
+function LevelThree()
 {
     const config = {
         type: Phaser.AUTO,
@@ -390,7 +457,7 @@ function LevelExample()
             }
         },
         backgroundColor: '#304858',
-        scene: [LevelExampleClass, PauseScreen, LevelCompleteScreen, LevelFailScreen]
+        scene: [LevelThreeClass, LevelThreePauseMenu, LevelThreeCompleteScreen, LevelThreeFailScreen]
     };
 
     const game = new Phaser.Game(config);
@@ -399,12 +466,12 @@ function LevelExample()
 
 function Game() {
     useEffect(() => {
-        const game = LevelExample();
+        const game = LevelThree();
         return () => {
             game.destroy(true); 
         };
     }, []);
-    return <div id={"level-example"}/>;
+    return <div id={"Level-Three"}/>;
 }
 
 export default Game;

@@ -1,18 +1,19 @@
-import React, { useEffect, useState} from 'react';
-import { Link } from 'react-router-dom';
+import React, { useContext, useState} from 'react';
+import {Link, useNavigate} from 'react-router-dom';
 
 import './StartGame.css';
 import axios from "axios";
 import querystring from 'qs'
+import {AppContext} from "../App";
 const CustomButton = ({ children, to }) => {
   return (
         <Link to={to} className="custom-button">{children}</Link>
   );
 }
 
-const CustomGameSave = ({children, id}) => {
+const CustomGameSave = ({children, id, onClick}) => {
   return (
-    <button id={id} className="gamesave">{children}</button>
+    <button id={id} className="gamesave" onClick={ (e) => onClick(e)}>{children}</button>
   );
 }
 
@@ -32,22 +33,9 @@ function popup() {
 
 // @dmiddour
 function StartGame() {
-    const [data, setData] = useState([{}])
     const [name, setName] = useState("")
-    const loadUser = () => {
-         axios.get("http://localhost:5000/load_users").then(res => {
-            setData(res.data)
-        }
-    ).catch(e => {
-        console.log(e);
-        })
-    }
-
-    useEffect(() => {
-            loadUser()
-    }, [data]);
-
-
+    const {userData, setArrayId} = useContext(AppContext)
+    const navigate = useNavigate()
     const updateName = (event) => {
         setName(event.target.value)
     }
@@ -66,21 +54,31 @@ function StartGame() {
       });
     }
 
+
+const currentUser = (event) => {
+        event.preventDefault()
+        let target_id = parseInt(event.target.id)
+        for (let i = 0; i < userData["users"].length; i++) {
+            if (userData["users"][i]["user_id"] === target_id) {
+                setArrayId(i)
+                navigate("/ChooseLevel")
+                return
+            }
+        }
+    }
+
+
     const gameSave = () => {
         let loadGameButtons = []
         let i = 0;
-        while (i < data["users"].length) {
-            loadGameButtons.push(<CustomGameSave id={data["users"][i]["user_id"]}> {data["users"][i]["username"]} </CustomGameSave>)
-            i++
-        }
-        while (i < 5) {
-            loadGameButtons.push(<CustomGameSave id={i+1}>Game {i+1} </CustomGameSave>)
+        while (i < userData["users"].length) {
+            loadGameButtons.push(<CustomGameSave id={userData["users"][i]["user_id"]} onClick = {currentUser}> {userData["users"][i]["username"]} </CustomGameSave>)
             i++
         }
         return loadGameButtons
     }
 
-    if (data["users"] === undefined) {
+    if (userData["users"] === undefined) {
         return <div> Still loading.... </div>
     }
 

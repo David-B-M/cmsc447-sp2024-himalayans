@@ -1,12 +1,13 @@
-import React, {Component, useEffect} from 'react';
+import React, {useEffect, useContext, useState} from 'react';
 import { Link } from 'react-router-dom';
 import Phaser from 'phaser';
-
-import './MainMenu.css'; // Import CSS file for styling
+import {AppContext} from "../App";
+import './MainMenu.css';
+import axios from "axios";
 
 
 // @cmgilger
-const CustomButton = ({ children, to }) => {
+const CustomButton = ({ children, to}) => {
   return (
     <Link to={to} className="custom-button">{children}</Link>
   );
@@ -58,31 +59,112 @@ function MovingBackground()
 }
 
 function MainMenu() {
-  
-  useEffect(() => {
-    const game = MovingBackground();
-    return () => {
-      game.destroy(true); 
-    };
-  }, []);
+    const {userData, arrayId} = useContext(AppContext)
+    const [leaderBoard, setLeaderBoard] = useState([{}])
+    const [sortedLeaderBoard, seSortedLeaderBoard] = useState([])
+    let userLoaded = 0;
+    let userName = "NULL";
+
+    if(arrayId !== -1) {
+    userLoaded = 1;
+    userName = userData["users"][arrayId]["username"]
+    }
+
+    useEffect(() => {
+        const game = MovingBackground();
+        return () => {
+          game.destroy(true);
+        };
+    }, []);
+
+    useEffect(() => {
+        loadLeaderBoard()
+    }, [leaderBoard]);
+
+    const chooseLevelOption = () => {
+    if(userLoaded === 0){
+      return <CustomButton disabled>Choose Level [LOCKED]</CustomButton>
+    }
+    else{
+      return <CustomButton to="/ChooseLevel">Choose Level</CustomButton>
+    }
+    }
+
+    const userNameOption = () => {
+    if(userName === "NULL"){
+      return <div  style={{color:'white', fontSize:'30px'}}>No User Loaded.</div>
+    }
+    else{
+      return <div  style={{color:'white', fontSize:'30px'}}>Current User: {userName}</div>
+    }
+    }
+
+    const loadLeaderBoard = () => {
+         axios.get("http://localhost:5000/load_leaderboard").then(res => {
+            setLeaderBoard(res.data)
+            leaderBoard["rows"].sort((a, b) => a.rank - b.rank)
+            seSortedLeaderBoard(leaderBoard["rows"]) // sorts leaderboard table (highest to lowest) in case it wasn't already sorted.
+         }
+    ).catch(e => {
+        console.log(e);
+        })
+    }
+
+
+    const uploadResults = () => {
+        if(sortedLeaderBoard.length < 4) {
+            console.log("not enough users.")
+            return
+        }
+
+        const config = {
+           data: [{
+               "Group":"Himalayan",
+               "Title": "Top 5 Scores",
+               [sortedLeaderBoard[0]["username"]]: `${sortedLeaderBoard[0]["score"]}`,
+               [sortedLeaderBoard[1]["username"]]: `${sortedLeaderBoard[1]["score"]}`,
+               [sortedLeaderBoard[2]["username"]]: `${sortedLeaderBoard[2]["score"]}`,
+               [sortedLeaderBoard[3]["username"]]: `${sortedLeaderBoard[3]["score"]}`,
+
+            }]
+        }
+
+        postData(config)
+    }
+
+    const postData = (config) => {
+        axios.post('http://localhost:5000/json', JSON.stringify(config), {headers: {'Content-Type': 'application/json'}})
+      .then(function (response) {
+        console.log(response);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+    }
 
   return (
-    <div className='menu-content'>
-      <div style={{fontSize:'20px'}}>
-        <h1 style={{color:'white', fontSize:'100px', textAlign:"center"}}>
-          Main Menu
-        </h1>
-        <h1>
-          <CustomButton to="/StartGame">Start or Load Game</CustomButton>
-        </h1>
-        <h1>
-          <CustomButton to="/ChooseLevel">Choose Level</CustomButton>
-        </h1>
-        <h1>
-          <CustomButton to="/ViewLeaderboard">View Leaderboard</CustomButton>
-        </h1>
+      <div className='menu-content'>
+          <div className={"container"}>
+              <button className={"submit-btn"} onClick={uploadResults}>Submit Results</button>
+          </div>
+          <div style={{fontSize: '20px'}}>
+
+              <h1 style={{color: 'white', fontSize: '100px', textAlign: "center"}}>
+                  Main Menu
+              </h1>
+              <h1>
+                  <CustomButton to="/StartGame">Start or Load Game</CustomButton>
+              </h1>
+              <h1>
+                  {chooseLevelOption(userLoaded)}
+              </h1>
+              <h1>
+                  <CustomButton to="/ViewLeaderboard">View Leaderboard</CustomButton>
+              </h1>
+
+              {userNameOption()}
+          </div>
       </div>
-    </div>
   );
 }
 

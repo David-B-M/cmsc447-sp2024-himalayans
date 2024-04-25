@@ -1,10 +1,10 @@
 import Phaser from 'phaser';
 
-class PauseScreen extends Phaser.Scene
+class LevelThreePauseMenu extends Phaser.Scene
 {
     constructor ()
     {
-        super({ key: 'PauseScreen'});
+        super({ key: 'LevelThreePauseMenu'});
     }
 
     preload ()
@@ -37,17 +37,17 @@ class PauseScreen extends Phaser.Scene
 
         this.resumeLevelBtn.on('pointerdown', () =>
         {
-            this.scene.resume('LevelExample');
+            this.scene.resume('LevelThree');
             this.scene.stop();
             
-            const levelExampleScene = this.scene.get('LevelExample');
-            levelExampleScene.pauseBtn.setVisible(true); 
+            const levelThreeScene = this.scene.get('LevelThree');
+            levelThreeScene.pauseBtn.setVisible(true); 
             
         });
 
         this.resetLevelBtn.on('pointerdown', () =>
         {
-            this.scene.start('LevelExample');
+            this.scene.start('LevelThree');
             this.scene.stop();
         });
 
@@ -63,4 +63,4 @@ class PauseScreen extends Phaser.Scene
     }
 }
 
-export default PauseScreen;
+export default LevelThreePauseMenu;
