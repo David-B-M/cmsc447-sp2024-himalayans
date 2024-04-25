@@ -276,7 +276,7 @@ class LevelTwoClass extends Phaser.Scene
             this.shieldTimeLeft -= 0.025;
         }
 
-        if (Math.abs(this.timerValue % 15) < 0.025) {
+        if (Math.abs(this.timerValue % 8) < 0.025) {
             spawnBoulder(this);
         }
 
@@ -302,10 +302,10 @@ function spawnTree(scene)
 }
 function spawnBoulder(scene)
 {
-    const boulder = scene.boulders.create(1000, 300, 'boulder')
+    const boulder = scene.boulders.create(700, 300, 'boulder')
             .setAccelerationX(-100)
             .setBounce(.5)
-            .setScale(.45);
+            .setScale(.40);
 
         scene.physics.world.on('worldstep', () =>
         {
@@ -316,7 +316,7 @@ function spawnBoulder(scene)
 }
 function spawnPowerup(scene)
 {
-    const powerup = Math.floor(Math.random() * 4) + 1;;
+    const powerup = Math.floor(Math.random() * 4) + 1;
     if (powerup === 1)
     {
         const jumpBoost = scene.jumpBoosts.create(1400, getRandomY(), 'jumpBoost');
