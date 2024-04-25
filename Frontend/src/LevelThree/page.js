@@ -38,6 +38,7 @@ class LevelThreeClass extends Phaser.Scene
         const { width, height } = this.sys.game.canvas;
         this.bg = this.add.tileSprite(0, 0, width, height, 'background').setOrigin(0, 0);
         this.bg.setTileScale(2);
+        this.bg.tint = 0xff0000;
 
         // create ground
         this.ground = this.add.tileSprite(0, 525, width, height, 'ground').setOrigin(0, 0);
