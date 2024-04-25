@@ -40,10 +40,12 @@ class LevelTwoClass extends Phaser.Scene
         const { width, height } = this.sys.game.canvas;
         this.bg = this.add.tileSprite(0, 0, width, height, 'background').setOrigin(0, 0);
         this.bg.setTileScale(2);
+        this.bg.tint = 0xFF9999;
 
         // create ground
         this.ground = this.add.tileSprite(0, 525, width, height, 'ground').setOrigin(0, 0);
         this.ground.setTileScale(3);
+        this.ground.tint = 0xFF9999;
         this.physics.add.existing(this.ground, true);
 
         // user input
@@ -176,13 +178,13 @@ class LevelTwoClass extends Phaser.Scene
         // update background and ground
         if (this.speedBoostActive)
         {
-            this.bg.tilePositionX += 4;
-            this.ground.tilePositionX += 4;
+            this.bg.tilePositionX += 5;
+            this.ground.tilePositionX += 5;
         }
         else
         {
-            this.bg.tilePositionX += 2;
-            this.ground.tilePositionX += 2;
+            this.bg.tilePositionX += 3;
+            this.ground.tilePositionX += 3;
         }
 
         // update timer
