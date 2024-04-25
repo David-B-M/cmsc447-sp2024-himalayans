@@ -82,7 +82,7 @@ function MainMenu() {
     }, [leaderBoard]);
 
     const chooseLevelOption = () => {
-    if(userLoaded === 0) {
+    if(userLoaded === 0){
       return <CustomButton disabled>Choose Level [LOCKED]</CustomButton>
     }
     else{
@@ -92,10 +92,10 @@ function MainMenu() {
 
     const userNameOption = () => {
     if(userName === "NULL"){
-      return <div  style={{color:'white', fontSize:'30px'}}>No User Loaded.</div>
+      return <div  style={{color:'white', fontSize:'30px', fontWeight: 'bold', WebkitTextStroke: '1px', WebkitTextStrokeColor: 'black'}}>No User Loaded.</div>
     }
     else{
-      return <div  style={{color:'white', fontSize:'30px'}}>Current User: {userName}</div>
+      return <div  style={{color:'white', fontSize:'30px', fontWeight: 'bold', WebkitTextStroke: '1px', WebkitTextStrokeColor: 'black'}}>Current User: {userName}</div>
     }
     }
 
@@ -112,7 +112,7 @@ function MainMenu() {
 
 
     const uploadResults = () => {
-        if(sortedLeaderBoard.length < 5) {
+        if(sortedLeaderBoard.length < 4) {
             console.log("not enough users.")
             return
         }
