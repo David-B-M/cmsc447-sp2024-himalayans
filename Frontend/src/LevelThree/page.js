@@ -31,6 +31,10 @@ class LevelThreeClass extends Phaser.Scene
         this.load.audio('collect', 'collect.mp3');
         this.load.audio('jump', 'jump.mp3');
         this.load.audio('gameOver', 'game_over.mp3');
+        this.load.audio('pickUpJumpBoost', 'Yippee.wav');
+        this.load.audio('pickUpShield', 'shield.mp3');
+        this.load.audio('pickUpSpeedBoost', 'speed.mp3');
+        this.load.audio('pickUpClock', 'clock.mp3');
         this.load.audio('time', 'time.mp3');
     }
 
@@ -40,12 +44,12 @@ class LevelThreeClass extends Phaser.Scene
         const { width, height } = this.sys.game.canvas;
         this.bg = this.add.tileSprite(0, 0, width, height, 'background').setOrigin(0, 0);
         this.bg.setTileScale(2);
-        this.bg.tint = 0xff0000;
+        this.bg.tint = 0xFF0000;
 
         // create ground
         this.ground = this.add.tileSprite(0, 525, width, height, 'ground').setOrigin(0, 0);
         this.ground.setTileScale(3);
-        this.ground.tint = 0xff0000;
+        this.ground.tint = 0xFF0000;
         this.physics.add.existing(this.ground, true);
 
 
@@ -159,6 +163,7 @@ class LevelThreeClass extends Phaser.Scene
             child.body.setAllowGravity(false);
             child.body.setImmovable(true);
             child.displayWidth /= 2
+            child.tint = 0xFF7777;
         });
         this.physics.add.collider(this.player, this.platforms);
 
@@ -218,13 +223,13 @@ class LevelThreeClass extends Phaser.Scene
         // update background and ground
         if (this.speedBoostActive)
         {
-            this.bg.tilePositionX += 6;
-            this.ground.tilePositionX += 6;
+            this.bg.tilePositionX += 8;
+            this.ground.tilePositionX += 8;
         }
         else
         {
-            this.bg.tilePositionX += 4;
-            this.ground.tilePositionX += 4;
+            this.bg.tilePositionX += 6;
+            this.ground.tilePositionX += 6;
         }
 
         // update timer
@@ -378,6 +383,7 @@ function spawnPowerup(scene)
 
 function collectClock(player, clock)
 {
+    this.sound.play('pickUpClock');
     clock.disableBody(true, true);
     this.timerValue += 5;
     timeConst = 0;
@@ -385,6 +391,7 @@ function collectClock(player, clock)
 
 function collectShield(player, shield)
 {
+    this.sound.play('pickUpShield');
     shield.disableBody(true, true);
     this.shieldActive = true;
     this.shieldTimeLeft = powerUpTime;
@@ -392,6 +399,7 @@ function collectShield(player, shield)
 
 function collectSpeedBoost(player, speedBoost)
 {
+    this.sound.play('pickUpSpeedBoost');
     speedBoost.disableBody(true, true);
     this.speedBoostActive = true;
     this.speedBoostTimeLeft = powerUpTime;
@@ -399,6 +407,7 @@ function collectSpeedBoost(player, speedBoost)
 
 function collectJumpBoost(player, jumpBoost)
 {
+    this.sound.play('pickUpJumpBoost');
     jumpBoost.disableBody(true, true);
     this.jumpBoostActive = true;
     this.jumpBoostTimeLeft = powerUpTime;
