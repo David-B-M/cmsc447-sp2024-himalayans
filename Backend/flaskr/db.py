@@ -509,14 +509,15 @@ def get_leaderboard_row(username, db=None, do_close=False, exclude_columns=["use
     return (True, jsonified_result)
 
 
-def initialize_score(username, score, user_id=None, do_close=False):
+def initialize_score(username, score, db=None, user_id=None, do_close=False):
     """
     :param do_close: Signal if I should close the database. i.e. if this is called from a solo endpoint.
     :return: rank!
     """
-    db = get_db()
-    assert db is not None, "[DB: initialize_score] Failed to connect to database."
-    
+    if not db:
+        db = get_db()
+        assert db is not None, "[DB: initialize_score] Failed to connect to database."
+        
     # not specifying rank because it should auto set and increment
     INITIALIZE_SCORE_SQL = \
     """
@@ -571,9 +572,13 @@ def increment_score(username, score):
     WHERE username = ?;
     """
     
-    # this_users_row = get_leaderboard_row(username)
-    # if not this_users_row[RETURN_BOOL_INDEX]:
-    #     pass
+    existing_user_result = get_saved_user(username, db, do_close_db=False, silence=True)
+    if not existing_user_result[RETURN_BOOL_INDEX]:
+        print(f"[DB: increment_score] Unable to verify existence of user {username}. Check logs.")
+        return False
+    elif not existing_user_result[RETURN_DATA_INDEX]:
+        print(f"[DB: increment_score] Will NOT increment score of non-existent user: {username}")
+        return False
 
     db_cursor = db.cursor()
     num_affected_rows = None

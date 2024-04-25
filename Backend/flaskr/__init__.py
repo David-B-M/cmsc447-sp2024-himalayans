@@ -54,6 +54,19 @@ def create_app(test_config=None):
         return home_response
 
     @cross_origin()
+    @app.route('/json', methods=["POST"])
+    def test_json():
+        data = request.get_json()
+        print("data is " + format(data))
+        response = {
+            RESPONSE_MESSAGE_KEY: "Welcome to Everest the Olympicat Backend!"
+        }
+        home_response = flask.Response(response=json.dumps(response), status=200)
+        home_response.headers['Access-Control-Allow-Origin'] = '*'
+        home_response.headers["content-type"] = "application/json"
+        return home_response
+
+    @cross_origin()
     @app.route("/load_users", methods=["GET"])
     def load_users():
         """
@@ -124,8 +137,8 @@ def create_app(test_config=None):
         username = None
 
         add_user_response = init_response()
+        username = get_param_from_request(param="username", response=add_user_response)
 
-        username = get_username_from_request(response=add_user_response)
         if username == None:  # ^ function auto sets the status to 404 and the message if it fails.
             return add_user_response
         # use the datadd_user_responseabase method to try to add the user (validates as well)
@@ -163,7 +176,7 @@ def create_app(test_config=None):
         increment_level_response = init_response()
         # get the username they passed to the request.
         username = None
-        username = get_username_from_request(response=increment_level_response)
+        username = get_param_from_request(param="username", response=increment_level_response)
         if username == None:  
             print("Will not increment user level for nonexistent user.")
             return increment_level_response
@@ -187,6 +200,7 @@ def create_app(test_config=None):
     def read_user_level():
         """
         Expects a username to be passed to be used for looking up a particular user.
+        :param username: (from request)
         :return: 
             The level number that that user has reached!
             {"level": 1 or 2 or 3}
@@ -194,7 +208,7 @@ def create_app(test_config=None):
         result = {"level": None}
         user_level_response = init_response()
 
-        username = get_username_from_request(response=user_level_response)
+        username = get_param_from_request(response=user_level_response)
         if username == None: # the user can check the output for reason for failure :p
             print("[GET /read_user_level] Unable to get username from request.")
             return user_level_response
@@ -265,11 +279,41 @@ def create_app(test_config=None):
     @app.route("/increment_score", methods=["POST"])
     def increment_score():
         """
+        Uses db.increment_score(username, score)
         :params: (throught the request)
         - username
         - score (to increment the score they already have with.)
         """
-        pass
+        # handling the request
+        result = {
+            "success": False
+        }  # <- None by default (db fails to add).
+        
+        increment_score_response = init_response()
+        # get the username they passed to the request.
+        username = None
+        username = get_param_from_request(param="username", response=increment_score_response)
+        if username == None:  
+            print("Will not increment user score for nonexistent user.")
+            return increment_level_response
+        score = get_param_from_request(param="score", response=increment_score_response)
+        if score == None:  
+            print("Cannot increment user score without a score!!")
+            return increment_level_response
+
+        db_increment_level_success = db.increment_score(username, score)
+        result["success"] = db_increment_level_success
+        if not db_increment_level_success:
+            result[RESPONSE_MESSAGE_KEY] = \
+                f"[Endpoint: add_user] Failed to increment user score for `{username}` :("
+            increment_score_response.response = json.dumps(result)
+            increment_score_response.status = 404
+            return increment_score_response
+
+        result[RESPONSE_MESSAGE_KEY] = f"Successfully increment score by {score} for user = `{username}` :D"
+        increment_score_response.response = json.dumps(result)
+        increment_score_response.status = 200
+        return increment_score_response
 
     # a simple page that says hello
     @app.route('/hello')
@@ -285,10 +329,13 @@ def create_app(test_config=None):
         return response
 
 
-    def get_username_from_request(response, failure_msg="Unable to get username from request."):
+    def get_param_from_request(response, param="username", failure_msg="Unable to get username from request."):
         """
-        :return: True/False - whether or not we were able to get the username from the request!
+        :return: 
+            (on fail) - None
+            (on success) - the value from the request!
         """
+        value = None
         # if request.headers["Content-Type"] == "application/x-www-form-urlencoded":
         if request.content_type == "application/x-www-form-urlencoded":
             # form data is a multi-dict
@@ -296,22 +343,22 @@ def create_app(test_config=None):
             # https://tedboy.github.io/flask/generated/generated/werkzeug.MultiDict.html
             
             #DEBUG
-            print("DEBUGGING (get_username_from_request): Attempting getting username from FORM: ")
-            username = request.form.get("username")
-            print(f"\t{username}")
+            print("DEBUGGING (get_param_from_request): Attempting getting username from FORM: ")
+            value = request.form.get(param)
+            print(f"\t{param}")
         else:
-            print("DEBUGGING (get_username_from_request): Attempting getting username from ARGS: ")
-            username = request.args.get('username')
-            print(f"\t{username}")
+            print("DEBUGGING (get_param_from_request): Attempting getting username from ARGS: ")
+            value = request.args.get(param)
+            print(f"\t{param}")
 
         # set the response flags to signify we were unable to get the username
-        if username == None:
+        if value == None:
             # DEBUG
-            print("Got None username.")
+            print("Got None param.")
             response.status=404
             response.response = json.dumps({RESPONSE_MESSAGE_KEY: failure_msg})
             return None
-        # successfully added the user.
-        return username
+        
+        return value
         
     return app
