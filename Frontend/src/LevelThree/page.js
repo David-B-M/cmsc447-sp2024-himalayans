@@ -7,6 +7,7 @@ import LevelThreeFailScreen from '../LevelThreeFail/page';
 const powerUpTime = 10;
 const levelTime = 30;
 const velocityX = -100
+let timeConst = 0;
 
 class LevelThreeClass extends Phaser.Scene
 {
@@ -30,6 +31,7 @@ class LevelThreeClass extends Phaser.Scene
         this.load.audio('collect', 'collect.mp3');
         this.load.audio('jump', 'jump.mp3');
         this.load.audio('gameOver', 'game_over.mp3');
+        this.load.audio('time', 'time.mp3');
     }
 
     create()
@@ -195,6 +197,11 @@ class LevelThreeClass extends Phaser.Scene
         {
             this.gameOver = true;
             this.scene.launch('LevelThreeCompleteScreen');
+        }
+
+        if (this.timerValue <= 5 && timeConst == 0){
+            this.sound.play('time');
+            timeConst = 1;
         }
 
         if (this.gameOver)
@@ -373,6 +380,7 @@ function collectClock(player, clock)
 {
     clock.disableBody(true, true);
     this.timerValue += 5;
+    timeConst = 0;
 }
 
 function collectShield(player, shield)
