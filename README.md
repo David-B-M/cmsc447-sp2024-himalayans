@@ -12,10 +12,19 @@ For your grading purposes, I have made this video of me scrolling through our JI
 <a>https://drive.google.com/file/d/1VFnRhCT7ANSImjoMtHHZIpmEcs9y-QfY/view?usp=sharing</a>
 - We know this is a software development project becuase there is a backlog, however, as you can see in the video, there is no `Create Sprint` button. So, our team has been using Epics to serve that purpose, although I have not been able to set a usable start and end date for that (i.e. to appear on the timeline).
 
-# Sprint 2 - Implementation
+# Sprint 3 (Finalizing Levels + How-to Play!)
+
 ## Build Instructions
-1. Load the backend by following the instructions in `./Backend/README.md`
+1. Load the backend by following the instructions in `./Backend/README.md`. (You won't be able to run )
+TLDR: Inside that folder:
+- activate a virtual environment (`venv`)
+- set the flask app environment variable (`FLASK_APP='flaskr'`)
+- Start the backend: `flask run`.
 2. Render the app by following the instructions in `./Frontend/README.md`.
+- Get Dependencies in `node_modules` (i.e. `npm install`). 
+- Run with `npm start`
+
+# Sprint 2 - Implementation
 
 ## Current Progress!
 Here is how our application is currently lookin!

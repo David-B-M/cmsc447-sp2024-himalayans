@@ -79,7 +79,7 @@ function ChooseLevel() {
         <div style={{marginTop: `10px`}}>
           <button onClick={goBack} className={"custom-button"}>Go Back</button>
         </div>
-        <div  style={{color:'white', fontSize:'30px'}}>Current User: {userName}</div>
+        <div style={{color:'white', fontSize:'30px', fontWeight: 'bold', WebkitTextStroke: '1px', WebkitTextStrokeColor: 'black'}}>Current User: {userName}</div>
       </div>
     </div>
   );

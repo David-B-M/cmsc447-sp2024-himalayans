@@ -1,41 +1,91 @@
 
-.ViewLeaderboard .control-flow {
-    display: flex;
-    flex-direction: column;
-    height:500px;
-}
+.customButton {
+    background-image: url('ChooseLevel_normal.png');
+    background-size: cover;
+    border: none;
+    color: rgb(0, 86, 156);
+    padding: 10px 30px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 20px;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 15px;
+    width: 20vw; /* Adjust width to desired size */
+    height: 7vh; /* Adjust height to desired size */
+    outline-style: solid;
+    margin: 0.5vw;
+    /*display: flex;*/
+    margin-right: 0;
+    margin-bottom: 0;
+  }
+  
 
-.ViewLeaderboard .title {
+.title {
     border: solid 1px black;
     width: fit-content;
     margin: 30px auto;
     padding: 10px 30px;
     border-radius: 10px;
-    background-color: darkgray;
-    opacity:.6;
-}
-
-.ViewLeaderboard button {
-    width: 300px;
-    height: 40px;
-    margin: 15px auto;
-    color: white;
-    background-color: #3f49c0;
-    border: 1px solid black;
-    text-decoration: none;
-}
-
-.ViewLeaderboard a {
-    text-decoration: none;
-}
-.ViewLeaderboard .return {
-    border: solid 1px black;
     background-color: white;
-    color: black;
-    font-size: 24px;
-    padding: 22px 0px;
     display: flex;
-    border-radius: 10px;
-    justify-content: center;
-    align-items: center;
+    margin-left: 13vw;
+    margin-top: 5vh;
+}
+
+
+.leaderboardItem {
+    height: 10vh;
+    width: 50vw;
+    display: flex;
+    margin-top: 2vh;
+}
+
+.rank {
+    height: 10vh;
+    width: 10vw;
+    border: solid;
+    border-radius: 15px;
+    background-color: white;
+    margin: auto; 
+}
+
+.name {
+    height: 10vh;
+    width: 15vw;
+    border: solid;
+    border-radius: 15px;
+    background-color: white;
+    margin: auto;
+}
+
+.leaderboardTitle {
+    height: '10vh';
+    width: '50vw';
+    display: 'flex';
+    border: 'solid';
+    border-radius: '15px';
+    background-color: 'white';
+}
+
+.leaderboardTitleRank {
+    height: '10vh';
+    width: '10vw';
+    display: 'flex';
+    margin: 'auto';
+    font-size: 'xx-large';
+    font-weight: 'bold';
+    justify-content: 'center';
+    margin-top: '1vh';
+}
+
+.leaderboardTitleName {
+    height: '10vh';
+    width: '15vw';
+    display: 'flex';
+    margin: 'auto';
+    font-size: 'xx-large';
+    font-weight: 'bold';
+    justify-content: 'center';
+    margin-top: '1vh';
 }
