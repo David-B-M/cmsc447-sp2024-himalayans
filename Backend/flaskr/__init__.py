@@ -54,6 +54,19 @@ def create_app(test_config=None):
         return home_response
 
     @cross_origin()
+    @app.route('/json', methods=["POST"])
+    def test_json():
+        data = request.get_json()
+        print("data is " + format(data))
+        response = {
+            RESPONSE_MESSAGE_KEY: "Welcome to Everest the Olympicat Backend!"
+        }
+        home_response = flask.Response(response=json.dumps(response), status=200)
+        home_response.headers['Access-Control-Allow-Origin'] = '*'
+        home_response.headers["content-type"] = "application/json"
+        return home_response
+
+    @cross_origin()
     @app.route("/load_users", methods=["GET"])
     def load_users():
         """
@@ -124,8 +137,8 @@ def create_app(test_config=None):
         username = None
 
         add_user_response = init_response()
-
         username = get_param_from_request(param="username", response=add_user_response)
+
         if username == None:  # ^ function auto sets the status to 404 and the message if it fails.
             return add_user_response
         # use the datadd_user_responseabase method to try to add the user (validates as well)
@@ -279,24 +292,28 @@ def create_app(test_config=None):
         increment_score_response = init_response()
         # get the username they passed to the request.
         username = None
-        username = get_param_from_request(response=increment_score_response)
+        username = get_param_from_request(param="username", response=increment_score_response)
         if username == None:  
-            print("Will not increment user level for nonexistent user.")
+            print("Will not increment user score for nonexistent user.")
+            return increment_level_response
+        score = get_param_from_request(param="score", response=increment_score_response)
+        if score == None:  
+            print("Cannot increment user score without a score!!")
             return increment_level_response
 
-        db_increment_level_success = db.increment_user_level(username)
+        db_increment_level_success = db.increment_score(username, score)
         result["success"] = db_increment_level_success
         if not db_increment_level_success:
             result[RESPONSE_MESSAGE_KEY] = \
-                f"[Endpoint: add_user] Failed to increment user level for `{username}` :("
-            increment_level_response.response = json.dumps(result)
-            increment_level_response.status = 404
-            return increment_level_response
+                f"[Endpoint: add_user] Failed to increment user score for `{username}` :("
+            increment_score_response.response = json.dumps(result)
+            increment_score_response.status = 404
+            return increment_score_response
 
-        result[RESPONSE_MESSAGE_KEY] = f"Successfully increment level for user = `{username}` :D"
-        increment_level_response.response = json.dumps(result)
-        increment_level_response.status = 200
-        return increment_level_response
+        result[RESPONSE_MESSAGE_KEY] = f"Successfully increment score by {score} for user = `{username}` :D"
+        increment_score_response.response = json.dumps(result)
+        increment_score_response.status = 200
+        return increment_score_response
 
     # a simple page that says hello
     @app.route('/hello')
