@@ -59,6 +59,12 @@ GET /load_users
 ```
 GET read_user_level?username="[username]"
     i.e. GET /read_user_level?username=test1
+Return (json)
+{
+    "levelReached": [1 or 2 or 3],
+    "username": [username] (the one you entered),
+    "message": [info about result i.e. failure+reason or just success]
+}
 ```
 - Usage: Frontend ChooseLevel page.
     - Get the integer value by accessing the key "level"
