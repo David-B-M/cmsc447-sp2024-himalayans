@@ -82,7 +82,7 @@ function MainMenu() {
     }, [leaderBoard]);
 
     const chooseLevelOption = () => {
-    if(userLoaded === 0){
+    if(userLoaded === 0) {
       return <CustomButton disabled>Choose Level [LOCKED]</CustomButton>
     }
     else{
@@ -112,7 +112,7 @@ function MainMenu() {
 
 
     const uploadResults = () => {
-        if(sortedLeaderBoard.length < 4) {
+        if(sortedLeaderBoard.length < 5) {
             console.log("not enough users.")
             return
         }
