@@ -183,7 +183,7 @@ class LevelOneClass extends Phaser.Scene
                 .catch(function (error) {
                     console.log(error);
                 });
-                axios.post('http://localhost:5000/increment_level', {
+                axios.post('http://localhost:5000/increment_user_level', {
                     username: userName,
                 })
                 .then(function (response) {
