@@ -26,11 +26,14 @@ class LevelOneClass extends Phaser.Scene
         this.load.image('rock', 'snowy_rock.png');
         this.load.image('tree', 'snowy_tree.png');
         this.load.image('fish', 'fish.png');
-        this.load.image('pauseBtn', 'pause_button.png');
+        this.load.image('pauseBtn', 'pause.png');
         this.load.image('jumpBoost', 'jump_boost.png');
         this.load.image('speedBoost', 'speed_boost.png');
         this.load.image('clock', 'clock.png');
         this.load.image('shield', 'shield.png');
+        this.load.audio('collect', 'collect.mp3');
+        this.load.audio('jump', 'jump.mp3');
+        this.load.audio('gameOver', 'game_over.mp3');
     }
 
     create()
@@ -107,7 +110,8 @@ class LevelOneClass extends Phaser.Scene
         // pause button 
         this.isGamePaused = false;
 
-        this.pauseBtn = this.add.sprite(16, 10, 'pauseBtn').setOrigin(0, 0);
+        this.pauseBtn = this.add.sprite(13, 14, 'pauseBtn').setOrigin(0, 0);
+        this.pauseBtn.setScale(.12)
         this.pauseBtn.setInteractive({ useHandCursor: true });
 
         this.pauseBtn.on('pointerdown', () =>
@@ -162,16 +166,6 @@ class LevelOneClass extends Phaser.Scene
         if (this.timerValue <= 0)
         {
             this.gameOver = true;
-            this.scene.launch('LevelOneCompleteScreen');
-        }
-
-        if (this.gameOver)
-        {
-            this.physics.pause();
-            this.player.anims.stop();
-            this.pauseBtn.disableInteractive();
-            //Upload Score to Leaderboard
-            //Score = this.scoreValue
             if(userName != 'NULL'){
                 axios.post('http://localhost:5000/increment_score', {
                     username: userName,
@@ -193,6 +187,14 @@ class LevelOneClass extends Phaser.Scene
                     console.log(error);
                 });
             }
+            this.scene.launch('LevelOneCompleteScreen');
+        }
+
+        if (this.gameOver)
+        {
+            this.physics.pause();
+            this.player.anims.stop();
+            this.pauseBtn.disableInteractive();
             return;
         }
 
@@ -216,6 +218,8 @@ class LevelOneClass extends Phaser.Scene
        // player jumping
         if (this.cursors.up.isDown && this.player.body.onFloor())
         {
+            this.sound.play('jump');
+          
             if (this.jumpBoostActive)
             {
                 this.player.setVelocityY(-350);
@@ -378,6 +382,7 @@ function hitObstacle (player, rock)
 {
     if (!this.shieldActive)
     {
+        this.sound.play('gameOver');
         this.gameOver = true;
         this.scene.launch('LevelOneFailScreen');
     }
@@ -392,6 +397,8 @@ function spawnFish(scene)
 
 function collectFish (player, fish)
 {
+    this.sound.play('collect');
+
     fish.disableBody(true, true);
 
     //  add and update the score
