@@ -32,7 +32,7 @@ class LevelTwoCompleteScreen extends Phaser.Scene
 
         this.nextLevelBtn.on('pointerdown', () =>
         {
-            // go to level 2
+            window.location.href = '/LevelThree'
         });
 
         this.viewLeaderboardBtn.on('pointerdown', () =>

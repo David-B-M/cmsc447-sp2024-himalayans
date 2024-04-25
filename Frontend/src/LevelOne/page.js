@@ -5,7 +5,7 @@ import LevelOneCompleteScreen from '../LevelOneComplete/page';
 import LevelOneFailScreen from '../LevelOneFail/page';
 
 const powerUpTime = 10;
-const levelTime = 60;
+const levelTime = 30;
 const velocityX = -100
 
 class LevelOneClass extends Phaser.Scene
@@ -28,6 +28,9 @@ class LevelOneClass extends Phaser.Scene
         this.load.image('speedBoost', 'speed_boost.png');
         this.load.image('clock', 'clock.png');
         this.load.image('shield', 'shield.png');
+        this.load.audio('collect', 'collect.mp3');
+        this.load.audio('jump', 'jump.mp3');
+        this.load.audio('gameOver', 'game_over.mp3');
     }
 
     create() {
@@ -194,6 +197,8 @@ class LevelOneClass extends Phaser.Scene
        // player jumping
         if (this.cursors.up.isDown && this.player.body.onFloor())
         {
+            this.sound.play('jump');
+          
             if (this.jumpBoostActive)
             {
                 this.player.setVelocityY(-350);
@@ -222,8 +227,8 @@ class LevelOneClass extends Phaser.Scene
         // reset rock position when it goes off screen
         this.rocks.children.iterate(function (child) {
             if (child.x < -60) {
-                child.x = 1350;
-                child.y = 510;
+                child.x = 1200;
+                child.y = 500;
             }
         });
 
@@ -356,6 +361,7 @@ function hitObstacle (player, rock)
 {
     if (!this.shieldActive)
     {
+        this.sound.play('gameOver');
         this.gameOver = true;
         this.scene.launch('LevelOneFailScreen');
     }
@@ -370,6 +376,8 @@ function spawnFish(scene)
 
 function collectFish (player, fish)
 {
+    this.sound.play('collect');
+
     fish.disableBody(true, true);
 
     //  add and update the score

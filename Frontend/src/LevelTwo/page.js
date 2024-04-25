@@ -1,18 +1,18 @@
 import Phaser from 'phaser';
 import {useEffect} from 'react';
-import LevelOnePauseMenu from "../LevelOnePauseMenu/page"
-import LevelOneCompleteScreen from '../LevelOneComplete/page';
-import LevelOneFailScreen from '../LevelOneFail/page';
+import LevelTwoPauseMenu from "../LevelTwoPauseMenu/page"
+import LevelTwoCompleteScreen from '../LevelTwoComplete/page';
+import LevelTwoFailScreen from '../LevelTwoFail/page';
 
 const powerUpTime = 10;
-const levelTime = 60;
+const levelTime = 30;
 const velocityX = -100
 
-class LevelOneClass extends Phaser.Scene
+class LevelTwoClass extends Phaser.Scene
 {
     constructor ()
     {
-        super({ key: 'LevelOne' });
+        super({ key: 'LevelTwo' });
     }
 
     preload()
@@ -29,6 +29,9 @@ class LevelOneClass extends Phaser.Scene
         this.load.image('clock', 'clock.png');
         this.load.image('shield', 'shield.png');
         this.load.image('boulder', 'boulder.png');
+        this.load.audio('collect', 'collect.mp3');
+        this.load.audio('jump', 'jump.mp3');
+        this.load.audio('gameOver', 'game_over.mp3');
     }
 
     create()
@@ -98,15 +101,15 @@ class LevelOneClass extends Phaser.Scene
         // pause button
         this.isGamePaused = false;
 
-        this.pauseBtn = this.add.sprite(13, 14, 'pauseBtn').setOrigin(0, 0);
-        this.pauseBtn.setScale(.12)
+        this.pauseBtn = this.add.sprite(13, 10, 'pauseBtn').setOrigin(0, 0);
+        this.pauseBtn.setScale(.12);
         this.pauseBtn.setInteractive({ useHandCursor: true });
 
         this.pauseBtn.on('pointerdown', () =>
         {
-            this.scene.sendToBack('LevelOne');
-            this.scene.pause('LevelOne');
-            this.scene.launch('LevelOnePauseMenu');
+            this.scene.sendToBack('LevelTwo');
+            this.scene.pause('LevelTwo');
+            this.scene.launch('LevelTwoPauseMenu');
 
             this.pauseBtn.setVisible(false);
         });
@@ -159,7 +162,7 @@ class LevelOneClass extends Phaser.Scene
         if (this.timerValue <= 0)
         {
             this.gameOver = true;
-            this.scene.launch('LevelOneCompleteScreen');
+            this.scene.launch('LevelTwoCompleteScreen');
         }
 
         if (this.gameOver)
@@ -190,6 +193,8 @@ class LevelOneClass extends Phaser.Scene
        // player jumping
         if (this.cursors.up.isDown && this.player.body.onFloor())
         {
+            this.sound.play('jump');
+            
             if (this.jumpBoostActive)
             {
                 this.player.setVelocityY(-350);
@@ -209,10 +214,6 @@ class LevelOneClass extends Phaser.Scene
         this.fish.children.iterate(function (child) {
             child.x -= 3;
         });
-
-
-
-
 
         // spawn powerup
         if (Math.abs(this.timerValue % 10) < 0.025) {
@@ -379,8 +380,9 @@ function hitObstacle (player, rock)
 {
     if (!this.shieldActive)
     {
+        this.sound.play('gameOver');
         this.gameOver = true;
-        this.scene.launch('LevelOneFailScreen');
+        this.scene.launch('LevelTwoFailScreen');
     }
 }
 
@@ -393,6 +395,8 @@ function spawnFish(scene)
 
 function collectFish (player, fish)
 {
+    this.sound.play('collect');
+
     fish.disableBody(true, true);
 
     //  add and update the score
@@ -400,7 +404,7 @@ function collectFish (player, fish)
     this.scoreText.setText('Score: ' + this.scoreValue);
 }
 
-function LevelOne()
+function LevelTwo()
 {
     const config = {
         type: Phaser.AUTO,
@@ -417,7 +421,7 @@ function LevelOne()
             }
         },
         backgroundColor: '#304858',
-        scene: [LevelOneClass, LevelOnePauseMenu, LevelOneCompleteScreen, LevelOneFailScreen]
+        scene: [LevelTwoClass, LevelTwoPauseMenu, LevelTwoCompleteScreen, LevelTwoFailScreen]
     };
 
     const game = new Phaser.Game(config);
@@ -426,12 +430,12 @@ function LevelOne()
 
 function Game() {
     useEffect(() => {
-        const game = LevelOne();
+        const game = LevelTwo();
         return () => {
             game.destroy(true);
         };
     }, []);
-    return <div id={"level-One"}/>;
+    return <div id={"level-Two"}/>;
 }
 
 export default Game;

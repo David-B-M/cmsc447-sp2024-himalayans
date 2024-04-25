@@ -27,6 +27,9 @@ class LevelThreeClass extends Phaser.Scene
         this.load.image('speedBoost', 'speed_boost.png');
         this.load.image('clock', 'clock.png');
         this.load.image('shield', 'shield.png');
+        this.load.audio('collect', 'collect.mp3');
+        this.load.audio('jump', 'jump.mp3');
+        this.load.audio('gameOver', 'game_over.mp3');
     }
 
     create()
@@ -93,9 +96,9 @@ class LevelThreeClass extends Phaser.Scene
 
         // pause button 
         this.isGamePaused = false;
-
-        this.pauseBtn = this.add.sprite(13, 14, 'pauseBtn').setOrigin(0, 0);
-        this.pauseBtn.setScale(.13);
+      
+        this.pauseBtn = this.add.sprite(13, 10, 'pauseBtn').setOrigin(0, 0);
+        this.pauseBtn.setScale(.12);
         this.pauseBtn.setInteractive({ useHandCursor: true });
 
         this.pauseBtn.on('pointerdown', () =>
@@ -224,6 +227,8 @@ class LevelThreeClass extends Phaser.Scene
        // player jumping
         if (this.cursors.up.isDown && this.player.body.onFloor())
         {
+            this.sound.play('jump');
+
             if (this.jumpBoostActive)
             {
                 this.player.setVelocityY(-350);
@@ -410,6 +415,7 @@ function hitObstacle (player, rock)
 {
     if (!this.shieldActive)
     {
+        this.sound.play('gameOver');
         this.gameOver = true;
         this.scene.launch('LevelThreeFailScreen');
     }
@@ -424,6 +430,8 @@ function spawnFish(scene)
 
 function collectFish (player, fish)
 {
+    this.sound.play('collect');
+
     fish.disableBody(true, true);
 
     //  add and update the score
