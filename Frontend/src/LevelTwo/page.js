@@ -176,13 +176,13 @@ class LevelTwoClass extends Phaser.Scene
         // update background and ground
         if (this.speedBoostActive)
         {
-            this.bg.tilePositionX += 4;
-            this.ground.tilePositionX += 4;
+            this.bg.tilePositionX += 5;
+            this.ground.tilePositionX += 5;
         }
         else
         {
-            this.bg.tilePositionX += 2;
-            this.ground.tilePositionX += 2;
+            this.bg.tilePositionX += 3;
+            this.ground.tilePositionX += 3;
         }
 
         // update timer
