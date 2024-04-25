@@ -10,7 +10,7 @@ const powerUpTime = 10;
 const levelTime = 60;
 const velocityX = -100
 let userName;
-
+let timeConst = 0;
 class LevelOneClass extends Phaser.Scene
 {
     constructor ()
@@ -34,6 +34,7 @@ class LevelOneClass extends Phaser.Scene
         this.load.audio('collect', 'collect.mp3');
         this.load.audio('jump', 'jump.mp3');
         this.load.audio('gameOver', 'game_over.mp3');
+        this.load.audio('time', 'time.mp3');
     }
 
     create()
@@ -188,6 +189,11 @@ class LevelOneClass extends Phaser.Scene
                 });
             }
             this.scene.launch('LevelOneCompleteScreen');
+        }
+
+        if (this.timerValue <= 5 && timeConst == 0){
+            this.sound.play('time');
+            timeConst = 1;
         }
 
         if (this.gameOver)
@@ -349,6 +355,7 @@ function collectClock(player, clock)
 {
     clock.disableBody(true, true);
     this.timerValue += 5;
+    timeConst = 0;
 }
 
 function collectShield(player, shield)
