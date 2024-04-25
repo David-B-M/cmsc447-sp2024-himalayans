@@ -66,5 +66,4 @@ class LevelThreePauseMenu extends Phaser.Scene
         });
     }
 }
-
 export default LevelThreePauseMenu;

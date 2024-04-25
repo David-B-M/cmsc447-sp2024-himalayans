@@ -66,5 +66,4 @@ class LevelTwoPauseMenu extends Phaser.Scene
         });
     }
 }
-
 export default LevelTwoPauseMenu;

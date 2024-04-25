@@ -9,6 +9,10 @@ import sqlite3
 
 RESPONSE_MESSAGE_KEY = "msg"
 
+# from db functions (called RETURN_* in that file)
+# here they correspond to result, thus the new var name
+RESULT_BOOL_INDEX = 0
+RESULT_USERS_JSON_INDEX = 1
 
 def create_app(test_config=None):
     # create and configure the app
@@ -203,18 +207,37 @@ def create_app(test_config=None):
         :param username: (from request)
         :return: 
             The level number that that user has reached!
-            {"level": 1 or 2 or 3}
+            {"levelReached": 1 or 2 or 3,
+             "username": (the one they entered for the request),
+             "message": [status message]}
         """
-        result = {"level": None}
+        result = {"levelReached": None}
         user_level_response = init_response()
 
         username = get_param_from_request(response=user_level_response)
         if username == None: # the user can check the output for reason for failure :p
             print("[GET /read_user_level] Unable to get username from request.")
             return user_level_response
+        result["username"] = username # <- for reference in case the backend logs are too hard to read.
 
-        db_level_result = db.get_user_level(username)
-        print(f"[__init__/read_user_level] DEBUG: Got level={db_level_result} ")
+        # first verify the user exists!
+        db_user_exists_result = db.get_saved_user(username)
+        if not db_user_exists_result[RESULT_BOOL_INDEX]:
+            print(f"[GET /read_user_level] Unable to verify existence of user {username}")
+            result[RESPONSE_MESSAGE_KEY] = "Failed to read user level. (db failed to look for that user.)"
+            user_level_response.status = 404
+            user_level_response.response = json.dumps(result)
+            return user_level_response
+        elif not db_user_exists_result[RESULT_USERS_JSON_INDEX]:
+            print(f"[GET /read_user_level] Unable to verify existence of user {username}")
+            result[RESPONSE_MESSAGE_KEY] = "Failed to read user level."
+            user_level_response.status = 404
+            user_level_response.response = json.dumps(result)
+            return user_level_response
+
+        # ready to check if they have a level :p
+        db_level_result = db_user_exists_result.get("levelReached") # db.read_user_level(username)
+        # print(f"[GET /read_user_level] DEBUG: Got level={db_level_result} ")
         if db_level_result == None:
             result["level"] = None
             result[RESPONSE_MESSAGE_KEY] = "Failed to read user level."
@@ -225,7 +248,7 @@ def create_app(test_config=None):
         # =========
         # Success!
         # =========
-        result["level"] = db_level_result
+        result["levelReached"] = db_level_result
         user_level_response.response = json.dumps(result)
         print(f"Done reading level for username=`{username}`: ", db_level_result)
         return user_level_response
@@ -250,9 +273,6 @@ def create_app(test_config=None):
             
         """
         result = {}
-
-        RESULT_BOOL_INDEX = 0
-        RESULT_USERS_JSON_INDEX = 1
 
         load_leaderboard_response = init_response()
 

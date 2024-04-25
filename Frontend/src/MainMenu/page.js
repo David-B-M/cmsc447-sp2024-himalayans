@@ -92,10 +92,10 @@ function MainMenu() {
 
     const userNameOption = () => {
     if(userName === "NULL"){
-      return <div  style={{color:'white', fontSize:'30px'}}>No User Loaded.</div>
+      return <div  style={{color:'white', fontSize:'30px', fontWeight: 'bold', WebkitTextStroke: '1px', WebkitTextStrokeColor: 'black'}}>No User Loaded.</div>
     }
     else{
-      return <div  style={{color:'white', fontSize:'30px'}}>Current User: {userName}</div>
+      return <div  style={{color:'white', fontSize:'30px', fontWeight: 'bold', WebkitTextStroke: '1px', WebkitTextStrokeColor: 'black'}}>Current User: {userName}</div>
     }
     }
 

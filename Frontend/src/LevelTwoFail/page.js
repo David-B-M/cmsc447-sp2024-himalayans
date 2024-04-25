@@ -51,5 +51,4 @@ class LevelTwoFailScreen extends Phaser.Scene
         });
     }
 }
-
 export default LevelTwoFailScreen;

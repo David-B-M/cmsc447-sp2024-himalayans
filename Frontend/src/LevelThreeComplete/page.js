@@ -1,7 +1,7 @@
 import Phaser from 'phaser';
 
 class LevelThreeCompleteScreen extends Phaser.Scene
-{x
+{
     constructor ()
     {
         super({ key: 'LevelThreeCompleteScreen'});
