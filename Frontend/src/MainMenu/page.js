@@ -61,7 +61,6 @@ function MovingBackground()
 function MainMenu() {
     const {userData, arrayId} = useContext(AppContext)
     const [leaderBoard, setLeaderBoard] = useState([{}])
-    const [sortedLeaderBoard, seSortedLeaderBoard] = useState([])
     let userLoaded = 0;
     let userName = "NULL";
 
@@ -79,7 +78,7 @@ function MainMenu() {
 
     useEffect(() => {
         loadLeaderBoard()
-    }, [leaderBoard]);
+    }, []);
 
     const chooseLevelOption = () => {
     if(userLoaded === 0) {
@@ -102,8 +101,6 @@ function MainMenu() {
     const loadLeaderBoard = () => {
          axios.get("http://localhost:5000/load_leaderboard").then(res => {
             setLeaderBoard(res.data)
-            leaderBoard["rows"].sort((a, b) => a.rank - b.rank)
-            seSortedLeaderBoard(leaderBoard["rows"]) // sorts leaderboard table (highest to lowest) in case it wasn't already sorted.
          }
     ).catch(e => {
         console.log(e);
@@ -112,8 +109,9 @@ function MainMenu() {
 
 
     const uploadResults = () => {
-        if(sortedLeaderBoard.length < 5) {
+        if(leaderBoard["rows"].length < 5) {
             console.log("not enough users.")
+            console.log(leaderBoard["rows"])
             return
         }
 
@@ -121,11 +119,11 @@ function MainMenu() {
            data: [{
                "Group":"Himalayan",
                "Title": "Top 5 Scores",
-               [sortedLeaderBoard[0]["username"]]: `${sortedLeaderBoard[0]["score"]}`,
-               [sortedLeaderBoard[1]["username"]]: `${sortedLeaderBoard[1]["score"]}`,
-               [sortedLeaderBoard[2]["username"]]: `${sortedLeaderBoard[2]["score"]}`,
-               [sortedLeaderBoard[3]["username"]]: `${sortedLeaderBoard[3]["score"]}`,
-
+               [leaderBoard["rows"][0]["username"]]: `${leaderBoard["rows"][0]["totalScore"]}`,
+               [leaderBoard["rows"][1]["username"]]: `${leaderBoard["rows"][1]["totalScore"]}`,
+               [leaderBoard["rows"][2]["username"]]: `${leaderBoard["rows"][2]["totalScore"]}`,
+               [leaderBoard["rows"][3]["username"]]: `${leaderBoard["rows"][3]["totalScore"]}`,
+               [leaderBoard["rows"][4]["username"]]: `${leaderBoard["rows"][4]["totalScore"]}`,
             }]
         }
 
