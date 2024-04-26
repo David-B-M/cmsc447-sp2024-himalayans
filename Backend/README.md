@@ -161,7 +161,7 @@ Every terminal session you do this in, I recommend you initialize the name of th
 
 ### 3.1 Set the flask app name 
 (reference: https://flask.palletsprojects.com/en/1.1.x/cli/ )
-- Note: If you are unable to set this environment variable, later instead of doing `flask [COMMAND]` you'll have to do `flask --app flaskr [COMMAND]`. I suggest trying to get this environment variable so you have less to type, especially if you run any of our custom click commands for testing.
+- <ins>**Note**</ins>: If you are unable to set this environment variable, later instead of doing `flask [COMMAND]` you'll have to do `flask --app flaskr [COMMAND]`. I suggest trying to get this environment variable so you have less to type, especially if you run any of our custom click commands for testing.
 ```bash
 $ export FLASK_APP=flaskr
 ```
