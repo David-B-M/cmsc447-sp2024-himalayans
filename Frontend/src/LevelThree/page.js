@@ -8,6 +8,25 @@ const powerUpTime = 10;
 const levelTime = 30;
 const velocityX = -100
 let timeConst = 0;
+let textStyleColorWhiteOutline = {
+    // keep Anna's original style besides text color (fill)
+    fontSize: '32px', 
+    // ^
+    fontWeight:'bold',
+    stroke: '#FFFFFF',
+    strokeThickness: 8,
+    fill:'#43d637'
+}
+let textStyleBlackWhiteOutline = {
+    // keep Anna's original style
+    fontSize: '32px', 
+    fill: '#000',
+    // ^
+    fontWeight:'bold',
+    stroke: '#FFFFFF',
+    strokeThickness: 4,
+    fill:'#00000'
+}
 
 class LevelThreeClass extends Phaser.Scene
 {
@@ -77,11 +96,11 @@ class LevelThreeClass extends Phaser.Scene
 
         //  the score
         this.scoreValue = 0;
-        this.scoreText = this.add.text(100, 16, 'Score: ' + this.scoreValue, { fontSize: '32px', fill: '#000' });
+        this.scoreText = this.add.text(100, 16, 'Score: ' + this.scoreValue, textStyleColorWhiteOutline);
 
         // the time
         this.timerValue = levelTime;
-        this.timerText = this.add.text(100, 48, 'Time: ' + this.timerValue, { fontSize: '32px', fill: '#000' });
+        this.timerText = this.add.text(100, 48, 'Time: ' + this.timerValue, textStyleColorWhiteOutline);
        
         // game end flag
         this.gameOver = false;
@@ -128,13 +147,13 @@ class LevelThreeClass extends Phaser.Scene
         this.shieldTimeLeft = 0;
 
         this.jumpBoostImg = this.add.sprite(45, 130, 'jumpBoost').setScale(0.35);
-        this.jumpBoostTimeLeftText = this.add.text(75, 125, ': ' + this.jumpBoostTimeLeft, { fontSize: '32px', fill: '#000' });
+        this.jumpBoostTimeLeftText = this.add.text(75, 125, ': ' + this.jumpBoostTimeLeft, textStyleBlackWhiteOutline);
 
         this.speedBoostImg = this.add.sprite(45, 200, 'speedBoost').setScale(0.25);
-        this.speedBoostTimeLeftText = this.add.text(75, 185, ': ' + this.speedBoostTimeLeft, { fontSize: '32px', fill: '#000' });
+        this.speedBoostTimeLeftText = this.add.text(75, 185, ': ' + this.speedBoostTimeLeft, textStyleBlackWhiteOutline);
 
         this.shieldImg = this.add.sprite(43, 270, 'shield').setScale(0.1);
-        this.shieldTimeLeftText = this.add.text(75, 250, ': ' + this.shieldTimeLeft, { fontSize: '32px', fill: '#000' });
+        this.shieldTimeLeftText = this.add.text(75, 250, ': ' + this.shieldTimeLeft, textStyleBlackWhiteOutline);
 
 
         this.jumpBoosts = this.physics.add.group();
