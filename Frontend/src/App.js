@@ -8,7 +8,7 @@ import ViewLeaderboard from "./ViewLeaderboard/page"
 import LevelOne from "./LevelOne/page"
 import LevelTwo from "./LevelTwo/page"
 import LevelThree from "./LevelThree/page"
-import {BrowserRouter as Router, Routes, Route, Link} from "react-router-dom";
+import {Routes, Route, Link} from "react-router-dom";
 import React, {useState, useEffect, createContext} from 'react'
 import axios from "axios";
 export const AppContext = createContext()
@@ -32,7 +32,6 @@ function App() {
   return (
     <div className="App">
         <AppContext.Provider value={{userData, arrayId, setArrayId}}>
-        <Router> {/* Navbar goes here */}
             <div>
                 {/* The navbar below is an example of how to use Navbar until main menu is complete. But for testing purposes,
                 When doing something that's going to require a new page like say main menu, add a new link and new route to the page.
@@ -56,7 +55,6 @@ function App() {
                 <Route path={"/LevelTwo"} element={<LevelTwo/>}></Route>
                 <Route path={"/LevelThree"} element={<LevelThree/>}></Route>
             </Routes>
-        </Router>
         </AppContext.Provider>
     </div>
   );

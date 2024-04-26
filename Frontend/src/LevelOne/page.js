@@ -3,13 +3,13 @@ import {useEffect, useContext} from 'react';
 import LevelOnePauseMenu from "../LevelOnePauseMenu/page"
 import LevelOneCompleteScreen from '../LevelOneComplete/page';
 import LevelOneFailScreen from '../LevelOneFail/page';
-import axios from "axios";
 import {AppContext} from "../App";
-
+import {useNavigate} from "react-router-dom";
 const powerUpTime = 10;
 const levelTime = 60;
 const velocityX = -100
 let userName;
+let navigate;
 let timeConst = 0;
 class LevelOneClass extends Phaser.Scene
 {
@@ -123,7 +123,7 @@ class LevelOneClass extends Phaser.Scene
         {
             this.scene.sendToBack('LevelOne');
             this.scene.pause('LevelOne');
-            this.scene.launch('LevelOnePauseMenu');
+            this.scene.launch('LevelOnePauseMenu', {navigate: navigate});
 
             this.pauseBtn.setVisible(false);
         });
@@ -171,28 +171,7 @@ class LevelOneClass extends Phaser.Scene
         if (this.timerValue <= 0)
         {
             this.gameOver = true;
-            if(userName != 'NULL'){
-                axios.post('http://localhost:5000/increment_score', {
-                    username: userName,
-                    score: Number(this.scoreValue)
-                })
-                .then(function (response) {
-                    console.log(response);
-                })
-                .catch(function (error) {
-                    console.log(error);
-                });
-                axios.post('http://localhost:5000/increment_user_level', {
-                    username: userName,
-                })
-                .then(function (response) {
-                    console.log(response);
-                })
-                .catch(function (error) {
-                    console.log(error);
-                });
-            }
-            this.scene.launch('LevelOneCompleteScreen');
+            this.scene.launch('LevelOneCompleteScreen', {navigate: navigate, userName:userName, scoreValue: Number(this.scoreValue)});
         }
 
         if (this.timerValue <= 5 && timeConst == 0){
@@ -399,7 +378,7 @@ function hitObstacle (player, rock)
     {
         this.sound.play('gameOver');
         this.gameOver = true;
-        this.scene.launch('LevelOneFailScreen');
+        this.scene.launch('LevelOneFailScreen', {navigate: navigate});
     }
 }
 
@@ -447,10 +426,11 @@ function LevelOne()
 
 function Game() {
     const {userData, arrayId} = useContext(AppContext)
+    navigate = useNavigate()
     if(arrayId === -1){
         userName = "NULL"
     }
-    else{
+    else {
         userName = userData["users"][arrayId]["username"]
     }
     useEffect(() => {

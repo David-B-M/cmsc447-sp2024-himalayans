@@ -14,8 +14,9 @@ class LevelTwoFailScreen extends Phaser.Scene
         this.load.image('backToMainMenuBtn', 'BackToMainMenuBtn.png');
     }
 
-    create ()
+    create (data)
     {
+        const navigate = data.navigate
         this.text = this.add.text(530, 150, 'Level Failed', { font: 'bold 64px Arial' });
 
         this.resetLevelBtn = this.add.sprite(560, 220, 'resetLevelBtn').setOrigin(0, 0);
@@ -40,14 +41,12 @@ class LevelTwoFailScreen extends Phaser.Scene
             this.scene.stop();
         });
 
-        this.viewLeaderboardBtn.on('pointerdown', () =>
-        {
-            window.location.href = '/ViewLeaderboard';
+        this.viewLeaderboardBtn.on('pointerdown', () => {
+            navigate('/ViewLeaderboard')
         });
 
-        this.backToMainMenuBtn.on('pointerdown', () =>
-        {
-            window.location.href = '/';
+        this.backToMainMenuBtn.on('pointerdown', () => {
+            navigate('/');
         });
     }
 }

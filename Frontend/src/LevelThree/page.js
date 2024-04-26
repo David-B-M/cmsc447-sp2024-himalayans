@@ -1,14 +1,16 @@
 import Phaser from 'phaser';
-import {useEffect} from 'react';
+import {useContext, useEffect} from 'react';
 import LevelThreePauseMenu from "../LevelThreePauseMenu/page"
 import LevelThreeCompleteScreen from '../LevelThreeComplete/page';
 import LevelThreeFailScreen from '../LevelThreeFail/page';
-
+import {useNavigate} from "react-router-dom";
+import {AppContext} from "../App";
 const powerUpTime = 10;
 const levelTime = 30;
 const velocityX = -100
 let timeConst = 0;
-
+let navigate;
+let userName
 class LevelThreeClass extends Phaser.Scene
 {
     constructor ()
@@ -112,7 +114,7 @@ class LevelThreeClass extends Phaser.Scene
         {
             this.scene.sendToBack('LevelThree');
             this.scene.pause('LevelThree');
-            this.scene.launch('LevelThreePauseMenu');
+            this.scene.launch('LevelThreePauseMenu', {navigate: navigate});
 
             this.pauseBtn.setVisible(false);
         });
@@ -201,7 +203,7 @@ class LevelThreeClass extends Phaser.Scene
         if (this.timerValue <= 0)
         {
             this.gameOver = true;
-            this.scene.launch('LevelThreeCompleteScreen');
+            this.scene.launch('LevelThreeCompleteScreen', {navigate: navigate, userName:userName, scoreValue: Number(this.scoreValue)});
         }
 
         if (this.timerValue <= 5 && timeConst == 0){
@@ -435,7 +437,7 @@ function hitObstacle (player, rock)
     {
         this.sound.play('gameOver');
         this.gameOver = true;
-        this.scene.launch('LevelThreeFailScreen');
+        this.scene.launch('LevelThreeFailScreen', {navigate: navigate});
     }
 }
 
@@ -482,6 +484,15 @@ function LevelThree()
 }
 
 function Game() {
+    const {userData, arrayId} = useContext(AppContext)
+    navigate = useNavigate()
+    if(arrayId === -1){
+        userName = "NULL"
+    }
+    else {
+        userName = userData["users"][arrayId]["username"]
+    }
+    navigate = useNavigate()
     useEffect(() => {
         const game = LevelThree();
         return () => {

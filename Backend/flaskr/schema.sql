@@ -6,7 +6,7 @@ CREATE TABLE IF NOT EXISTS users (
 );
 
 CREATE TABLE IF NOT EXISTS leaderboard (
-  rank integer NOT NULL UNIQUE DEFAULT 1 , -- won't force unique because I guess two people could be in top place if they have the same score
+  rank integer NOT NULL DEFAULT 1 , -- won't force unique because I guess two people could be in top place if they have the same score
   user_id integer NOT NULL UNIQUE,
   username varchar(20) NOT NULL UNIQUE,
   lv1Score integer NOT NULL DEFAULT 0, -- maybe we can just store their cumulative score across levels.
