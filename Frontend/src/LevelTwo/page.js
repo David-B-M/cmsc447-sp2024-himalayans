@@ -1,9 +1,10 @@
 import Phaser from 'phaser';
-import {useEffect} from 'react';
+import {useContext, useEffect} from 'react';
 import LevelTwoPauseMenu from "../LevelTwoPauseMenu/page"
 import LevelTwoCompleteScreen from '../LevelTwoComplete/page';
 import LevelTwoFailScreen from '../LevelTwoFail/page';
-
+import {useNavigate} from 'react-router-dom'
+import {AppContext} from "../App";
 const powerUpTime = 10;
 const levelTime = 30;
 const velocityX = -100
@@ -17,6 +18,7 @@ let textStyleColorWhiteOutline = {
     strokeThickness: 8,
     fill:'#43d637'
 }
+
 let textStyleBlackWhiteOutline = {
     // keep Anna's original style
     fontSize: '32px', 
@@ -25,9 +27,10 @@ let textStyleBlackWhiteOutline = {
     fontWeight:'bold',
     stroke: '#FFFFFF',
     strokeThickness: 4,
-    fill:'#00000'
 }
 
+let navigate;
+let userName;
 class LevelTwoClass extends Phaser.Scene
 {
     constructor ()
@@ -136,7 +139,7 @@ class LevelTwoClass extends Phaser.Scene
         {
             this.scene.sendToBack('LevelTwo');
             this.scene.pause('LevelTwo');
-            this.scene.launch('LevelTwoPauseMenu');
+            this.scene.launch('LevelTwoPauseMenu', {navigate: navigate});
 
             this.pauseBtn.setVisible(false);
         });
@@ -189,7 +192,7 @@ class LevelTwoClass extends Phaser.Scene
         if (this.timerValue <= 0)
         {
             this.gameOver = true;
-            this.scene.launch('LevelTwoCompleteScreen');
+            this.scene.launch('LevelTwoCompleteScreen', {navigate: navigate, userName:userName, scoreValue: Number(this.scoreValue)});
         }
 
         if (this.timerValue <= 5 && timeConst == 0){
@@ -419,7 +422,7 @@ function hitObstacle (player, rock)
     {
         this.sound.play('gameOver');
         this.gameOver = true;
-        this.scene.launch('LevelTwoFailScreen');
+        this.scene.launch('LevelTwoFailScreen', {navigate: navigate});
     }
 }
 
@@ -466,6 +469,15 @@ function LevelTwo()
 }
 
 function Game() {
+    const {userData, arrayId} = useContext(AppContext)
+    navigate = useNavigate()
+    if(arrayId === -1){
+        userName = "NULL"
+    }
+    else {
+        userName = userData["users"][arrayId]["username"]
+    }
+    navigate = useNavigate()
     useEffect(() => {
         const game = LevelTwo();
         return () => {

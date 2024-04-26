@@ -15,8 +15,9 @@ class LevelOnePauseMenu extends Phaser.Scene
         this.load.image('backToMainMenuBtn', 'BackToMainMenuBtn.png');
     }
 
-    create ()
+    create (data)
     {
+        const navigate = data.navigate
         this.text = this.add.text(530, 100, 'Pause Menu', { font: 'bold 64px Arial' });
 
         this.resumeLevelBtn = this.add.sprite(450, 160, 'resumeLevelBtn').setOrigin(0, 0);
@@ -53,12 +54,12 @@ class LevelOnePauseMenu extends Phaser.Scene
 
         this.quitLevelBtn.on('pointerdown', () =>
         {
-            window.location.href = '/ChooseLevel'
+            navigate('/ChooseLevel')
         });
 
         this.backToMainMenuBtn.on('pointerdown', () =>
         {
-            window.location.href = '/';
+            navigate('/');
         });
     }
 }
