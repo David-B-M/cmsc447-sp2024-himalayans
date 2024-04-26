@@ -40,19 +40,20 @@ function StartGame() {
         setName(event.target.value)
     }
 
-    const config = {
-        username: name
-    }
     const postData = (event) => {
+        const config = {
+            username: name
+        }
         event.preventDefault()
         axios.post('http://localhost:5000/add_user', querystring.stringify(config), {headers: {'Content-Type': 'application/x-www-form-urlencoded'}})
-      .then(function (response) {
-        console.log(response);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
+            .then(function (response) {
+                console.log(response);
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
     }
+
 
 
 const currentUser = (event) => {
@@ -92,7 +93,7 @@ const currentUser = (event) => {
       <div>
         <div style={{display: 'inline-flex', height: '20vh'}}>
           <h1 style={{color:'white', fontSize:'70px', textAlign:"center"}}>
-          Start Game 
+          Start Game
           </h1>
         </div>
       

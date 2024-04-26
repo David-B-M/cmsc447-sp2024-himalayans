@@ -28,7 +28,6 @@ let textStyleBlackWhiteOutline = {
     fontWeight:'bold',
     stroke: '#FFFFFF',
     strokeThickness: 4,
-    fill:'#00000'
 }
 
 class LevelOneClass extends Phaser.Scene
