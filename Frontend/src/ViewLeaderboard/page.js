@@ -1,4 +1,4 @@
-import React, { useContext, useState} from 'react';
+import React, {useEffect, useContext, useState} from 'react';
 import {Link, useNavigate} from 'react-router-dom';
 
 import './ViewLeaderboard.css';
@@ -16,68 +16,43 @@ const CustomButton = ({ children, to }) => {
 
 // @dmiddour
 function Leaderboard() {
-    const [name, setName] = useState("")
-    const {userData, setArrayId} = useContext(AppContext)
-    const navigate = useNavigate()
-    const updateName = (event) => {
-        setName(event.target.value)
+    const [leaderBoard, setLeaderBoard] = useState([{}])
+
+    const loadLeaderBoard = () => {
+      axios.get("http://localhost:5000/load_leaderboard").then(res => {
+         setLeaderBoard(res.data)
+         //console.log(leaderBoard)
+      }
+      ).catch(e => {
+          console.log(e);
+          })
     }
 
-    const config = {
-        username: name
-    }
-    const postData = (event) => {
-        event.preventDefault()
-        axios.post('http://localhost:5000/add_user', querystring.stringify(config), {headers: {'Content-Type': 'application/x-www-form-urlencoded'}})
-      .then(function (response) {
-        console.log(response);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-    }
+    useEffect(() => {
+      loadLeaderBoard()
+    }, []);
 
     const leaderboard = () => {
       let leaderboardList = []
       let i = 0;
       leaderboardList.push(
-        <div style={{height: '10vh',
-                      width: '50vw',
-                      display: 'flex',
-                      border: 'solid',
-                      borderRadius: '15px',
-                      backgroundColor: 'white',}}>
-          <div style={{height: '10vh',
-                      width: '10vw',
-                      display: 'flex',
-                      margin: 'auto',
-                      fontSize: 'xx-large',
-                      fontWeight: 'bold',
-                      justifyContent: 'center',
-                      marginTop: '1vh'}}
-                      >Rank</div>
-          <div style={{height: '10vh',
-                      width: '15vw',
-                      display: 'flex',
-                      margin: 'auto',
-                      fontSize: 'xx-large',
-                      fontWeight: 'bold',
-                      justifyContent: 'center',
-                      marginTop: '1vh'}}
-                      >Name</div>
-          <div style={{height: '10vh',
-                      width: '15vw',
-                      display: 'flex',
-                      margin: 'auto',
-                      fontSize: 'xx-large',
-                      fontWeight: 'bold',
-                      justifyContent: 'center',
-                      marginTop: '1vh'}}
-                      >Score</div>
+        <div className='leaderboardTitle'>
+          <div className='leaderboardTitleRank'>Rank</div>
+          <div className='leaderboardTitleName'>Name</div>
+          <div className='leaderboardTitleName'>Score</div>
         </div>
       )
-      while (i < 5) {
+      while (i < leaderBoard["rows"].length) {
           leaderboardList.push(
+          <div className='leaderboardItem'>
+            <div className='rank'><p className='itemText'>{i+1}</p></div>
+            <div className='name'><p className='itemText'>{leaderBoard["rows"][i]["username"]}</p></div>
+            <div className='name'><p className='itemText'>{leaderBoard["rows"][i]["totalScore"]}</p></div>
+          </div>)
+          i++
+      }
+      while (i < 5) {
+        leaderboardList.push(
           <div className='leaderboardItem'>
             <div className='rank'></div>
             <div className='name'></div>
@@ -88,9 +63,11 @@ function Leaderboard() {
       return leaderboardList
   }
 
-  if (userData["users"] === undefined) {
+  
+  if (leaderBoard["rows"] === undefined) {
       return <div> Still loading.... </div>
   }
+  
 
 
   return (
