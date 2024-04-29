@@ -1,13 +1,36 @@
 import Phaser from 'phaser';
-import {useEffect} from 'react';
+import {useContext, useEffect} from 'react';
 import LevelThreePauseMenu from "../LevelThreePauseMenu/page"
 import LevelThreeCompleteScreen from '../LevelThreeComplete/page';
 import LevelThreeFailScreen from '../LevelThreeFail/page';
-
+import {useNavigate} from "react-router-dom";
+import {AppContext} from "../App";
 const powerUpTime = 10;
 const levelTime = 30;
 const velocityX = -100
+let timeConst = 0;
 
+let textStyleColorWhiteOutline = {
+    // keep Anna's original style besides text color (fill)
+    fontSize: '32px', 
+    // ^
+    fontWeight:'bold',
+    stroke: '#FFFFFF',
+    strokeThickness: 8,
+    fill:'#43d637'
+}
+let textStyleBlackWhiteOutline = {
+    // keep Anna's original style
+    fontSize: '32px',
+    fill: '#000',
+    // ^
+    fontWeight:'bold',
+    stroke: '#FFFFFF',
+    strokeThickness: 4,
+}
+
+let navigate;
+let userName
 class LevelThreeClass extends Phaser.Scene
 {
     constructor ()
@@ -30,6 +53,11 @@ class LevelThreeClass extends Phaser.Scene
         this.load.audio('collect', 'collect.mp3');
         this.load.audio('jump', 'jump.mp3');
         this.load.audio('gameOver', 'game_over.mp3');
+        this.load.audio('pickUpJumpBoost', 'Yippee.wav');
+        this.load.audio('pickUpShield', 'shield.mp3');
+        this.load.audio('pickUpSpeedBoost', 'speed.mp3');
+        this.load.audio('pickUpClock', 'clock.mp3');
+        this.load.audio('time', 'time.mp3');
     }
 
     create()
@@ -38,12 +66,12 @@ class LevelThreeClass extends Phaser.Scene
         const { width, height } = this.sys.game.canvas;
         this.bg = this.add.tileSprite(0, 0, width, height, 'background').setOrigin(0, 0);
         this.bg.setTileScale(2);
-        this.bg.tint = 0xff0000;
+        this.bg.tint = 0xFF0000;
 
         // create ground
         this.ground = this.add.tileSprite(0, 525, width, height, 'ground').setOrigin(0, 0);
         this.ground.setTileScale(3);
-        this.ground.tint = 0xff0000;
+        this.ground.tint = 0xFF0000;
         this.physics.add.existing(this.ground, true);
 
 
@@ -71,11 +99,11 @@ class LevelThreeClass extends Phaser.Scene
 
         //  the score
         this.scoreValue = 0;
-        this.scoreText = this.add.text(100, 16, 'Score: ' + this.scoreValue, { fontSize: '32px', fill: '#000' });
+        this.scoreText = this.add.text(100, 16, 'Score: ' + this.scoreValue, textStyleColorWhiteOutline);
 
         // the time
         this.timerValue = levelTime;
-        this.timerText = this.add.text(100, 48, 'Time: ' + this.timerValue, { fontSize: '32px', fill: '#000' });
+        this.timerText = this.add.text(100, 48, 'Time: ' + this.timerValue, textStyleColorWhiteOutline);
        
         // game end flag
         this.gameOver = false;
@@ -106,7 +134,7 @@ class LevelThreeClass extends Phaser.Scene
         {
             this.scene.sendToBack('LevelThree');
             this.scene.pause('LevelThree');
-            this.scene.launch('LevelThreePauseMenu');
+            this.scene.launch('LevelThreePauseMenu', {navigate: navigate});
 
             this.pauseBtn.setVisible(false);
         });
@@ -122,13 +150,13 @@ class LevelThreeClass extends Phaser.Scene
         this.shieldTimeLeft = 0;
 
         this.jumpBoostImg = this.add.sprite(45, 130, 'jumpBoost').setScale(0.35);
-        this.jumpBoostTimeLeftText = this.add.text(75, 125, ': ' + this.jumpBoostTimeLeft, { fontSize: '32px', fill: '#000' });
+        this.jumpBoostTimeLeftText = this.add.text(75, 125, ': ' + this.jumpBoostTimeLeft, textStyleBlackWhiteOutline);
 
         this.speedBoostImg = this.add.sprite(45, 200, 'speedBoost').setScale(0.25);
-        this.speedBoostTimeLeftText = this.add.text(75, 185, ': ' + this.speedBoostTimeLeft, { fontSize: '32px', fill: '#000' });
+        this.speedBoostTimeLeftText = this.add.text(75, 185, ': ' + this.speedBoostTimeLeft, textStyleBlackWhiteOutline);
 
         this.shieldImg = this.add.sprite(43, 270, 'shield').setScale(0.1);
-        this.shieldTimeLeftText = this.add.text(75, 250, ': ' + this.shieldTimeLeft, { fontSize: '32px', fill: '#000' });
+        this.shieldTimeLeftText = this.add.text(75, 250, ': ' + this.shieldTimeLeft, textStyleBlackWhiteOutline);
 
 
         this.jumpBoosts = this.physics.add.group();
@@ -157,6 +185,7 @@ class LevelThreeClass extends Phaser.Scene
             child.body.setAllowGravity(false);
             child.body.setImmovable(true);
             child.displayWidth /= 2
+            child.tint = 0xFF7777;
         });
         this.physics.add.collider(this.player, this.platforms);
 
@@ -194,7 +223,12 @@ class LevelThreeClass extends Phaser.Scene
         if (this.timerValue <= 0)
         {
             this.gameOver = true;
-            this.scene.launch('LevelThreeCompleteScreen');
+            this.scene.launch('LevelThreeCompleteScreen', {navigate: navigate, userName:userName, scoreValue: Number(this.scoreValue)});
+        }
+
+        if (this.timerValue <= 5 && timeConst == 0){
+            this.sound.play('time');
+            timeConst = 1;
         }
 
         if (this.gameOver)
@@ -211,13 +245,13 @@ class LevelThreeClass extends Phaser.Scene
         // update background and ground
         if (this.speedBoostActive)
         {
-            this.bg.tilePositionX += 6;
-            this.ground.tilePositionX += 6;
+            this.bg.tilePositionX += 8;
+            this.ground.tilePositionX += 8;
         }
         else
         {
-            this.bg.tilePositionX += 4;
-            this.ground.tilePositionX += 4;
+            this.bg.tilePositionX += 6;
+            this.ground.tilePositionX += 6;
         }
 
         // update timer
@@ -371,12 +405,15 @@ function spawnPowerup(scene)
 
 function collectClock(player, clock)
 {
+    this.sound.play('pickUpClock');
     clock.disableBody(true, true);
     this.timerValue += 5;
+    timeConst = 0;
 }
 
 function collectShield(player, shield)
 {
+    this.sound.play('pickUpShield');
     shield.disableBody(true, true);
     this.shieldActive = true;
     this.shieldTimeLeft = powerUpTime;
@@ -384,6 +421,7 @@ function collectShield(player, shield)
 
 function collectSpeedBoost(player, speedBoost)
 {
+    this.sound.play('pickUpSpeedBoost');
     speedBoost.disableBody(true, true);
     this.speedBoostActive = true;
     this.speedBoostTimeLeft = powerUpTime;
@@ -391,6 +429,7 @@ function collectSpeedBoost(player, speedBoost)
 
 function collectJumpBoost(player, jumpBoost)
 {
+    this.sound.play('pickUpJumpBoost');
     jumpBoost.disableBody(true, true);
     this.jumpBoostActive = true;
     this.jumpBoostTimeLeft = powerUpTime;
@@ -418,7 +457,7 @@ function hitObstacle (player, rock)
     {
         this.sound.play('gameOver');
         this.gameOver = true;
-        this.scene.launch('LevelThreeFailScreen');
+        this.scene.launch('LevelThreeFailScreen', {navigate: navigate});
     }
 }
 
@@ -465,6 +504,15 @@ function LevelThree()
 }
 
 function Game() {
+    const {userData, arrayId} = useContext(AppContext)
+    navigate = useNavigate()
+    if(arrayId === -1){
+        userName = "NULL"
+    }
+    else {
+        userName = userData["users"][arrayId]["username"]
+    }
+    navigate = useNavigate()
     useEffect(() => {
         const game = LevelThree();
         return () => {

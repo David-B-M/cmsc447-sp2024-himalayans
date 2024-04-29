@@ -315,17 +315,18 @@ def create_app(test_config=None):
         username = get_param_from_request(param="username", response=increment_score_response)
         if username == None:  
             print("Will not increment user score for nonexistent user.")
-            return increment_level_response
+            return increment_score_response
         score = get_param_from_request(param="score", response=increment_score_response)
         if score == None:  
             print("Cannot increment user score without a score!!")
-            return increment_level_response
+            return increment_score_response
+        levelScore = get_param_from_request(param="levelScore", response=increment_score_response)
 
-        db_increment_level_success = db.increment_score(username, score)
+        db_increment_level_success = db.increment_score(username, levelScore, score)
         result["success"] = db_increment_level_success
         if not db_increment_level_success:
             result[RESPONSE_MESSAGE_KEY] = \
-                f"[Endpoint: add_user] Failed to increment user score for `{username}` :("
+                f"[Endpoint: increment_score] Failed to increment user score for `{username}` :("
             increment_score_response.response = json.dumps(result)
             increment_score_response.status = 404
             return increment_score_response
