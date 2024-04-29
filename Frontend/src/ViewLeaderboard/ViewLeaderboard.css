@@ -59,33 +59,40 @@
     margin: auto;
 }
 
+.itemText {
+    margin: auto;
+    font-size: x-large;
+    font-weight: bold;
+    margin-top: 2vh;
+}
+
 .leaderboardTitle {
-    height: '10vh';
-    width: '50vw';
-    display: 'flex';
-    border: 'solid';
-    border-radius: '15px';
-    background-color: 'white';
+    height: 10vh;
+    width: 50vw;
+    display: flex;
+    border: solid;
+    border-radius: 15px;
+    background-color: white;
 }
 
 .leaderboardTitleRank {
-    height: '10vh';
-    width: '10vw';
-    display: 'flex';
-    margin: 'auto';
-    font-size: 'xx-large';
-    font-weight: 'bold';
-    justify-content: 'center';
-    margin-top: '1vh';
+    height: 10vh;
+    width: 10vw;
+    display: flex;
+    margin: auto;
+    font-size: xx-large;
+    font-weight: bold;
+    justify-content: center;
+    margin-top: 1vh;
 }
 
 .leaderboardTitleName {
-    height: '10vh';
-    width: '15vw';
-    display: 'flex';
-    margin: 'auto';
-    font-size: 'xx-large';
-    font-weight: 'bold';
-    justify-content: 'center';
-    margin-top: '1vh';
+    height: 10vh;
+    width: 15vw;
+    display: flex;
+    margin: auto;
+    font-size: xx-large;
+    font-weight: bold;
+    justify-content: center;
+    margin-top: 1vh;
 }
