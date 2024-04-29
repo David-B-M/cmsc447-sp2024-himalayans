@@ -6,7 +6,7 @@ import LevelThreeFailScreen from '../LevelThreeFail/page';
 import {useNavigate} from "react-router-dom";
 import {AppContext} from "../App";
 const powerUpTime = 10;
-const levelTime = 30;
+const levelTime = 60;
 const velocityX = -100
 let timeConst = 0;
 
@@ -190,30 +190,32 @@ class LevelThreeClass extends Phaser.Scene
         this.physics.add.collider(this.player, this.platforms);
 
         // hawk animation
-        this.anims.create({ 
-            key:'fly', 
-            frames: this.anims.generateFrameNames('hawk', {
-                prefix:'hawk_sprite', 
-                end: 2, 
-                zeroPad: 1
-            }),
-            frameRate: 10,
-            repeat: -1
-        });
+        // this.anims.create({ 
+        //    key:'fly', 
+        //    frames: this.anims.generateFrameNames('hawk', {
+        //        prefix:'hawk_sprite', 
+        //        end: 2, 
+        //        zeroPad: 1
+        //    }),
+        //    frameRate: 10,
+        //    repeat: -1
+        //});
 
-        this.hawks = this.physics.add.group({
-            key: 'hawk', 
-            repeat: 1,   
-            setXY: { x: 700, y: 200, stepX: 600 }
-        });
+        // this.hawks = this.physics.add.group({
+        //     key: 'hawk', 
+        //     repeat: 1,   
+        //     setXY: { x: 700, y: 200, stepX: 600 }
+        // });
 
-        this.hawks.children.iterate(function(child) {
-            child.anims.play('fly', true);
-            child.setScale(0.75);
-            child.body.setAllowGravity(false);
-        });
+        // this.hawks.children.iterate(function(child) {
+        //     child.anims.play('fly', true);
+        //     child.setScale(0.75);
+        //     child.body.setAllowGravity(false);
+        // });
 
-        this.physics.add.collider(this.player, this.hawks, hitObstacle, null, this);
+        this.physics.add.collider(this.player, 
+            //this.hawks, 
+            hitObstacle, null, this);
 
     }
 
@@ -235,9 +237,9 @@ class LevelThreeClass extends Phaser.Scene
         {
             this.physics.pause();
             this.player.anims.stop();
-            this.hawks.children.iterate(function(child) {
-                child.anims.stop();
-            });
+            // this.hawks.children.iterate(function(child) {
+            //     child.anims.stop();
+            // });
             this.pauseBtn.disableInteractive();
             return;
         }
@@ -279,35 +281,59 @@ class LevelThreeClass extends Phaser.Scene
             spawnFish(this);
         }
 
-        // fish moving
-        this.fish.children.iterate(function (child) {
-            child.x -= 3;
-        });
+        // speedboost moving
+        if(this.speedBoostActive){
+            //fish
+            this.fish.children.iterate(function (child) {
+                child.x -= 6;
+            });
+            //powerups
+            //speed
+            this.speedBoosts.children.iterate(function (child) {
+                child.x -= 6;
+            });
+            //jump
+            this.jumpBoosts.children.iterate(function (child) {
+                child.x -= 6;
+            });
+            //shields
+            this.shields.children.iterate(function (child) {
+                child.x -= 6;
+            });
+            //extra time
+            this.clocks.children.iterate(function (child) {
+                child.x -= 6;
+            });
+            //platforms
+            this.platforms.children.iterate(function (child) {
+                child.x -= 6;
+            });
+        }
+        else{
+            this.fish.children.iterate(function (child) {
+                child.x -= 3;
+            });
+            this.speedBoosts.children.iterate(function (child) {
+                child.x -= 3;
+            });
+            this.jumpBoosts.children.iterate(function (child) {
+                child.x -= 3;
+            });
+            this.shields.children.iterate(function (child) {
+                child.x -= 3;
+            });
+            this.clocks.children.iterate(function (child) {
+                child.x -= 3;
+            });
+            this.platforms.children.iterate(function (child) {
+                child.x -= 3;
+            });
+        }   
 
         // spawn powerup
         if (Math.abs(this.timerValue % 10) < 0.025) {
             spawnPowerup(this);
         }
-
-        // speed boosts moving
-        this.speedBoosts.children.iterate(function (child) {
-            child.x -= 3;
-        });
-
-        // jump boosts moving
-        this.jumpBoosts.children.iterate(function (child) {
-            child.x -= 3;
-        });
-
-        // shields moving
-        this.shields.children.iterate(function (child) {
-            child.x -= 3;
-        });
-
-        // clocks moving
-        this.clocks.children.iterate(function (child) {
-            child.x -= 3;
-        });
 
         if (this.jumpBoostTimeLeft <= 0)
         {
@@ -345,11 +371,6 @@ class LevelThreeClass extends Phaser.Scene
             this.shieldTimeLeft -= 0.025;
         }
 
-        // platforms moving
-        this.platforms.children.iterate(function (child) {
-            child.x -= 3;
-        });
-
         // reset platform position when it goes off screen
         this.platforms.children.iterate(function (child) {
             if (child.x < -100) {
@@ -358,18 +379,18 @@ class LevelThreeClass extends Phaser.Scene
             }
         });
 
-        // platforms moving
-        this.hawks.children.iterate(function (child) {
-            child.x -= 4;
-        });
+        // hawks moving
+        // this.hawks.children.iterate(function (child) {
+        //     child.x -= 4;
+        // });
 
-        // reset platform position when it goes off screen
-        this.hawks.children.iterate(function (child) {
-            if (child.x < -60) {
-                child.x = 1350;
-                child.y = getRandomYHawk();
-            }
-        });
+        // reset hawk position when it goes off screen
+        // this.hawks.children.iterate(function (child) {
+        //     if (child.x < -60) {
+        //         child.x = 1350;
+        //         child.y = getRandomYHawk();
+        //     }
+        // });
 
     }
 }
@@ -446,10 +467,10 @@ function getRandomYPlatform()
     return Math.random() * (450 - 350) + 350;
 }
 
-function getRandomYHawk()
-{
-    return Math.random() * (475 - 200) + 200;
-}
+// function getRandomYHawk()
+// {
+//     return Math.random() * (475 - 200) + 200;
+// }
 
 function hitObstacle (player, rock)
 {
