@@ -28,7 +28,7 @@ function App() {
 
     useEffect(() => {
             loadUser()
-    }, [userData]);
+    }, []);
   return (
     <div className="App">
         <AppContext.Provider value={{userData, arrayId, setArrayId}}>
