@@ -209,13 +209,13 @@ class LevelOneClass extends Phaser.Scene
         // update background and ground
         if (this.speedBoostActive)
         {
-            this.bg.tilePositionX += 4;
-            this.ground.tilePositionX += 4;
+            this.bg.tilePositionX += 2;
+            this.ground.tilePositionX += 2;
         }
         else
         {
-            this.bg.tilePositionX += 2;
-            this.ground.tilePositionX += 2;
+            this.bg.tilePositionX += 1;
+            this.ground.tilePositionX += 1;
         }
 
         // update timer
@@ -242,17 +242,55 @@ class LevelOneClass extends Phaser.Scene
         if (Math.abs(this.timerValue % 2.5) < 0.025) {
             spawnFish(this);
         }
-
-        // fish moving
-        this.fish.children.iterate(function (child) {
-            child.x -= 3;
-        });
-
-        // rocks moving
-        this.rocks.children.iterate(function (child) {
-            child.x -= 3;
-        });
-
+        
+        // speedboost moving
+        if(this.speedBoostActive){
+            //fish
+            this.fish.children.iterate(function (child) {
+                child.x -= 6;
+            });
+            //powerups
+            //speed
+            this.speedBoosts.children.iterate(function (child) {
+                child.x -= 6;
+            });
+            //jump
+            this.jumpBoosts.children.iterate(function (child) {
+                child.x -= 6;
+            });
+            //shields
+            this.shields.children.iterate(function (child) {
+                child.x -= 6;
+            });
+            //extra time
+            this.clocks.children.iterate(function (child) {
+                child.x -= 6;
+            });
+            this.rocks.children.iterate(function (child) {
+                child.x -= 6;
+            });
+        }
+        else{
+            this.fish.children.iterate(function (child) {
+                child.x -= 3;
+            });
+            this.speedBoosts.children.iterate(function (child) {
+                child.x -= 3;
+            });
+            this.jumpBoosts.children.iterate(function (child) {
+                child.x -= 3;
+            });
+            this.shields.children.iterate(function (child) {
+                child.x -= 3;
+            });
+            this.clocks.children.iterate(function (child) {
+                child.x -= 3;
+            });
+            // rocks moving
+            this.rocks.children.iterate(function (child) {
+                child.x -= 3;
+            });
+        }   
         // reset rock position when it goes off screen
         this.rocks.children.iterate(function (child) {
             if (child.x < -60) {
@@ -265,26 +303,6 @@ class LevelOneClass extends Phaser.Scene
         if (Math.abs(this.timerValue % 10) < 0.025) {
             spawnPowerup(this);
         }
-
-        // speed boosts moving
-        this.speedBoosts.children.iterate(function (child) {
-            child.x -= 3;
-        });
-
-        // jump boosts moving
-        this.jumpBoosts.children.iterate(function (child) {
-            child.x -= 3;
-        });
-
-        // shields moving
-        this.shields.children.iterate(function (child) {
-            child.x -= 3;
-        });
-
-        // clocks moving
-        this.clocks.children.iterate(function (child) {
-            child.x -= 3;
-        });
 
         if (this.jumpBoostTimeLeft <= 0)
         {

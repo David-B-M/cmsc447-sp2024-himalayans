@@ -245,35 +245,53 @@ class LevelTwoClass extends Phaser.Scene
             spawnFish(this);
         }
 
-        // fish moving
-        this.fish.children.iterate(function (child) {
-            child.x -= 3;
-        });
+        // speedboost moving
+        if(this.speedBoostActive){
+            //fish
+            this.fish.children.iterate(function (child) {
+                child.x -= 6;
+            });
+            //powerups
+            //speed
+            this.speedBoosts.children.iterate(function (child) {
+                child.x -= 6;
+            });
+            //jump
+            this.jumpBoosts.children.iterate(function (child) {
+                child.x -= 6;
+            });
+            //shields
+            this.shields.children.iterate(function (child) {
+                child.x -= 6;
+            });
+            //extra time
+            this.clocks.children.iterate(function (child) {
+                child.x -= 6;
+            });
+        }
+        else{
+            this.fish.children.iterate(function (child) {
+                child.x -= 3;
+            });
+            this.speedBoosts.children.iterate(function (child) {
+                child.x -= 3;
+            });
+            this.jumpBoosts.children.iterate(function (child) {
+                child.x -= 3;
+            });
+            this.shields.children.iterate(function (child) {
+                child.x -= 3;
+            });
+            this.clocks.children.iterate(function (child) {
+                child.x -= 3;
+            });
+        }   
+        
 
         // spawn powerup
         if (Math.abs(this.timerValue % 10) < 0.025) {
             spawnPowerup(this);
         }
-
-        // speed boosts moving
-        this.speedBoosts.children.iterate(function (child) {
-            child.x -= 3;
-        });
-
-        // jump boosts moving
-        this.jumpBoosts.children.iterate(function (child) {
-            child.x -= 3;
-        });
-
-        // shields moving
-        this.shields.children.iterate(function (child) {
-            child.x -= 3;
-        });
-
-        // clocks moving
-        this.clocks.children.iterate(function (child) {
-            child.x -= 3;
-        });
 
         if (this.jumpBoostTimeLeft <= 0)
         {
