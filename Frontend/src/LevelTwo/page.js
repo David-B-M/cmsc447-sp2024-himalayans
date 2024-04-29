@@ -211,13 +211,13 @@ class LevelTwoClass extends Phaser.Scene
         // update background and ground
         if (this.speedBoostActive)
         {
-            this.bg.tilePositionX += 6;
-            this.ground.tilePositionX += 6;
+            this.bg.tilePositionX += 3;
+            this.ground.tilePositionX += 3;
         }
         else
         {
-            this.bg.tilePositionX += 4;
-            this.ground.tilePositionX += 4;
+            this.bg.tilePositionX += 2;
+            this.ground.tilePositionX += 2;
         }
 
         // update timer
@@ -286,7 +286,7 @@ class LevelTwoClass extends Phaser.Scene
                 child.x -= 3;
             });
         }   
-        
+
 
         // spawn powerup
         if (Math.abs(this.timerValue % 10) < 0.025) {
