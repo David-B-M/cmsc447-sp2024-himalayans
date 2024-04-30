@@ -199,22 +199,22 @@ class LevelThreeClass extends Phaser.Scene
         //    }),
         //    frameRate: 10,
         //    repeat: -1
-        //});
+        // });
 
         // this.hawks = this.physics.add.group({
         //     key: 'hawk', 
         //     repeat: 1,   
-        //     setXY: { x: 700, y: 200, stepX: 600 }
+        //     setXY: { x: 700, y: 100, stepX: 800 }
         // });
 
         // this.hawks.children.iterate(function(child) {
         //     child.anims.play('fly', true);
-        //     child.setScale(0.75);
+        //     child.setScale(0.50);
         //     child.body.setAllowGravity(false);
         // });
 
         this.physics.add.collider(this.player, 
-            //this.hawks, 
+            // this.hawks, 
             hitObstacle, null, this);
 
     }
@@ -224,6 +224,8 @@ class LevelThreeClass extends Phaser.Scene
         // check if time is left
         if (this.timerValue <= 0)
         {
+            this.sound.pauseAll();
+            this.sound.play('pickUpJumpBoost');
             this.gameOver = true;
             this.scene.launch('LevelThreeCompleteScreen', {navigate: navigate, userName:userName, scoreValue: Number(this.scoreValue)});
         }
@@ -238,7 +240,7 @@ class LevelThreeClass extends Phaser.Scene
             this.physics.pause();
             this.player.anims.stop();
             // this.hawks.children.iterate(function(child) {
-            //     child.anims.stop();
+            //      child.anims.stop();
             // });
             this.pauseBtn.disableInteractive();
             return;
@@ -308,6 +310,10 @@ class LevelThreeClass extends Phaser.Scene
             this.platforms.children.iterate(function (child) {
                 child.x -= 8;
             });
+            // hawks moving
+            // this.hawks.children.iterate(function (child) {
+            //     child.x -= 12;
+            // });
         }
         else{
             this.fish.children.iterate(function (child) {
@@ -328,6 +334,9 @@ class LevelThreeClass extends Phaser.Scene
             this.platforms.children.iterate(function (child) {
                 child.x -= 4;
             });
+            // this.hawks.children.iterate(function (child) {
+            //     child.x -= 6;
+            // });
         }   
 
         // spawn powerup
@@ -384,9 +393,9 @@ class LevelThreeClass extends Phaser.Scene
         //     child.x -= 4;
         // });
 
-        // reset hawk position when it goes off screen
+        //reset hawk position when it goes off screen
         // this.hawks.children.iterate(function (child) {
-        //     if (child.x < -60) {
+        //      if (child.x < -60) {
         //         child.x = 1350;
         //         child.y = getRandomYHawk();
         //     }
@@ -426,6 +435,7 @@ function spawnPowerup(scene)
 
 function collectClock(player, clock)
 {
+    this.sound.pauseAll();
     this.sound.play('pickUpClock');
     clock.disableBody(true, true);
     this.timerValue += 5;
@@ -468,14 +478,15 @@ function getRandomYPlatform()
 }
 
 // function getRandomYHawk()
-// {
-//     return Math.random() * (475 - 200) + 200;
-// }
+//  {
+//      return Math.random() * (350 - 100) + 100;
+//  }
 
 function hitObstacle (player, rock)
 {
     if (!this.shieldActive)
     {
+        this.sound.pauseAll();
         this.sound.play('gameOver');
         this.gameOver = true;
         this.scene.launch('LevelThreeFailScreen', {navigate: navigate});

@@ -6,7 +6,7 @@ import LevelTwoFailScreen from '../LevelTwoFail/page';
 import {useNavigate} from 'react-router-dom'
 import {AppContext} from "../App";
 const powerUpTime = 10;
-const levelTime = 30;
+const levelTime = 45;
 const velocityX = -100
 let timeConst = 0;
 let textStyleColorWhiteOutline = {
@@ -64,6 +64,7 @@ class LevelTwoClass extends Phaser.Scene
 
     create()
     {
+        timeConst = 0;
         // create background
         const { width, height } = this.sys.game.canvas;
         this.bg = this.add.tileSprite(0, 0, width, height, 'background').setOrigin(0, 0);
@@ -191,6 +192,8 @@ class LevelTwoClass extends Phaser.Scene
         // check if time is left
         if (this.timerValue <= 0)
         {
+            this.sound.pauseAll();
+            this.sound.play('pickUpJumpBoost');
             this.gameOver = true;
             this.scene.launch('LevelTwoCompleteScreen', {navigate: navigate, userName:userName, scoreValue: Number(this.scoreValue)});
         }
@@ -398,6 +401,7 @@ function spawnPowerup(scene)
 
 function collectClock(player, clock)
 {
+    this.sound.pauseAll();
     this.sound.play('pickUpClock');
     clock.disableBody(true, true);
     this.timerValue += 5;
@@ -438,6 +442,7 @@ function hitObstacle (player, rock)
 {
     if (!this.shieldActive)
     {
+        this.sound.pauseAll();
         this.sound.play('gameOver');
         this.gameOver = true;
         this.scene.launch('LevelTwoFailScreen', {navigate: navigate});

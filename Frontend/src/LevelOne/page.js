@@ -126,6 +126,7 @@ class LevelOneClass extends Phaser.Scene
         });
         this.rocks.children.iterate(function (child) {
             child.setScale(2)
+            child.body.setAllowGravity(false);
         });
         this.rocksVelocityX = velocityX; 
         this.physics.add.collider(this.rocks, this.ground);
@@ -189,6 +190,8 @@ class LevelOneClass extends Phaser.Scene
         // check if time is left
         if (this.timerValue <= 0)
         {
+            this.sound.pauseAll();
+            this.sound.play('pickUpJumpBoost');
             this.gameOver = true;
             this.scene.launch('LevelOneCompleteScreen', {navigate: navigate, userName:userName, scoreValue: Number(this.scoreValue)});
         }
@@ -294,7 +297,7 @@ class LevelOneClass extends Phaser.Scene
         // reset rock position when it goes off screen
         this.rocks.children.iterate(function (child) {
             if (child.x < -60) {
-                child.x = 1350;
+                child.x =  1350;
                 child.y = 510;
             }
         });
@@ -373,6 +376,7 @@ function spawnPowerup(scene)
 
 function collectClock(player, clock)
 {
+    this.sound.pauseAll();
     this.sound.play('pickUpClock');
     clock.disableBody(true, true);
     this.timerValue += 5;
@@ -413,6 +417,7 @@ function hitObstacle (player, rock)
 {
     if (!this.shieldActive)
     {
+        this.sound.pauseAll();
         this.sound.play('gameOver');
         this.gameOver = true;
         this.scene.launch('LevelOneFailScreen', {navigate: navigate});
