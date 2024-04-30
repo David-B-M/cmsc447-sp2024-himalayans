@@ -112,7 +112,7 @@ def create_app(test_config=None):
         users = loaded_users[RESULT_USERS_JSON_INDEX]
         result["users"] = users
         load_user_response.response = json.dumps(result)
-        print("Loaded users: ", users)
+        # print("Loaded users: ", users)
         return load_user_response
 
     @cross_origin()
@@ -301,8 +301,9 @@ def create_app(test_config=None):
         """
         Uses db.increment_score(username, score)
         :params: (throught the request)
-        - username
-        - score (to increment the score they already have with.)
+        - (str) username
+        - (str) levelScore (the level name we want to set a score for)
+        - (int) score (to increment the score they already have with.)
         """
         # handling the request
         result = {
@@ -364,13 +365,13 @@ def create_app(test_config=None):
             # https://tedboy.github.io/flask/generated/generated/werkzeug.MultiDict.html
             
             #DEBUG
-            print("DEBUGGING (get_param_from_request): Attempting getting username from FORM: ")
+            # print("DEBUGGING (get_param_from_request): Attempting getting username from FORM: ")
             value = request.form.get(param)
-            print(f"\t{param}")
+            # print(f"\t{param}: {value}")
         else:
-            print("DEBUGGING (get_param_from_request): Attempting getting username from ARGS: ")
+            # print("DEBUGGING (get_param_from_request): Attempting getting username from ARGS: ")
             value = request.args.get(param)
-            print(f"\t{param}")
+            # print(f"\t{param}: {value}")
 
         # set the response flags to signify we were unable to get the username
         if value == None:

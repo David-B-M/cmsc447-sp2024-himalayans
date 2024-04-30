@@ -1,10 +1,11 @@
-import flaskr.db as db
-# doesn't work in pytest folder, maybe use closer to when I have an endpoint for it :P
-def test_increment_score():
-    test_user = "jat101"
-    increment_by = 100
-    rank = db.increment_score(test_user, increment_by)
-    print("Got rank = {rank}")
+INCREMENT_SCORE_ENDPOINT = "/increment_score"
 
-if __name__ == '__main__':
-    test_increment_score()
+def test_increment_score(client, test_usernames, debug_print_response):
+    test_user = test_usernames.get("valid_username")
+    levelScore = "lv1"
+    score = 100
+    params_dict = {"username": test_user, "levelScore": levelScore, "score": score}
+    response = client.get(INCREMENT_SCORE_ENDPOINT, data=params_dict)
+    debug_print_response(response)
+    assert response is not None
+    assert response.status_code == 200
