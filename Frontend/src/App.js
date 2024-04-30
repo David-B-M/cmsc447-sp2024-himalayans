@@ -28,24 +28,10 @@ function App() {
 
     useEffect(() => {
             loadUser()
-    }, []);
+    }, [userData]);
   return (
     <div className="App">
         <AppContext.Provider value={{userData, arrayId, setArrayId}}>
-            <div>
-                {/* The navbar below is an example of how to use Navbar until main menu is complete. But for testing purposes,
-                When doing something that's going to require a new page like say main menu, add a new link and new route to the page.
-                Link to={} connects the navbar to the path. path={} will contain
-                 url that represents the page element={} will have the React component that represents the page. */}
-                NAVBAR
-                <Link to={"/"}> Home</Link>
-                <Link to={"/StartGame"}> Start Game </Link>
-                <Link to={"/ChooseLevel"}>Choose Level </Link>
-                <Link to={"/ViewLeaderboard"}> View Leaderboard</Link>
-                <Link to={"/LevelOne"}> Level One</Link>
-                <Link to={"/LevelTwo"}> Level Two</Link>
-                <Link to={"/LevelThree"}> Level Three</Link>
-            </div>
             <Routes> {/* Routes navbar connects to goes here */}
                 <Route path={"/"} element={<MainMenu/>}></Route>
                 <Route path={"/StartGame"} element={<StartGame/>}></Route>
