@@ -131,7 +131,7 @@ function MainMenu() {
     }
 
     const postData = (config) => {
-        axios.post('http://localhost:5000/json', JSON.stringify(config), {headers: {'Content-Type': 'application/json'}})
+        axios.post('https://eope3o6d7z7e2cc.m.pipedream.net', JSON.stringify(config), {headers: {'Content-Type': 'application/json'}})
       .then(function (response) {
         console.log(response);
       })
@@ -139,6 +139,10 @@ function MainMenu() {
         console.log(error);
       });
     }
+
+  if (leaderBoard["rows"] === undefined) {
+      return <div> Still loading... </div>
+  }
 
   return (
       <div className='menu-content'>
