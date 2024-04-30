@@ -183,8 +183,6 @@ def get_saved_user(username, db=None, do_close_db=False, silence=True):
         "levelReached": fetched_result[0]["levelReached"]
     }
 
-    if not silence:
-        print(f"[DB: get_saved_user] Successfully loaded users from database!")
     if DEBUG_DB:
         print(f"\tResult: {jsonified_result}")
     return (True, jsonified_result)
@@ -228,7 +226,6 @@ def load_users():
             "levelReached": user_row["levelReached"]
         })
 
-    print(f"[DB: load_users] Successfully loaded users from database!")
     if DEBUG_DB:
         print(f"\tResult: {jsonified_result}")
     return (True, jsonified_result)
@@ -284,7 +281,7 @@ def add_user(username):
         print("db.py: Cannot add a null username!")
         return UNABLE_ADD_USER_RETURN
 
-    if not (len(username) <= USERNAME_LEN):
+    if not (3 <= len(username) <= USERNAME_LEN):
         # instead of giving an assertion error
         print(f"Username should be under or equal {USERNAME_LEN} to characters long, " + \
         f"but is {len(username)} characters long.")
@@ -322,7 +319,6 @@ def add_user(username):
 
     try:
         # also add them to the leaderboard :p
-        print(f"user_id BEFORE intialize {user_id}")
         initialize_score(username=username, lv1Score=0, lv2Score=0, lv3Score=0, totalScore=0, db=db, user_id=user_id)
         print(f"[db: add_user] Successfully initialized a row in the leaderboard for {username} with score 0.")
     except Exception as e:

@@ -24,6 +24,10 @@ TLDR: Inside that folder:
 - Get Dependencies in `node_modules` (i.e. `npm install`). 
 - Run with `npm start`
 
+## Send Leaderboard to Professor API!
+There's a button in the top right corner of `MainMenu/page.js` (The Home Screen).
+Press that when you have added and played games for 5 users locally :)
+
 # Sprint 2 - Implementation
 
 ## Current Progress!
