@@ -112,7 +112,6 @@ def create_app(test_config=None):
         users = loaded_users[RESULT_USERS_JSON_INDEX]
         result["users"] = users
         load_user_response.response = json.dumps(result)
-        print("Loaded users: ", users)
         return load_user_response
 
     @cross_origin()
