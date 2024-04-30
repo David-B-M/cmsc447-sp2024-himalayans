@@ -247,13 +247,13 @@ class LevelThreeClass extends Phaser.Scene
         // update background and ground
         if (this.speedBoostActive)
         {
-            this.bg.tilePositionX += 8;
-            this.ground.tilePositionX += 8;
+            this.bg.tilePositionX += 2;
+            this.ground.tilePositionX += 2;
         }
         else
         {
-            this.bg.tilePositionX += 6;
-            this.ground.tilePositionX += 6;
+            this.bg.tilePositionX += 1;
+            this.ground.tilePositionX += 1;
         }
 
         // update timer
@@ -285,48 +285,48 @@ class LevelThreeClass extends Phaser.Scene
         if(this.speedBoostActive){
             //fish
             this.fish.children.iterate(function (child) {
-                child.x -= 6;
+                child.x -= 8;
             });
             //powerups
             //speed
             this.speedBoosts.children.iterate(function (child) {
-                child.x -= 6;
+                child.x -= 8;
             });
             //jump
             this.jumpBoosts.children.iterate(function (child) {
-                child.x -= 6;
+                child.x -= 8;
             });
             //shields
             this.shields.children.iterate(function (child) {
-                child.x -= 6;
+                child.x -= 8;
             });
             //extra time
             this.clocks.children.iterate(function (child) {
-                child.x -= 6;
+                child.x -= 8;
             });
             //platforms
             this.platforms.children.iterate(function (child) {
-                child.x -= 6;
+                child.x -= 8;
             });
         }
         else{
             this.fish.children.iterate(function (child) {
-                child.x -= 3;
+                child.x -= 4;
             });
             this.speedBoosts.children.iterate(function (child) {
-                child.x -= 3;
+                child.x -= 4;
             });
             this.jumpBoosts.children.iterate(function (child) {
-                child.x -= 3;
+                child.x -= 4;
             });
             this.shields.children.iterate(function (child) {
-                child.x -= 3;
+                child.x -= 4;
             });
             this.clocks.children.iterate(function (child) {
-                child.x -= 3;
+                child.x -= 4;
             });
             this.platforms.children.iterate(function (child) {
-                child.x -= 3;
+                child.x -= 4;
             });
         }   
 

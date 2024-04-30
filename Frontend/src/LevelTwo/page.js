@@ -211,13 +211,13 @@ class LevelTwoClass extends Phaser.Scene
         // update background and ground
         if (this.speedBoostActive)
         {
-            this.bg.tilePositionX += 3;
-            this.ground.tilePositionX += 3;
+            this.bg.tilePositionX += 2;
+            this.ground.tilePositionX += 2;
         }
         else
         {
-            this.bg.tilePositionX += 2;
-            this.ground.tilePositionX += 2;
+            this.bg.tilePositionX += 1;
+            this.ground.tilePositionX += 1;
         }
 
         // update timer
@@ -356,9 +356,9 @@ function spawnTree(scene)
 function spawnBoulder(scene)
 {
     const boulder = scene.boulders.create(1000, 300, 'boulder')
-            .setAccelerationX(-100)
+            .setAccelerationX(-75)
             .setBounce(.5)
-            .setScale(.45);
+            .setScale(.35);
 
         scene.physics.world.on('worldstep', () =>
         {
