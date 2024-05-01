@@ -37,3 +37,28 @@ def client(app):
 @pytest.fixture()
 def runner(app):
     return app.test_cli_runner()
+<<<<<<< Updated upstream
+=======
+
+@pytest.fixture()
+def test_usernames():
+    return {
+        "valid_username": "test",
+        "invalid_username": "qwertyuiop"
+    }
+
+# since pyfixtures can't have non fixture arguments, using a class method instead.
+class Helpers:
+    @staticmethod
+    def debug_print_response(response, func_name=""):
+        parsed_response = response.data.decode('UTF-8')
+        print("*" * 50)
+        if func_name:
+            print(f"Inside test function: `{func_name}`: ", end="")
+        print("Got response", parsed_response)
+        print("*" * 50)
+
+@pytest.fixture
+def helpers():
+    return Helpers
+>>>>>>> Stashed changes
