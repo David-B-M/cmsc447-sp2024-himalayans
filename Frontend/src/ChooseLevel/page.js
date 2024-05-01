@@ -20,7 +20,7 @@ function ChooseLevel() {
     const {userData, arrayId} = useContext(AppContext)
     const navigate = useNavigate();
     const goBack = () => {
-          navigate(-1)
+          navigate("/")
         }
     let levelReached;
     let userName;
