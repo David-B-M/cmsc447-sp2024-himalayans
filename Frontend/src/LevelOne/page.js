@@ -125,7 +125,7 @@ class LevelOneClass extends Phaser.Scene
             setXY: { x: 600, y: 510, stepX: 410 }
         });
         this.rocks.children.iterate(function (child) {
-            child.setScale(2)
+            child.setScale(1.75)
             child.body.setAllowGravity(false);
         });
         this.rocksVelocityX = velocityX; 
