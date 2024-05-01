@@ -34,7 +34,7 @@ def close_db(e=None):
     if db is not None:
         db.close()
 
-    print("Closed database connection.")
+        print("Closed database connection.")
 
 
 def init_db():
