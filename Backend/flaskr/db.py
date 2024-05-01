@@ -325,7 +325,7 @@ def add_user(username):
         initialize_score(username=username, score=0, db=db, user_id=user_id)
         print("[db: add_user] Successfully initialized a row in the leaderboard for {username} with score 0.")
     except Exception as e:
-        print(f"Unable to initialize score row for username = {username}")
+        print(f"Unable to initialize totalScore row for username = {username}")
         if DEBUG_DB:
             print(f"\tException: {e}")
 
@@ -405,7 +405,7 @@ def increment_user_level(username):
         db_cursor.fetchall()
         num_affected_rows = db_cursor.rowcount
     except Exception as e:
-        print(f"[DB: increment_user_level] Oh no! Something went wrong! Unable to increment_user_level(username={username})")
+        print(f"[DB: increment_user_level] Oh no! Something went wrong! Unable to increment_user_level(username='{username})'")
         if DEBUG_DB:
             print(f"\n\tExeption:\n\t{e}")
         close_db()
@@ -568,7 +568,7 @@ def increment_score(username, score):
 
     UPDATE_SCORE_SQL = """
     UPDATE leaderboard 
-    SET score = score + ?
+    SET totalScore = totalScore + ?
     WHERE username = ?;
     """
     

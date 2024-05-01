@@ -302,17 +302,17 @@ def create_app(test_config=None):
         username = get_param_from_request(param="username", response=increment_score_response)
         if username == None:  
             print("Will not increment user score for nonexistent user.")
-            return increment_level_response
+            return increment_score_response
         score = get_param_from_request(param="score", response=increment_score_response)
         if score == None:  
             print("Cannot increment user score without a score!!")
-            return increment_level_response
+            return increment_score_response
 
         db_increment_level_success = db.increment_score(username, score)
         result["success"] = db_increment_level_success
         if not db_increment_level_success:
             result[RESPONSE_MESSAGE_KEY] = \
-                f"[Endpoint: add_user] Failed to increment user score for `{username}` :("
+                f"[Endpoint: increment_score] Failed to increment user score for `{username}` :("
             increment_score_response.response = json.dumps(result)
             increment_score_response.status = 404
             return increment_score_response
@@ -352,11 +352,11 @@ def create_app(test_config=None):
             #DEBUG
             print("DEBUGGING (get_param_from_request): Attempting getting username from FORM: ")
             value = request.form.get(param)
-            print(f"\t{param}")
+            print(f"\t(form key) {param}: (value) {value}")
         else:
             print("DEBUGGING (get_param_from_request): Attempting getting username from ARGS: ")
             value = request.args.get(param)
-            print(f"\t{param}")
+            print(f"\t(param name) {param}: (value) {value}")
 
         # set the response flags to signify we were unable to get the username
         if value == None:
