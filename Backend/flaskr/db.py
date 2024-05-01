@@ -129,11 +129,11 @@ def get_user_id(username, db=None):
         if user_id_result:
             user_id = user_id_result[0]["user_id"]
     except Exception as e:
-        print(f"Unable to get_user_id(username={username})")
+        print(f"Unable to get_user_id(username='{username}')")
         return [False, None]
 
     db.commit()
-    print(f"Successfully retrieved `user_id`={user_id} for username={username}.")
+    print(f"Successfully retrieved `user_id`={user_id} for username='{username}'.")
     # Reference: https://www.sqlitetutorial.net/sqlite-python/insert/
     return [True, user_id]
     # checks if they have an entry in the `usernames` table.
@@ -286,7 +286,7 @@ def add_user(username):
 
     if not (len(username) <= USERNAME_LEN):
         # instead of giving an assertion error
-        print(f"Username should be under or equal {USERNAME_LEN} to characters long, " + \
+        print(f"[DB: add_user] (INVALID ARG) Username should be under or equal {USERNAME_LEN} to characters long, " + \
         f"but is {len(username)} characters long.")
         return UNABLE_ADD_USER_RETURN
         
@@ -390,10 +390,10 @@ def increment_user_level(username):
 
     existing_user_result = get_saved_user(username, db, do_close_db=False, silence=True)
     if not existing_user_result[RETURN_BOOL_INDEX]:
-        print(f"[DB: increment_user_level ] Unable to verify existence of user {username}. Check logs.")
+        print(f"[DB: increment_user_level ] Unable to verify existence of user `{username}`. Check logs.")
         return False
     elif not existing_user_result[RETURN_DATA_INDEX]:
-        print(f"[DB: increment_user_level] Will not increment level for nonexistent user: {username}")
+        print(f"[DB: increment_user_level] Will not increment level for nonexistent user: `{username}`")
         return False
 
     db_cursor = db.cursor()
@@ -421,7 +421,7 @@ def increment_user_level(username):
     # Success!
     # ~~~~~~~~~
     db.commit()
-    print(f"Successfully incremented levelReached for {username}!")
+    print(f"Successfully incremented levelReached for `{username}`!")
     close_db()
     return True
 
@@ -542,18 +542,18 @@ def initialize_score(username, score, db=None, user_id=None, do_close=False):
         load_result = db_cursor.execute(INITIALIZE_SCORE_SQL, (user_id, username, score))
 
         if load_result is None:
-            print(f"Failed to initialize_score(username={username}, score={score}):\n\t Couldn't retrieve the result from the query to add the user")
+            print(f"Failed to initialize_score(username='{username}', score={score}):\n\t Couldn't retrieve the result from the query to add the user")
             close_db()
             return None
     except sqlite3.IntegrityError as e:
-        print(f"[DB: initialize_score] Unable to add user '{username}.'" +
+        print(f"[DB: initialize_score] Unable to add user '{username}'" +
               "\nuser_id already exists in `leaderboard` table database.")
         if DEBUG_DB:
             print("Got this exact integrity error: ", e)
         return None
 
     db.commit()
-    print(f"Successfully initialied leaderboard row for username={username} with score={score}.")
+    print(f"Successfully initialied leaderboard row for username='{username}' with score={score}.")
     if do_close:
         close_db()
     # Reference: https://www.sqlitetutorial.net/sqlite-python/insert/
@@ -574,10 +574,10 @@ def increment_score(username, score):
     
     existing_user_result = get_saved_user(username, db, do_close_db=False, silence=True)
     if not existing_user_result[RETURN_BOOL_INDEX]:
-        print(f"[DB: increment_score] Unable to verify existence of user {username}. Check logs.")
+        print(f"[DB: increment_score] Unable to verify existence of user '{username}'. Check logs.")
         return False
     elif not existing_user_result[RETURN_DATA_INDEX]:
-        print(f"[DB: increment_score] Will NOT increment score of non-existent user: {username}")
+        print(f"[DB: increment_score] Will NOT increment score of non-existent user: '{username}'")
         return False
 
     db_cursor = db.cursor()
@@ -589,7 +589,7 @@ def increment_score(username, score):
         db_cursor.fetchall()
         num_affected_rows = db_cursor.rowcount
     except Exception as e:
-        print(f"[DB: increment_score] Oh no! Something went wrong! Unable to increment_score(username={username})")
+        print(f"[DB: increment_score] Oh no! Something went wrong! Unable to increment_score(username='{username}')")
         if DEBUG_DB:
             print(f"\n\tExeption:\n\t{e}")
         close_db()
@@ -605,6 +605,6 @@ def increment_score(username, score):
     # Success!
     # ~~~~~~~~~
     db.commit()
-    print(f"Successfully incremented score by `{score} pts` for {username}!")
+    print(f"Successfully incremented score by `{score} pts` for '{username}'!")
     close_db()
     return True

@@ -352,11 +352,11 @@ def create_app(test_config=None):
             #DEBUG
             print("DEBUGGING (get_param_from_request): Attempting getting username from FORM: ")
             value = request.form.get(param)
-            print(f"\t(form key) {param}: (value) {value}")
+            print(f"\t(form key) `{param}`: (value) `{value}`")
         else:
             print("DEBUGGING (get_param_from_request): Attempting getting username from ARGS: ")
             value = request.args.get(param)
-            print(f"\t(param name) {param}: (value) {value}")
+            print(f"\t(param name) `{param}`: (value) `{value}`")
 
         # set the response flags to signify we were unable to get the username
         if value == None:

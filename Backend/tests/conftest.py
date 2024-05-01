@@ -14,6 +14,10 @@ https://flask.palletsprojects.com/en/3.0.x/testing/
 import pytest
 from flaskr import create_app
 
+# for my test_usernames
+VALID_USERNAME_KEY = "valid_username"
+INVALID_USERNAME_KEY = "invalid_username"
+# endpoint names are set at the top of each individual test file.
 
 @pytest.fixture()
 def app():
@@ -40,10 +44,27 @@ def runner(app):
 
 @pytest.fixture()
 def test_usernames():
-    return {
-        "valid_username": "test",
-        "invalid_username": "qwertyuiop"
+    # organized by the endpoint I want to test them in :)
+    
+    usernames_for_any_endpoint = {
+        VALID_USERNAME_KEY: "test",
+        INVALID_USERNAME_KEY: "qwertyuiop"
     }
+    return {
+        "any": usernames_for_any_endpoint,
+        "increment_user_level": {
+            VALID_USERNAME_KEY: "TEMP_for_lvl_tsts",
+            INVALID_USERNAME_KEY:usernames_for_any_endpoint[INVALID_USERNAME_KEY]
+        }
+    }
+
+@pytest.fixture()
+def add_user_endpoint_name():
+    return "/add_user"
+
+@pytest.fixture()
+def increment_level_endpoint_name():
+    return "/increment_user_level"
 
 # since pyfixtures can't have non fixture arguments, using a class method instead.
 class Helpers:
