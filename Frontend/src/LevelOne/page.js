@@ -6,7 +6,7 @@ import LevelOneFailScreen from '../LevelOneFail/page';
 import {AppContext} from "../App";
 import {useNavigate} from "react-router-dom";
 const powerUpTime = 10;
-const levelTime = 60;
+const levelTime = 45;
 const velocityX = -100
 let userName;
 let navigate;
