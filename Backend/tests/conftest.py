@@ -37,8 +37,6 @@ def client(app):
 @pytest.fixture()
 def runner(app):
     return app.test_cli_runner()
-<<<<<<< Updated upstream
-=======
 
 @pytest.fixture()
 def test_usernames():
@@ -61,4 +59,3 @@ class Helpers:
 @pytest.fixture
 def helpers():
     return Helpers
->>>>>>> Stashed changes
