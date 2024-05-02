@@ -7,6 +7,13 @@ This code should allow me to test our endpoints using the pytest app client!
 
 Particularly, I can use any "fixtures" here as variables in any of the tests in this directory. i.e. `app` (all without having to import them!)
 
+~~~~~~~~~~~~~~ IMPORTANT ~~~~~~~~~~~~
+if you are running test_increment_level.py,
+you MUST either (before each re-run)
+- delete the dummy user (the username is specified below in the constant )
+- or set a new username to run the test fresh with. (^same location to edit the username)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 Skeleton code gathered from this source:
 https://flask.palletsprojects.com/en/3.0.x/testing/
 """
@@ -17,7 +24,9 @@ from flaskr import create_app
 # for my test_usernames
 VALID_USERNAME_KEY = "valid_username"
 INVALID_USERNAME_KEY = "invalid_username"
-# endpoint names are set at the top of each individual test file.
+# endpoint names are set at the top of each individual test file, or here as a fixture, depends on if i re-use the endpoint fr.
+
+TEST_FRESH_USER_FOR_INCREMENTING = "TEMP_4_lvl_tsts3"
 
 @pytest.fixture()
 def app():
@@ -50,8 +59,9 @@ def test_usernames():
         VALID_USERNAME_KEY: "test",
         INVALID_USERNAME_KEY: "qwertyuiop"
     }
+    # if you are going to run "/increment_user_level", change the username every time so it can be created fresh!
     level_endpoint_usernames = {
-        VALID_USERNAME_KEY: "TEMP_for_lvl_tsts"
+        VALID_USERNAME_KEY: TEST_FRESH_USER_FOR_INCREMENTING
     }
 
     all_usernames = {
@@ -64,6 +74,10 @@ def test_usernames():
 @pytest.fixture()
 def add_user_endpoint_name():
     return "/add_user"
+
+@pytest.fixture()
+def read_user_level_endpoint_name():
+    return "/read_user_level"
 
 @pytest.fixture()
 def increment_level_endpoint_name():
