@@ -214,7 +214,7 @@ class LevelThreeClass extends Phaser.Scene
         });
 
         this.physics.add.collider(this.player, 
-            // this.hawks, 
+            this.hawks, 
             hitObstacle, null, this);
 
     }
