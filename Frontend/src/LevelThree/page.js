@@ -479,7 +479,7 @@ function getRandomYPlatform()
 
 function getRandomYHawk()
  {
-     return Math.random() * (350 - 100) + 100;
+     return Math.random() * (250 - 100) + 100;
  }
 
 function hitObstacle (player, rock)
