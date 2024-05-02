@@ -6,7 +6,7 @@ import LevelThreeFailScreen from '../LevelThreeFail/page';
 import {useNavigate} from "react-router-dom";
 import {AppContext} from "../App";
 const powerUpTime = 10;
-const levelTime = 60;
+const levelTime = 45;
 const velocityX = -100
 let timeConst = 0;
 
@@ -91,6 +91,7 @@ class LevelThreeClass extends Phaser.Scene
 
         // create player
         this.player = this.physics.add.sprite(200, 375, 'player');
+        this.player.setScale(0.75);
         this.player.setCollideWorldBounds(true);
         this.player.play('walk');
         this.player.setDepth(2);
@@ -479,7 +480,7 @@ function getRandomYPlatform()
 
 function getRandomYHawk()
  {
-     return Math.random() * (250 - 100) + 100;
+     return Math.random() * (200 - 50) + 50;
  }
 
 function hitObstacle (player, rock)
