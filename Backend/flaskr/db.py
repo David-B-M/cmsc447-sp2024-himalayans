@@ -558,7 +558,12 @@ def initialize_score(username, lv1Score, lv2Score, lv3Score, totalScore, db=None
 
 def increment_score(username, levelScore, score):
     """
-    Checks if there is an entry for them in the scores table.
+    Updates `leaderboard` table with the score for the particular level and updates the cumulative score.
+    - requies you to specify which level so we can over-write your old level attempts 
+        with the new high score if you beat your old score.
+    :param username:   (str) from `users` table i.e. "nickallgood"
+    :param levelScore: (str) either "lv1Score", "lv2Score", or "lv3Score"
+    :param score:      (int) usually 10 * the number of fish collected in the level.
     """
     db = get_db()
     assert db is not None, "[DB: load_leaderboard] Failed to connect to database."
