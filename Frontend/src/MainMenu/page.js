@@ -151,8 +151,8 @@ function MainMenu() {
           </div>
           <div style={{fontSize: '20px'}}>
 
-              <h1 style={{color: 'white', fontSize: '100px', textAlign: "center"}}>
-                  Main Menu
+              <h1 style={{color:'white', fontSize:'100px', fontWeight: 'bold', WebkitTextStroke: '1px', WebkitTextStrokeColor: 'black'}}>
+                  Everest the Olympicat
               </h1>
               <h1>
                   <CustomButton to="/StartGame">Start or Load Game</CustomButton>
