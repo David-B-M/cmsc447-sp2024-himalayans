@@ -28,9 +28,58 @@ TLDR: Inside that folder:
 There's a button in the top right corner of `MainMenu/page.js` (The Home Screen).
 Press that when you have added and played games for 5 users locally :)
 
-# Sprint 2 - Implementation
+## How to Play
+### 1. Add/select your username if you haven't already via the `Start Game` page.
 
-## Current Progress!
+<figure>
+<img src="./current_appearance/MainMenu_5-2.png" height="200px">
+</figure>
+- If this isn't your first time, you can select your username to play!
+- if you refresh the page, you'll need to select your username again from that page.
+
+<figure style="display: 'flex'">
+<img src="./current_appearance/StartGame-with-saves_5-2.png" height="200px">
+<img src="./current_appearance/StartGame-enter-new-username_5-2.png" width="200px">
+<figcaption>
+Select a username or create a new one.
+Note: <em>Your username must be <= 20 characters!</em>
+After you `Submit` your new username, press `Close` and select it from the list.
+</figcaption>
+</figure>
+
+
+- You can feel free to create a new username to have your progress associated with a different name on the leaderboard.
+
+### 2. Pick a level via `Choose Level`
+### 3. Keep running until the time runs out!
+
+You are a himalayan cat that is great at jumping.
+
+**The point of the game is to avoid obstacles and eat fish along the way to boost your score.**
+
+<figure>
+<img src="about_images/arrow-keys-pixelart.jpg" width="100px">
+<figcaption>Press Up to jump!</figcaption>
+</figure>
+
+If you hit an obstacle before the time runs out => **you lose the level.**
+
+<figure>
+<img src="./about_images/Level-Score-Time-and-PowerUps.png" width="150px">
+<figcaption>Keep an eye on the time!</figcaption>
+</figure>
+
+
+Challenge your friends to start a game with their own username and beat each other on the leaderboard!
+
+# Sprint 2 - Implementation
+These two headers `Sprint 2` and `Sprint 1` are mainly for grading and reference purposes.
+
+If you just wanna play, you've prob scrolled down far enough ;)
+
+If you wanna learn more about our team, scroll down to `Who we are` and `Notes about our Branches.`
+
+## Old Progress as of that sprint.
 Here is how our application is currently lookin!
 You can load the app up and see the the following pages.
 
@@ -40,13 +89,13 @@ See the Use Case Diagram / Use Case document for the general flow of the applica
 
 Note: currently there is no score saving since the level isn't complete (we don't have a win condition yet).
 
-Shoutout our awesome team of developers for each of those pages.
+Shoutout our awesome team of developers for each of those pages as well as @LT69018 and @samdev193 for the flask backend.
 - MainMenu: @cmgilger, @samdev193, @LT69018, @David-B-M, @ampham03
 - StartGame: @David-B-M @LT69018
 - ChooseLevel: @cmgilger
 - PauseMenu/LevelFail: @samdev193
 - ViewLeaderboard: @ampham03
-- LevelExample: @ampham03 
+- Level: @ampham03 
 <figure>
     <img src="current_appearance/MainMenu_4_4.jpg" height="300px">
     <figcaption>Main Menu Screen as of 4-4. ChooseLevel navigates to ChooseLevel page, rest are not functional. Credits - Connor, Jess, David. Moving background as of 4-9 (Credits - Anna).</figcaption>
@@ -145,16 +194,16 @@ Currently working on an example level using Phaser
 - created a moving background with a static player
 - created obstacles to avoid and items to collect for points
 - level ends when player hits an obstacle or time runs out
+
 ## Jess' Branch: 
-Will be where I implement the StartGame and ChooseLevel Page.
-- I originally implemented them using classes and custom page switching,
-but I was overcomplicating it :p 
-- Stashed that code in `backup-frontend-class-components`
-- I will pull sam's updated main so that we are both the same page.
+- focused on the backend, implementing and testing flask endpoints that interface with the database of `users` (usernames, level numbers) and scores via the `leaderboard` table
+- merge changes with collaborators via main branch (i.e. Sam doing full stack)
 
-Connors Branch:
-@LT69018 Todo: add a skeleton HTML page for him to add buttons to.
+## Sam's branch
+- full stack development, propose changes and fix bugs there before merging into main.
 
+## Connors Branch:
+- Frontend (i.e. `ChooseLevel`) and level play design 
 Main Branch: (what have we all agreed on)
 - App that switches between different pages 
 
