@@ -53,7 +53,7 @@ GET /load_users
 </figure>
 
 
-## Get/check user level
+## ✅✅ Get/check user level
 **Note: Updated 4/18 from `/get_level` to `/read_user_level`** 
 (not implemented, however you can parse the data from load_users for now)
 ```

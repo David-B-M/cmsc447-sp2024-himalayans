@@ -223,20 +223,20 @@ def create_app(test_config=None):
         # first verify the user exists!
         db_user_exists_result = db.get_saved_user(username)
         if not db_user_exists_result[RESULT_BOOL_INDEX]:
-            print(f"[GET /read_user_level] Unable to verify existence of user {username}")
+            print(f"[GET /read_user_level] Unable to verify existence of user '{username}'")
             result[RESPONSE_MESSAGE_KEY] = "Failed to read user level. (db failed to look for that user.)"
             user_level_response.status = 404
             user_level_response.response = json.dumps(result)
             return user_level_response
         elif not db_user_exists_result[RESULT_USERS_JSON_INDEX]:
-            print(f"[GET /read_user_level] Unable to verify existence of user {username}")
-            result[RESPONSE_MESSAGE_KEY] = "Failed to read user level."
+            print(f"[GET /read_user_level] User '{username}' does not exist.")
+            result[RESPONSE_MESSAGE_KEY] = "Failed to read user level for non-existent user '{username}'"
             user_level_response.status = 404
             user_level_response.response = json.dumps(result)
             return user_level_response
 
         # ready to check if they have a level :p
-        db_level_result = db_user_exists_result.get("levelReached") # db.read_user_level(username)
+        db_level_result = db_user_exists_result[RESULT_USERS_JSON_INDEX].get("levelReached") # db.read_user_level(username)
         # print(f"[GET /read_user_level] DEBUG: Got level={db_level_result} ")
         if db_level_result == None:
             result["level"] = None

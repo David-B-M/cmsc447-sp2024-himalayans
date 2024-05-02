@@ -50,13 +50,16 @@ def test_usernames():
         VALID_USERNAME_KEY: "test",
         INVALID_USERNAME_KEY: "qwertyuiop"
     }
-    return {
-        "any": usernames_for_any_endpoint,
-        "increment_user_level": {
-            VALID_USERNAME_KEY: "TEMP_for_lvl_tsts",
-            INVALID_USERNAME_KEY:usernames_for_any_endpoint[INVALID_USERNAME_KEY]
-        }
+    level_endpoint_usernames = {
+        VALID_USERNAME_KEY: "TEMP_for_lvl_tsts"
     }
+
+    all_usernames = {
+        "*": usernames_for_any_endpoint,
+        "/increment_user_level": level_endpoint_usernames,
+        "/read_user_level": level_endpoint_usernames
+    }
+    return all_usernames
 
 @pytest.fixture()
 def add_user_endpoint_name():
@@ -74,7 +77,7 @@ class Helpers:
         print("*" * 50)
         if func_name:
             print(f"Inside test function: `{func_name}`: ", end="")
-        print("Got response", parsed_response)
+        print("Got response\n\t", parsed_response)
         print("*" * 50)
 
 @pytest.fixture
