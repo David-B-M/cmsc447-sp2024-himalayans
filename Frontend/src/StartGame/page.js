@@ -11,7 +11,7 @@ const CustomButton = ({ children, to }) => {
   );
 }
 
-const CustomGameSave = ({children, id, onClick, to}) => {
+const CustomGameSave = ({children, id, onClick}) => {
   return (
     <button id={id} className="gamesave" onClick={ (e) => onClick(e)}>{children}</button>
   );

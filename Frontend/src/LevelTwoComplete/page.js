@@ -2,20 +2,19 @@ import Phaser from 'phaser';
 import axios from "axios";
 import querystring from "qs";
 
-class LevelThreeCompleteScreen extends Phaser.Scene
-{
+class LevelTwoCompleteScreen extends Phaser.Scene
+{x
     constructor ()
     {
-        super({ key: 'LevelThreeCompleteScreen'});
+        super({ key: 'LevelTwoCompleteScreen'});
     }
 
     preload ()
     {
         this.load.image('viewLeaderboardBtn', 'ViewLeaderboardBtn.png');
         this.load.image('backToMainMenuBtn', 'BackToMainMenuBtn.png');
-        this.load.image('resetLevelBtn', 'resetLevelBtn.png');
+        this.load.image('nextLevelBtn', 'nextLevelBtn.png');
     }
-
     apiCallsMade = false;
 
     create (data)
@@ -25,25 +24,24 @@ class LevelThreeCompleteScreen extends Phaser.Scene
         const scoreValue = data.scoreValue;
         this.text = this.add.text(500, 150, 'Level Complete', { font: 'bold 64px Arial' });
 
-        this.resetLevelBtn = this.add.sprite(560, 220, 'resetLevelBtn').setOrigin(0, 0);
-        this.resetLevelBtn.setInteractive({ useHandCursor: true });
-        this.resetLevelBtn.setScale(0.5);
-        this.resetLevelBtn.tint = 0xFF7777;
+        this.nextLevelBtn = this.add.sprite(560, 230, 'nextLevelBtn').setOrigin(0, 0);
+        this.nextLevelBtn.setInteractive({ useHandCursor: true });
+        this.nextLevelBtn.setScale(0.5);
+        this.nextLevelBtn.tint = 0xFF9999;
 
-        this.viewLeaderboardBtn = this.add.sprite(475, 340, 'viewLeaderboardBtn').setOrigin(0, 0);
+        this.viewLeaderboardBtn = this.add.sprite(475, 320, 'viewLeaderboardBtn').setOrigin(0, 0);
         this.viewLeaderboardBtn.setInteractive({ useHandCursor: true });
         this.viewLeaderboardBtn.setScale(0.5);
-        this.viewLeaderboardBtn.tint = 0xFF7777;
+        this.viewLeaderboardBtn.tint = 0xFF9999;
 
-        this.backToMainMenuBtn = this.add.sprite(505, 440, 'backToMainMenuBtn').setOrigin(0, 0);
+        this.backToMainMenuBtn = this.add.sprite(505, 420, 'backToMainMenuBtn').setOrigin(0, 0);
         this.backToMainMenuBtn.setInteractive({ useHandCursor: true });
         this.backToMainMenuBtn.setScale(0.5);
-        this.backToMainMenuBtn.tint = 0xFF7777;
+        this.backToMainMenuBtn.tint = 0xFF9999;
 
-        this.resetLevelBtn.on('pointerdown', () =>
+        this.nextLevelBtn.on('pointerdown', () =>
         {
-            this.scene.start('LevelThree');
-            this.scene.stop();
+             navigate('/LevelThree')
         });
 
         this.viewLeaderboardBtn.on('pointerdown', () => {
@@ -58,7 +56,7 @@ class LevelThreeCompleteScreen extends Phaser.Scene
             this.apiCallsMade = true;
             const config1 = {
                 username: userName,
-                levelScore: "lv3Score",
+                levelScore: "lv2Score",
                 score: scoreValue
             }
 
@@ -83,4 +81,4 @@ class LevelThreeCompleteScreen extends Phaser.Scene
     }
 }
 
-export default LevelThreeCompleteScreen;
+export default LevelTwoCompleteScreen;

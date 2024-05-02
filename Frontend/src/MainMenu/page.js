@@ -1,12 +1,13 @@
-import React, {useEffect, useContext} from 'react';
+import React, {useEffect, useContext, useState} from 'react';
 import { Link } from 'react-router-dom';
 import Phaser from 'phaser';
 import {AppContext} from "../App";
-import './MainMenu.css'; // Import CSS file for styling
+import './MainMenu.css';
+import axios from "axios";
 
 
 // @cmgilger
-const CustomButton = ({ children, to }) => {
+const CustomButton = ({ children, to}) => {
   return (
     <Link to={to} className="custom-button">{children}</Link>
   );
@@ -58,56 +59,114 @@ function MovingBackground()
 }
 
 function MainMenu() {
-  const {userData, arrayId} = useContext(AppContext)
-  let userLoaded = 0;
-  let userName = "NULL";
-  if(arrayId !== -1){
+    const {userData, arrayId} = useContext(AppContext)
+    const [leaderBoard, setLeaderBoard] = useState([{}])
+    let userLoaded = 0;
+    let userName = "NULL";
+
+    if(arrayId !== -1) {
     userLoaded = 1;
     userName = userData["users"][arrayId]["username"]
-  }
-  useEffect(() => {
-    const game = MovingBackground();
-    return () => {
-      game.destroy(true); 
-    };
-  }, []);
+    }
 
-  const chooseLevelOption = () => {
+    useEffect(() => {
+        const game = MovingBackground();
+        return () => {
+          game.destroy(true);
+        };
+    }, []);
+
+    useEffect(() => {
+        loadLeaderBoard()
+    }, []);
+
+    const chooseLevelOption = () => {
     if(userLoaded === 0){
       return <CustomButton disabled>Choose Level [LOCKED]</CustomButton>
     }
     else{
       return <CustomButton to="/ChooseLevel">Choose Level</CustomButton>
     }
-  }
+    }
 
-  const userNameOption = () => {
+    const userNameOption = () => {
     if(userName === "NULL"){
-      return <div  style={{color:'white', fontSize:'30px'}}>No User Loaded.</div>
+      return <div  style={{color:'white', fontSize:'30px', fontWeight: 'bold', WebkitTextStroke: '1px', WebkitTextStrokeColor: 'black'}}>No User Loaded.</div>
     }
     else{
-      return <div  style={{color:'white', fontSize:'30px'}}>Current User: {userName}</div>
+      return <div  style={{color:'white', fontSize:'30px', fontWeight: 'bold', WebkitTextStroke: '1px', WebkitTextStrokeColor: 'black'}}>Current User: {userName}</div>
     }
+    }
+
+    const loadLeaderBoard = () => {
+         axios.get("http://localhost:5000/load_leaderboard").then(res => {
+            setLeaderBoard(res.data)
+         }
+    ).catch(e => {
+        console.log(e);
+        })
+    }
+
+
+    const uploadResults = () => {
+        if(leaderBoard["rows"].length < 5) {
+            console.log("not enough users.")
+            console.log(leaderBoard["rows"])
+            return
+        }
+
+        const config = {
+           data: [{
+               "Group":"Himalayan",
+               "Title": "Top 5 Scores",
+               [leaderBoard["rows"][0]["username"]]: `${leaderBoard["rows"][0]["totalScore"]}`,
+               [leaderBoard["rows"][1]["username"]]: `${leaderBoard["rows"][1]["totalScore"]}`,
+               [leaderBoard["rows"][2]["username"]]: `${leaderBoard["rows"][2]["totalScore"]}`,
+               [leaderBoard["rows"][3]["username"]]: `${leaderBoard["rows"][3]["totalScore"]}`,
+               [leaderBoard["rows"][4]["username"]]: `${leaderBoard["rows"][4]["totalScore"]}`,
+            }]
+        }
+
+        postData(config)
+    }
+
+    const postData = (config) => {
+        axios.post('https://eope3o6d7z7e2cc.m.pipedream.net', JSON.stringify(config), {headers: {'Content-Type': 'application/json'}})
+      .then(function (response) {
+        console.log(response);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+    }
+
+  if (leaderBoard["rows"] === undefined) {
+      return <div> Still loading... </div>
   }
 
   return (
-    <div className='menu-content'>
-      <div style={{fontSize:'20px'}}>
-        <h1 style={{color:'white', fontSize:'100px', textAlign:"center"}}>
-          Main Menu
-        </h1>
-        <h1>
-          <CustomButton to="/StartGame">Start or Load Game</CustomButton>
-        </h1>
-        <h1>
-          {chooseLevelOption(userLoaded)}
-        </h1>
-        <h1>
-          <CustomButton to="/ViewLeaderboard">View Leaderboard</CustomButton>
-        </h1>
-        {userNameOption()}
+      <div className='menu-content'>
+          <div className={"container"}>
+              <button className={"submit-btn"} onClick={uploadResults}>Submit Results</button>
+          </div>
+          <div style={{fontSize: '20px'}}>
+
+              <h1 style={{color:'white', fontSize:'100px', fontWeight: 'bold', WebkitTextStroke: '1px', WebkitTextStrokeColor: 'black'}}>
+                  Everest the Olympicat
+              </h1>
+              <h1>
+                  <CustomButton to="/StartGame">Start or Load Game</CustomButton>
+              </h1>
+              <h1>
+                  {chooseLevelOption(userLoaded)}
+              </h1>
+              <h1>
+                  <CustomButton to="/ViewLeaderboard">View Leaderboard</CustomButton>
+              </h1>
+
+              {userNameOption()}
+          </div>
       </div>
-    </div>
   );
 }
 

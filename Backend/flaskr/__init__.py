@@ -58,6 +58,19 @@ def create_app(test_config=None):
         return home_response
 
     @cross_origin()
+    @app.route('/json', methods=["POST"])
+    def test_json():
+        data = request.get_json()
+        print("data is " + format(data))
+        response = {
+            RESPONSE_MESSAGE_KEY: "Welcome to Everest the Olympicat Backend!"
+        }
+        home_response = flask.Response(response=json.dumps(response), status=200)
+        home_response.headers['Access-Control-Allow-Origin'] = '*'
+        home_response.headers["content-type"] = "application/json"
+        return home_response
+
+    @cross_origin()
     @app.route("/load_users", methods=["GET"])
     def load_users():
         """
@@ -99,7 +112,7 @@ def create_app(test_config=None):
         users = loaded_users[RESULT_USERS_JSON_INDEX]
         result["users"] = users
         load_user_response.response = json.dumps(result)
-        print("Loaded users: ", users)
+        # print("Loaded users: ", users)
         return load_user_response
 
     @cross_origin()
@@ -128,8 +141,8 @@ def create_app(test_config=None):
         username = None
 
         add_user_response = init_response()
-
         username = get_param_from_request(param="username", response=add_user_response)
+
         if username == None:  # ^ function auto sets the status to 404 and the message if it fails.
             return add_user_response
         # use the datadd_user_responseabase method to try to add the user (validates as well)
@@ -288,8 +301,9 @@ def create_app(test_config=None):
         """
         Uses db.increment_score(username, score)
         :params: (throught the request)
-        - username
-        - score (to increment the score they already have with.)
+        - (str) username
+        - (str) levelScore (the level name we want to set a score for)
+        - (int) score (to increment the score they already have with.)
         """
         # handling the request
         result = {
@@ -307,8 +321,9 @@ def create_app(test_config=None):
         if score == None:  
             print("Cannot increment user score without a score!!")
             return increment_score_response
+        levelScore = get_param_from_request(param="levelScore", response=increment_score_response)
 
-        db_increment_level_success = db.increment_score(username, score)
+        db_increment_level_success = db.increment_score(username, levelScore, score)
         result["success"] = db_increment_level_success
         if not db_increment_level_success:
             result[RESPONSE_MESSAGE_KEY] = \
@@ -350,13 +365,13 @@ def create_app(test_config=None):
             # https://tedboy.github.io/flask/generated/generated/werkzeug.MultiDict.html
             
             #DEBUG
-            print("DEBUGGING (get_param_from_request): Attempting getting username from FORM: ")
+            # print("DEBUGGING (get_param_from_request): Attempting getting username from FORM: ")
             value = request.form.get(param)
-            print(f"\t(form key) `{param}`: (value) `{value}`")
+            # print(f"\t{param}: {value}")
         else:
-            print("DEBUGGING (get_param_from_request): Attempting getting username from ARGS: ")
+            # print("DEBUGGING (get_param_from_request): Attempting getting username from ARGS: ")
             value = request.args.get(param)
-            print(f"\t(param name) `{param}`: (value) `{value}`")
+            # print(f"\t{param}: {value}")
 
         # set the response flags to signify we were unable to get the username
         if value == None:

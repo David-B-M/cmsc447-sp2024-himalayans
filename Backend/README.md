@@ -4,12 +4,12 @@ This folder contains the source code for our Flask backend!
 Scroll down to "Build Instructions" for how to run the app.
 
 # __HTTP Requests__  
-The status of each of these implementations is shown by the emojis:
+These have all been implemented, so now the colors mean if they passed the test. 
 - ✅ = done
 - 🟡 = in progress
 - ❌ = not started
 
-## ✅ Add/Create user
+## ✅✅ Add/Create user
 ```
 POST add_user
 parameter: username 
@@ -31,7 +31,7 @@ Example:
     - BUG: getting parameter from form returns None when using postman (parameter past in the body). seems to only work within pytest.
 - when user presses `[New Game]` and enters their name, send it to the backend to validate and save!
 
-## ✅ Load (read all) users 
+## ✅✅ Load (read all) users 
 (done with first attempt and test, ready to be called!)
 ```
 GET /load_users
@@ -53,7 +53,7 @@ GET /load_users
 </figure>
 
 
-##  Get/check user level
+## Get/check user level
 **Note: Updated 4/18 from `/get_level` to `/read_user_level`** 
 (not implemented, however you can parse the data from load_users for now)
 ```
@@ -78,7 +78,7 @@ Return (json)
     </figcaption>
 </figure>
 
-##  Increment user level
+## Increment user level
 When the user complete's a level successfully POST to this method!
 
 (See `LevelSuccess` use case in our use case document)
@@ -89,7 +89,7 @@ i.e. POST /increment_user_level?username=jatcs
 ```
 **NOTE: the value of the level only changes if they hadn't yet reached the final level (3).**
 - Use "GET /read_user_level" to verify the value of this increment occured as you wished :)
-## ✅ Update user score
+## Update user score
 ```
 POST /increment_score?username=[usernameString]&levelScore=[levelString]&score=[scoreInt]
 Params:
@@ -162,7 +162,7 @@ Every terminal session you do this in, I recommend you initialize the name of th
 
 ### 3.1 Set the flask app name 
 (reference: https://flask.palletsprojects.com/en/1.1.x/cli/ )
-- Note: If you are unable to set this environment variable, later instead of doing `flask [COMMAND]` you'll have to do `flask --app flaskr [COMMAND]`. I suggest trying to get this environment variable so you have less to type, especially if you run any of our custom click commands for testing.
+- <ins>**Note**</ins>: If you are unable to set this environment variable, later instead of doing `flask [COMMAND]` you'll have to do `flask --app flaskr [COMMAND]`. I suggest trying to get this environment variable so you have less to type, especially if you run any of our custom click commands for testing.
 ```bash
 $ export FLASK_APP=flaskr
 ```

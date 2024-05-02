@@ -183,8 +183,6 @@ def get_saved_user(username, db=None, do_close_db=False, silence=True):
         "levelReached": fetched_result[0]["levelReached"]
     }
 
-    if not silence:
-        print(f"[DB: get_saved_user] Successfully loaded users from database!")
     if DEBUG_DB:
         print(f"\tResult: {jsonified_result}")
     return (True, jsonified_result)
@@ -228,7 +226,6 @@ def load_users():
             "levelReached": user_row["levelReached"]
         })
 
-    print(f"[DB: load_users] Successfully loaded users from database!")
     if DEBUG_DB:
         print(f"\tResult: {jsonified_result}")
     return (True, jsonified_result)
@@ -284,7 +281,7 @@ def add_user(username):
         print("db.py: Cannot add a null username!")
         return UNABLE_ADD_USER_RETURN
 
-    if not (len(username) <= USERNAME_LEN):
+    if not (3 <= len(username) <= USERNAME_LEN):
         # instead of giving an assertion error
         print(f"[DB: add_user] (INVALID ARG) Username should be under or equal {USERNAME_LEN} to characters long, " + \
         f"but is {len(username)} characters long.")
@@ -322,8 +319,8 @@ def add_user(username):
 
     try:
         # also add them to the leaderboard :p
-        initialize_score(username=username, score=0, db=db, user_id=user_id)
-        print("[db: add_user] Successfully initialized a row in the leaderboard for {username} with score 0.")
+        initialize_score(username=username, lv1Score=0, lv2Score=0, lv3Score=0, totalScore=0, db=db, user_id=user_id)
+        print(f"[db: add_user] Successfully initialized a row in the leaderboard for {username} with score 0.")
     except Exception as e:
         print(f"Unable to initialize totalScore row for username = {username}")
         if DEBUG_DB:
@@ -446,7 +443,7 @@ def load_leaderboard(exclude_columns=["user_id"]):
     assert db is not None, "[DB: load_leaderboard] Failed to connect to database."
 
     LOAD_LEADERBOARD_SQL = """
-    SELECT * from leaderboard;
+    SELECT * from leaderboard ORDER BY rank;
     """
     db_cursor = db.cursor()
     load_result = db_cursor.execute(LOAD_LEADERBOARD_SQL)
@@ -462,7 +459,7 @@ def load_leaderboard(exclude_columns=["user_id"]):
     for user_row in fetched_result:
         json_row = {}
         # Expecting: rank , user_id, username, score
-        for column in ["rank", "user_id", "username", "score"]:
+        for column in ["rank", "user_id", "username", "lv1Score", "lv2Score", "lv3Score", "totalScore"]:
             if column not in exclude_columns:
                 json_row[column] = user_row[column]
         jsonified_result.append(json_row)
@@ -509,7 +506,7 @@ def get_leaderboard_row(username, db=None, do_close=False, exclude_columns=["use
     return (True, jsonified_result)
 
 
-def initialize_score(username, score, db=None, user_id=None, do_close=False):
+def initialize_score(username, lv1Score, lv2Score, lv3Score, totalScore, db=None, user_id=None, do_close=False):
     """
     :param do_close: Signal if I should close the database. i.e. if this is called from a solo endpoint.
     :return: rank!
@@ -521,10 +518,10 @@ def initialize_score(username, score, db=None, user_id=None, do_close=False):
     # not specifying rank because it should auto set and increment
     INITIALIZE_SCORE_SQL = \
     """
-    INSERT INTO leaderboard(user_id, username, score) 
-    VALUES (?, ?, ?);
+    INSERT INTO leaderboard(rank, user_id, username, lv1Score, lv2Score, lv3Score, totalScore) 
+    VALUES (?, ?, ?, ?, ?, ?, ?);
     """
-    rank = None
+    rank = 0
 
     if user_id is None:
         # try to get the ID (maybe for the 2nd time) from the database
@@ -539,7 +536,7 @@ def initialize_score(username, score, db=None, user_id=None, do_close=False):
     
     db_cursor = db.cursor()
     try:
-        load_result = db_cursor.execute(INITIALIZE_SCORE_SQL, (user_id, username, score))
+        load_result = db_cursor.execute(INITIALIZE_SCORE_SQL, (rank, user_id, username, lv1Score, lv2Score, lv3Score, totalScore,))
 
         if load_result is None:
             print(f"Failed to initialize_score(username='{username}', score={score}):\n\t Couldn't retrieve the result from the query to add the user")
@@ -559,19 +556,47 @@ def initialize_score(username, score, db=None, user_id=None, do_close=False):
     # Reference: https://www.sqlitetutorial.net/sqlite-python/insert/
     return db_cursor.lastrowid
 
-def increment_score(username, score):
+def increment_score(username, levelScore, score):
     """
-    Checks if there is an entry for them in the scores table.
+    Updates `leaderboard` table with the score for the particular level and updates the cumulative score.
+    - requies you to specify which level so we can over-write your old level attempts 
+        with the new high score if you beat your old score.
+    :param username:   (str) from `users` table i.e. "nickallgood"
+    :param levelScore: (str) either "lv1Score", "lv2Score", or "lv3Score"
+    :param score:      (int) usually 10 * the number of fish collected in the level.
     """
     db = get_db()
     assert db is not None, "[DB: load_leaderboard] Failed to connect to database."
 
-    UPDATE_SCORE_SQL = """
+    """
+     Increments score that user got from completing their level (only updates if new score is higher than current score.) 
+     Then updates total score of user after level score is updated 
+     Finally, updates the ranks of everyone on the leaderboard. 
+    """
+    print(f"My values are {username, levelScore, score}")
+    UPDATE_LEVEL_SCORE_SQL = f"""
     UPDATE leaderboard 
-    SET totalScore = totalScore + ?
+    SET {levelScore} = ?
+    WHERE username = ? AND ? > {levelScore};
+    """
+
+    UPDATE_TOTAL_SCORE_SQL = """
+    UPDATE leaderboard
+    SET totalScore = lv1Score + lv2Score + lv3Score
     WHERE username = ?;
     """
-    
+
+    UPDATE_RANK_SQL = """
+        UPDATE leaderboard
+        SET rank = (
+            SELECT COUNT(*) + 1
+            FROM leaderboard l
+            WHERE l.totalScore > leaderboard.totalScore
+        );
+    """
+
+    SELECT_DATA_SQL = "SELECT * FROM db"
+
     existing_user_result = get_saved_user(username, db, do_close_db=False, silence=True)
     if not existing_user_result[RETURN_BOOL_INDEX]:
         print(f"[DB: increment_score] Unable to verify existence of user '{username}'. Check logs.")
@@ -583,9 +608,16 @@ def increment_score(username, score):
     db_cursor = db.cursor()
     num_affected_rows = None
     try:
-        update_result = db_cursor.execute(UPDATE_SCORE_SQL, (score, username))
+        db_cursor.execute(UPDATE_LEVEL_SCORE_SQL, (score, username, score))
+        db_cursor.execute(UPDATE_TOTAL_SCORE_SQL, (username,))
+        db_cursor.execute(UPDATE_RANK_SQL)
+        update_result = SELECT_DATA_SQL
         # according to documentation, you have to fetchall in order for the rowcount to update
         # Reference: https://docs.python.org/3/library/sqlite3.html#sqlite3.Cursor.rowcount
+        if update_result is None:
+            print(f"Failed to update score (username={username}, score={score}):\n\t Couldn't retrieve the result from the query to update score of user")
+            close_db()
+            return None
         db_cursor.fetchall()
         num_affected_rows = db_cursor.rowcount
     except Exception as e:
