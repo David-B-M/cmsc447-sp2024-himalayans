@@ -30,8 +30,9 @@ INVALID_USERNAME_KEY = "invalid_username"
 # ...................................................
 # For re-runs of `test_increment_level.py` or `test_increment_score`
 # - Make sure to change this value
-TEST_FRESH_USER_FOR_INCREMENTING_LEVEL = "level_user1"
-TEST_FRESH_USER_FOR_INCREMENTING_SCORE = "score_user12"
+TEST_FRESH_USER_FOR_INCREMENTING_LEVEL = "level_user101"
+TEST_FRESH_USER_FOR_INCREMENTING_SCORE = "score_user101"
+TEST_FRESH_USER_FOR_ADDING = "username_101"
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # endpoint names are set at the top of each individual test file, or here as a fixture, depends on if i re-use the endpoint fr.
@@ -80,11 +81,16 @@ def test_usernames():
         VALID_USERNAME_KEY: TEST_FRESH_USER_FOR_INCREMENTING_SCORE
     }
 
+    add_user_username = {
+        VALID_USERNAME_KEY: TEST_FRESH_USER_FOR_ADDING
+    }
+
     all_usernames = {
         "*": usernames_for_any_endpoint,
         INCREMENT_LEVEL_ENDPOINT: level_endpoint_usernames,
         READ_LEVEL_ENDPOINT: level_endpoint_usernames,
-        INCREMENT_SCORE_ENDPOINT: score_endpoint_usernames
+        INCREMENT_SCORE_ENDPOINT: score_endpoint_usernames,
+        ADD_USER_ENDPOINT: add_user_username
     }
     return all_usernames
 
