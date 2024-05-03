@@ -78,7 +78,7 @@ Return (json)
     </figcaption>
 </figure>
 
-## ✅ Increment user level
+## ✅✅ Increment user level
 When the user complete's a level successfully POST to this method!
 
 (See `LevelSuccess` use case in our use case document)
