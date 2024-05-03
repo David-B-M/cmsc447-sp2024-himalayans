@@ -7,7 +7,7 @@ import click
 from flask import current_app, g
 
 SCHEMA_SQL_FILE_PATH = 'schema.sql'
-DEBUG_DB = True
+DEBUG_DB = False
 
 USERNAME_LEN = 20  # <- for easy display on frontend. Also this is how we define it in the database schema.
 
@@ -34,7 +34,7 @@ def close_db(e=None):
     if db is not None:
         db.close()
 
-    print("Closed database connection.")
+        print("Closed database connection.")
 
 
 def init_db():
@@ -84,9 +84,9 @@ def drop_db():
         db_cursor.execute(DROP_USERS_TABLE_SQL)
         db_cursor.execute(DROP_LEADERBOARD_TABLE_SQL)
     except Exception as e:
-        print("Failed to drop_db :(")
+        print("[DB: drop_db] Failed to drop_db :(")
         if DEBUG_DB:
-            print("[DB: drop_db] Error: ", e)
+            print("(DEBUG) Error: ", e)
         return False
     print("Dropped tables.")
     return True
@@ -129,11 +129,11 @@ def get_user_id(username, db=None):
         if user_id_result:
             user_id = user_id_result[0]["user_id"]
     except Exception as e:
-        print(f"Unable to get_user_id(username={username})")
+        print(f"[DB: get_user_id] Unable to get_user_id(username='{username}')")
         return [False, None]
 
     db.commit()
-    print(f"Successfully retrieved `user_id`={user_id} for username={username}.")
+    print(f"[DB: get_user_id] Successfully retrieved `user_id`={user_id} for username='{username}'.")
     # Reference: https://www.sqlitetutorial.net/sqlite-python/insert/
     return [True, user_id]
     # checks if they have an entry in the `usernames` table.
@@ -182,9 +182,9 @@ def get_saved_user(username, db=None, do_close_db=False, silence=True):
         "username": fetched_result[0]["username"],
         "levelReached": fetched_result[0]["levelReached"]
     }
-
+    print(f"[DB: get_saved_user] Successfully retrieved user from username = '{username}'")
     if DEBUG_DB:
-        print(f"\tResult: {jsonified_result}")
+        print(f"(DEBUG)\tResult: {jsonified_result}")
     return (True, jsonified_result)
 
 def load_users():
@@ -226,8 +226,9 @@ def load_users():
             "levelReached": user_row["levelReached"]
         })
 
+    print("[DB: load_users] Successfully loaded users!")
     if DEBUG_DB:
-        print(f"\tResult: {jsonified_result}")
+        print(f"(DEBUG)\nResult:\n\t{jsonified_result}")
     return (True, jsonified_result)
 
 
@@ -278,12 +279,12 @@ def add_user(username):
     assert db is not None, "[DB: add_user] Failed to connect to database."
 
     if username is None:
-        print("db.py: Cannot add a null username!")
+        print("[DB: add_user] Cannot add a null username!")
         return UNABLE_ADD_USER_RETURN
 
     if not (3 <= len(username) <= USERNAME_LEN):
         # instead of giving an assertion error
-        print(f"Username should be under or equal {USERNAME_LEN} to characters long, " + \
+        print(f"[DB: add_user] (INVALID ARG) Username should be under or equal {USERNAME_LEN} to characters long, " + \
         f"but is {len(username)} characters long.")
         return UNABLE_ADD_USER_RETURN
         
@@ -299,13 +300,13 @@ def add_user(username):
         load_result = db_cursor.execute(ADD_USER_SQL, (username, ))
 
         if load_result is None:
-            print(f"Failed to add_user(username={username}):\n\t Couldn't retrieve the result from the query to add the user")
+            print(f"[DB: add_user] Failed to add_user(username='{username}'):\n\t Couldn't retrieve the result from the query to add the user")
             close_db()
             return UNABLE_ADD_USER_RETURN
         
         user_id = db_cursor.lastrowid
         
-        print(f"Successfully saved username={username} to database.")
+        print(f"[DB: add_user] Successfully saved username='{username}' to database.")
         
     except sqlite3.IntegrityError as e:
         # If it reaches here,
@@ -314,7 +315,7 @@ def add_user(username):
         print(f"[DB: add_user] Unable to add user '{username}.'" +
               "\n\tUsername already exists in database.")
         if DEBUG_DB:
-            print("Got this exact integrity error: ", e)
+            print(f"(DEBUG)\n\tGot this exact integrity error:\n\t`{e}`")
         return None
 
     try:
@@ -322,9 +323,10 @@ def add_user(username):
         initialize_score(username=username, lv1Score=0, lv2Score=0, lv3Score=0, totalScore=0, db=db, user_id=user_id)
         print(f"[db: add_user] Successfully initialized a row in the leaderboard for {username} with score 0.")
     except Exception as e:
-        print(f"Unable to initialize score row for username = {username}")
+        print(f"[DB: add_user] Unable to initialize totalScore row for username = {username}")
         if DEBUG_DB:
-            print(f"\tException: {e}")
+            import traceback
+            print(f"(DEBUG)\tException: ```\n{traceback.format_exc()}\n```")
 
     db.commit()
     close_db()
@@ -351,11 +353,11 @@ def read_user_level(username):
         # then we can use the column name to get the value itself 
         level_result = db_cursor.execute(QUERY_LEVEL_SQL, (username, )).fetchall()[0]["levelReached"]
     except Exception as e:
-        print(f"Unable to read_user_level(username={username})")
+        print(f"[DB: read_user_level] Unable to read_user_level(username='{username}')")
         close_db()
         return None
     db.commit()
-    print(f"Successfully retrieved `levelReached`={level_result} for username={username}.")
+    print(f"[DB: read_user_level] Successfully retrieved `levelReached`={level_result} for username='{username}'.")
     close_db()
     # Reference: https://www.sqlitetutorial.net/sqlite-python/insert/
     return level_result
@@ -387,10 +389,10 @@ def increment_user_level(username):
 
     existing_user_result = get_saved_user(username, db, do_close_db=False, silence=True)
     if not existing_user_result[RETURN_BOOL_INDEX]:
-        print(f"[DB: increment_user_level ] Unable to verify existence of user {username}. Check logs.")
+        print(f"[DB: increment_user_level ] Unable to verify existence of user `{username}`. Check logs.")
         return False
     elif not existing_user_result[RETURN_DATA_INDEX]:
-        print(f"[DB: increment_user_level] Will not increment level for nonexistent user: {username}")
+        print(f"[DB: increment_user_level] Will not increment level for nonexistent user: `{username}`")
         return False
 
     db_cursor = db.cursor()
@@ -402,9 +404,9 @@ def increment_user_level(username):
         db_cursor.fetchall()
         num_affected_rows = db_cursor.rowcount
     except Exception as e:
-        print(f"[DB: increment_user_level] Oh no! Something went wrong! Unable to increment_user_level(username={username})")
+        print(f"[DB: increment_user_level] Oh no! Something went wrong! Unable to increment_user_level(username='{username}')")
         if DEBUG_DB:
-            print(f"\n\tExeption:\n\t{e}")
+            print(f"(DEBUG)\n\tExeption:\n\t{e}")
         close_db()
         return False
 
@@ -418,7 +420,7 @@ def increment_user_level(username):
     # Success!
     # ~~~~~~~~~
     db.commit()
-    print(f"Successfully incremented levelReached for {username}!")
+    print(f"[DB: increment_user_level] Successfully incremented levelReached for `{username}`!")
     close_db()
     return True
 
@@ -449,7 +451,7 @@ def load_leaderboard(exclude_columns=["user_id"]):
     load_result = db_cursor.execute(LOAD_LEADERBOARD_SQL)
 
     if load_result is None:
-        print("Failed to load_leaderboard :(")
+        print("[DB: load_leaderboard] Failed to load_leaderboard :(")
         close_db()
         return (False, [])
 
@@ -466,7 +468,7 @@ def load_leaderboard(exclude_columns=["user_id"]):
 
     print(f"[DB: load_leaderboard] Successfully loaded rows from `leaderboard` table in database!")
     if DEBUG_DB:
-        print(f"\tResult: {jsonified_result}")
+        print(f"(DEBUG)\n\tResult: {jsonified_result}")
     return (True, jsonified_result)
 
 
@@ -483,7 +485,7 @@ def get_leaderboard_row(username, db=None, do_close=False, exclude_columns=["use
     load_result = db_cursor.execute(GET_ROW_SQL, (username,))
 
     if load_result is None:
-        print("Failed to get_leaderboard_row :(")
+        print("[DB: get_leaderboard_row] Failed to get_leaderboard_row :(")
         close_db()
         return (False, [])
 
@@ -502,7 +504,7 @@ def get_leaderboard_row(username, db=None, do_close=False, exclude_columns=["use
 
     print(f"[DB: get_leaderboard_row] Successfully loaded username row from `leaderboard` table in database!")
     if DEBUG_DB:
-        print(f"\tResult: {jsonified_result}")
+        print(f"(DEBUG)\n\tResult: {jsonified_result}")
     return (True, jsonified_result)
 
 
@@ -528,7 +530,7 @@ def initialize_score(username, lv1Score, lv2Score, lv3Score, totalScore, db=None
         user_id_result = get_user_id(username)
         user_id = user_id_result[RETURN_DATA_INDEX]
         if not user_id_result[RETURN_BOOL_INDEX]:
-            print("Create the user in the `users` table 1st! Won't initialize score")
+            print("[DB: initialize_score] Create the user in the `users` table 1st! Won't initialize score")
             return None
         if user_id is None:
             print("[db: initialize_score] Will not initialize a score for a player that doesn't exist!")
@@ -539,18 +541,19 @@ def initialize_score(username, lv1Score, lv2Score, lv3Score, totalScore, db=None
         load_result = db_cursor.execute(INITIALIZE_SCORE_SQL, (rank, user_id, username, lv1Score, lv2Score, lv3Score, totalScore,))
 
         if load_result is None:
-            print(f"Failed to initialize_score(username={username}, totalScore={totalScore}):\n\t Couldn't retrieve the result from the query to add the user")
+            print(f"[DB: initialize_score] Failed to initialize_score(username='{username}', lv1Score={lv1Score}, lv2Score={lv2Score}, lv3Score={lv3Score}, totalScore={totalScore}):"
+                  "\n\t Couldn't retrieve the result from the query to add the user")
             close_db()
             return None
     except sqlite3.IntegrityError as e:
-        print(f"[DB: initialize_score] Unable to add user '{username}.'" +
+        print(f"[DB: initialize_score] Unable to add user '{username}'" +
               "\nuser_id already exists in `leaderboard` table database.")
         if DEBUG_DB:
-            print("Got this exact integrity error: ", e)
+            print("(DEBUG)\nGot this exact integrity error: ", e)
         return None
 
     db.commit()
-    print(f"Successfully initialied leaderboard row for username={username} with totalScore={totalScore}.")
+    print(f"[DB: initialize_score] Successfully initialied leaderboard row for username='{username}' with lv1Score={lv1Score}, lv2Score={lv2Score}, lv3Score={lv3Score}, totalScore={totalScore}.")
     if do_close:
         close_db()
     # Reference: https://www.sqlitetutorial.net/sqlite-python/insert/
@@ -573,7 +576,8 @@ def increment_score(username, levelScore, score):
      Then updates total score of user after level score is updated 
      Finally, updates the ranks of everyone on the leaderboard. 
     """
-    print(f"My values are {username, levelScore, score}")
+    if DEBUG_DB:
+        print(f"[DB: increment_score] (DEBUG) Got parameters: {username, levelScore, score}")
     UPDATE_LEVEL_SCORE_SQL = f"""
     UPDATE leaderboard 
     SET {levelScore} = ?
@@ -599,10 +603,10 @@ def increment_score(username, levelScore, score):
 
     existing_user_result = get_saved_user(username, db, do_close_db=False, silence=True)
     if not existing_user_result[RETURN_BOOL_INDEX]:
-        print(f"[DB: increment_score] Unable to verify existence of user {username}. Check logs.")
+        print(f"[DB: increment_score] Unable to verify existence of user '{username}'. Check logs.")
         return False
     elif not existing_user_result[RETURN_DATA_INDEX]:
-        print(f"[DB: increment_score] Will NOT increment score of non-existent user: {username}")
+        print(f"[DB: increment_score] Will NOT increment score of non-existent user: '{username}'")
         return False
 
     db_cursor = db.cursor()
@@ -615,15 +619,15 @@ def increment_score(username, levelScore, score):
         # according to documentation, you have to fetchall in order for the rowcount to update
         # Reference: https://docs.python.org/3/library/sqlite3.html#sqlite3.Cursor.rowcount
         if update_result is None:
-            print(f"Failed to update score (username={username}, score={score}):\n\t Couldn't retrieve the result from the query to update score of user")
+            print(f"[DB: increment_score] Failed to update score (username='{username}', score={score}):\n\t Couldn't retrieve the result from the query to update score of user")
             close_db()
             return None
         db_cursor.fetchall()
         num_affected_rows = db_cursor.rowcount
     except Exception as e:
-        print(f"[DB: increment_score] Oh no! Something went wrong! Unable to increment_score(username={username})")
+        print(f"[DB: increment_score] Oh no! Something went wrong! Unable to increment_score(username='{username}')")
         if DEBUG_DB:
-            print(f"\n\tExeption:\n\t{e}")
+            print(f"(DEBUG)\n\tExeption:\n\t{e}")
         close_db()
         return False
 
@@ -637,6 +641,6 @@ def increment_score(username, levelScore, score):
     # Success!
     # ~~~~~~~~~
     db.commit()
-    print(f"Successfully incremented score by `{score} pts` for {username}!")
+    print(f"[DB: increment_score] Successfully incremented score by `{score} pts` for '{username}'!")
     close_db()
     return True

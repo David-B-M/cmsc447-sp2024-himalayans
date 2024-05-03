@@ -22,3 +22,4 @@ poetry.lock
 pyproject.toml
 .breakpoints
 Backend/tests/__pycache__/
+/Backend/__pycache__
