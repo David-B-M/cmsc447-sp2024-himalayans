@@ -26,7 +26,13 @@ VALID_USERNAME_KEY = "valid_username"
 INVALID_USERNAME_KEY = "invalid_username"
 # endpoint names are set at the top of each individual test file, or here as a fixture, depends on if i re-use the endpoint fr.
 
-TEST_FRESH_USER_FOR_INCREMENTING = "TEMP_4_lvl_tsts3"
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# --------------- /increment_user_level -------------
+# ...................................................
+# For re-runs of `test_increment_level.py``
+# - Make sure to change this value
+TEST_FRESH_USER_FOR_INCREMENTING = "TEMP_4_lvl_tsts6"
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 @pytest.fixture()
 def app():
@@ -88,7 +94,7 @@ class Helpers:
     @staticmethod
     def debug_print_response(response, func_name=""):
         parsed_response = response.data.decode('UTF-8')
-        print("*" * 50)
+        print(" DEBUG PYTEST ".center(50, "*"))
         if func_name:
             print(f"Inside test function: `{func_name}`: ", end="")
         print("Got response\n\t", parsed_response)
