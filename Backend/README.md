@@ -89,7 +89,7 @@ i.e. POST /increment_user_level?username=jatcs
 ```
 **NOTE: the value of the level only changes if they hadn't yet reached the final level (3).**
 - Use "GET /read_user_level" to verify the value of this increment occured as you wished :)
-## Update user score
+## ✅✅ Update user score
 ```
 POST /increment_score?username=[usernameString]&levelScore=[levelString]&score=[scoreInt]
 Params:

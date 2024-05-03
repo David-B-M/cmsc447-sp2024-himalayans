@@ -24,15 +24,21 @@ from flaskr import create_app
 # for my test_usernames
 VALID_USERNAME_KEY = "valid_username"
 INVALID_USERNAME_KEY = "invalid_username"
-# endpoint names are set at the top of each individual test file, or here as a fixture, depends on if i re-use the endpoint fr.
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # --------------- /increment_user_level -------------
 # ...................................................
-# For re-runs of `test_increment_level.py``
+# For re-runs of `test_increment_level.py` or `test_increment_score`
 # - Make sure to change this value
-TEST_FRESH_USER_FOR_INCREMENTING = "TEMP_4_lvl_tsts6"
+TEST_FRESH_USER_FOR_INCREMENTING_LEVEL = "level_user1"
+TEST_FRESH_USER_FOR_INCREMENTING_SCORE = "score_user12"
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+# endpoint names are set at the top of each individual test file, or here as a fixture, depends on if i re-use the endpoint fr.
+ADD_USER_ENDPOINT = "/add_user"
+INCREMENT_LEVEL_ENDPOINT = "/increment_user_level"
+READ_LEVEL_ENDPOINT = "/read_user_level"
+INCREMENT_SCORE_ENDPOINT = "/increment_score"
 
 @pytest.fixture()
 def app():
@@ -67,27 +73,36 @@ def test_usernames():
     }
     # if you are going to run "/increment_user_level", change the username every time so it can be created fresh!
     level_endpoint_usernames = {
-        VALID_USERNAME_KEY: TEST_FRESH_USER_FOR_INCREMENTING
+        VALID_USERNAME_KEY: TEST_FRESH_USER_FOR_INCREMENTING_LEVEL
+    }
+
+    score_endpoint_usernames = {
+        VALID_USERNAME_KEY: TEST_FRESH_USER_FOR_INCREMENTING_SCORE
     }
 
     all_usernames = {
         "*": usernames_for_any_endpoint,
-        "/increment_user_level": level_endpoint_usernames,
-        "/read_user_level": level_endpoint_usernames
+        INCREMENT_LEVEL_ENDPOINT: level_endpoint_usernames,
+        READ_LEVEL_ENDPOINT: level_endpoint_usernames,
+        INCREMENT_SCORE_ENDPOINT: score_endpoint_usernames
     }
     return all_usernames
 
 @pytest.fixture()
 def add_user_endpoint_name():
-    return "/add_user"
+    return ADD_USER_ENDPOINT
 
 @pytest.fixture()
 def read_user_level_endpoint_name():
-    return "/read_user_level"
+    return READ_LEVEL_ENDPOINT
 
 @pytest.fixture()
 def increment_level_endpoint_name():
-    return "/increment_user_level"
+    return INCREMENT_LEVEL_ENDPOINT
+
+@pytest.fixture()
+def increment_score_endpoint_name():
+    return INCREMENT_SCORE_ENDPOINT
 
 # since pyfixtures can't have non fixture arguments, using a class method instead.
 class Helpers:
